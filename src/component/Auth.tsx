@@ -1,8 +1,9 @@
-import { Center, Container, FormControl, FormLabel, Grid, Input } from "@chakra-ui/react"
+import { Button, Center, Container, FormControl, FormLabel, Grid, Input } from "@chakra-ui/react"
+import Logo from "component/Logo"
 import { ChangeEvent, FC, FormEvent, useState } from "react"
 
 interface IAuth {
-    signIn: (email: string, password: string) => void,
+  signIn: (email: string, password: string) => void;
 }
 
 const Auth: FC<IAuth> = ({ signIn }) => {
@@ -24,15 +25,29 @@ const Auth: FC<IAuth> = ({ signIn }) => {
 
     return (
         <Grid placeItems="center" h="100vh">
-            <Container maxW="lg" flexGrow="1">
-                <Center></Center>
-                <form onSubmit={handleSubmit}>
-                    <FormControl>
+            <Container maxW="sm" flexGrow="1" display="flex" flexDirection="column" gap={30}>
+                <Center>
+                    <Logo />
+                </Center>
+                <form
+                    onSubmit={handleSubmit}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 20,
+                    }}
+                >
+                    <FormControl isRequired>
                         <FormLabel>Email</FormLabel>
                         <Input type="text" value={email} onChange={handleEmailChange} />
-                        <Input type="password" value={password} onChange={handlePasswordChange} />
-                        <Input type="submit" />
                     </FormControl>
+
+                    <FormControl isRequired>
+                        <FormLabel>Password</FormLabel>
+                        <Input type="password" value={password} onChange={handlePasswordChange} />
+                    </FormControl>
+
+                    <Button colorScheme="blue" type="submit">Submit</Button>
                 </form>
             </Container>
         </Grid>
