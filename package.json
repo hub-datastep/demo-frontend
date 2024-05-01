@@ -1,0 +1,129 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@chakra-ui/icons": "^2.1.1",
+    "@chakra-ui/react": "^2.8.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@react-pdf-viewer/core": "^3.12.0",
+    "@react-pdf-viewer/default-layout": "^3.12.0",
+    "@react-pdf-viewer/page-navigation": "^3.12.0",
+    "@supabase/auth-ui-react": "^0.4.2",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "axios": "^1.4.0",
+    "chakra-ui-markdown-renderer": "^4.1.0",
+    "framer-motion": "^10.15.1",
+    "github-markdown-css": "^5.2.0",
+    "moment": "^2.29.4",
+    "pdfjs-dist": "^3.11.174",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.11.0",
+    "react-markdown": "^8.0.7",
+    "react-notion": "^0.10.0",
+    "react-pdf": "^7.5.0",
+    "react-pdf-viewer": "^0.1.0",
+    "react-query": "^3.39.3",
+    "react-router": "^6.22.3",
+    "react-router-dom": "^6.22.3",
+    "react-scripts": "5.0.1",
+    "react-syntax-highlighter": "^15.5.0",
+    "react-use-websocket": "^4.5.0",
+    "remark-gfm": "^3.0.1",
+    "typescript": "^4.4.2",
+    "universal-cookie": "^7.0.1",
+    "web-vitals": "^2.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext .ts,.tsx ./src",
+    "lint:fix": "eslint --fix --ext .ts,.tsx ./src"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ],
+    "rules": {
+      "indent": [
+        "warn",
+        4
+      ],
+      "no-console": "warn",
+      "semi": [
+        "warn",
+        "never"
+      ],
+      "object-curly-spacing": [
+        "warn",
+        "always"
+      ],
+      "quotes": [
+        "warn",
+        "double"
+      ],
+      "import/order": [
+        1,
+        {
+          "groups": [
+            "external",
+            "builtin",
+            "internal",
+            "sibling",
+            "parent",
+            "index"
+          ]
+        }
+      ],
+      "no-multiple-empty-lines": [
+        "warn",
+        {
+          "max": 1,
+          "maxBOF": 1,
+          "maxEOF": 1
+        }
+      ],
+      "no-restricted-imports": [
+        "warn",
+        {
+          "patterns": [
+            ".*"
+          ]
+        }
+      ]
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/*.ts?(x)"
+        ]
+      }
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/react-syntax-highlighter": "^15.5.7",
+    "eslint-plugin-import": "^2.28.1"
+  }
+}
