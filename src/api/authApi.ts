@@ -16,4 +16,3 @@ const signIn = async (username: string, password: string): Promise<TokenModel> =
 export {
     signIn
 }
-
