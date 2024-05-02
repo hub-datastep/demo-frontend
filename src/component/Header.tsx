@@ -3,22 +3,21 @@ import {
     Box,
     Button,
     Flex,
-    FormControl,
-    FormLabel,
     HStack,
     Menu,
     MenuButton,
     MenuGroup,
     MenuItem,
     MenuList,
-    Switch,
     UseToastOptions,
     useDisclosure,
-    useToast,
+    useToast
 } from "@chakra-ui/react"
 import { getFavoriteMessages } from "api/messageApi"
 import { AdminModal } from "component/AdminModal"
+import { FavoriteMessage } from "component/FavoriteMessage"
 import Logo from "component/Logo"
+import { AuthContext, IAuthContext } from "context/authContext"
 import { FavoriteMessageContext, IFavoriteMessageContext } from "context/favoriteMessageContext"
 import { ModeContext, ModeContextI } from "context/modeContext"
 import { UserContext } from "context/userContext"
@@ -28,13 +27,11 @@ import React, { useContext, useEffect, useState } from "react"
 import { AiOutlineDown } from "react-icons/ai"
 import { useQuery, useQueryClient } from "react-query"
 import { useClearMessages } from "service/messageService"
-import { FavoriteMessage } from "component/FavoriteMessage"
-import { AuthContext, IAuthContext } from "context/authContext"
 
 const Header = () => {
     const queryClient = useQueryClient()
     const user = useContext(UserContext)
-    const { currentMode, setMode, isFilesEnabled, isDatabaseEnabled, chatID } = useContext<ModeContextI>(ModeContext)
+    const { chatID } = useContext<ModeContextI>(ModeContext)
     const clearMessagesMutation = useClearMessages()
     const adminModalFunctions = useDisclosure()
     const { isFavoriteListEnabled } = useContext<IFavoriteMessageContext>(FavoriteMessageContext)
@@ -56,10 +53,6 @@ const Header = () => {
     const handleSignOut = () => {
         signOut()
         queryClient.clear()
-    }
-
-    const handleSwitchMode = () => {
-        setMode((prevMode) => prevMode === "databases" ? "wiki" : "databases")
     }
 
     const handleChatClear = () => {
@@ -144,7 +137,17 @@ const Header = () => {
     }, [warningToastCountdown, isTimerActive])
 
     return (
-        <HStack bg="gray.100" h="48px" flexShrink="0" justify="space-between" px="165" py="10" position="fixed" w="100%" zIndex={100}>
+        <HStack 
+            bg="purple.300"
+            h="48px" 
+            flexShrink="0"
+            justify="space-between" 
+            px="165" 
+            py="10" 
+            position="fixed" 
+            w="100%" 
+            zIndex={100}
+        >
             <Logo />
             <HStack>
                 {isFavoriteListEnabled && (
@@ -172,7 +175,7 @@ const Header = () => {
                         </MenuList>
                     </Menu>
                 )}
-                {isFilesEnabled && isDatabaseEnabled && (
+                {/* {isFilesEnabled && isDatabaseEnabled && (
                     <FormControl display='flex' alignItems='center'>
                         <FormLabel mb="0">
                             Базы данных
@@ -185,34 +188,36 @@ const Header = () => {
                             Файлы
                         </FormLabel>
                     </FormControl>
-                )}
-                <Box>
+                )} */}
+                <Box mr={10}>
                     <Button
-                        variant="outline"
-                        colorScheme="blue"
+                        variant="solid"
+                        colorScheme="purple"
                         onClick={handleChatClear}
                     >
                         Очистить чат
                     </Button>
                 </Box>
                 <Menu>
-                    <MenuButton as={Button} rightIcon={<AiOutlineDown />} variant="link">
-                        <Avatar></Avatar>
+                    <MenuButton as={Button} variant="link">
+                        <Avatar src="/image/avatar/user.png" />
                     </MenuButton>
                     <MenuList>
                         <MenuGroup title={user.username}>
-                            {user.database_prediction_config && <MenuItem onClick={adminModalFunctions.onOpen}>Админка</MenuItem>}
+                            {user.database_prediction_config && (
+                                <MenuItem onClick={adminModalFunctions.onOpen}>Админка</MenuItem>
+                            )}
                             <MenuItem onClick={handleSignOut}>Выйти</MenuItem>
                         </MenuGroup>
                     </MenuList>
                 </Menu>
 
-                { adminModalFunctions.isOpen &&
+                {adminModalFunctions.isOpen && (
                     <AdminModal
                         adminModalFunctions={adminModalFunctions}
                         databasePredictionConfig={user.database_prediction_config}
                     />
-                }
+                )}
             </HStack>
         </HStack>
     )

@@ -1,7 +1,8 @@
 import { Box, ChakraProvider } from "@chakra-ui/react"
 import queryClient from "api/queryClient"
 import { AppLayout } from "component/AppLayout"
-import Chat from "component/Chat"
+import ChatDB from "component/ChatDB"
+import ChatDocs from "component/ChatDocs"
 import EditPromptForm from "component/EditPromptForm"
 import { AuthContextProvider } from "context/authContext"
 import { FavoriteMessageContextProvider } from "context/favoriteMessageContext"
@@ -26,7 +27,8 @@ function App() {
                                                     <EditPromptForm />
                                                 </Box>
                                             } />
-                                            <Route index element={<Chat />} />
+                                            <Route path="/databases" element={<ChatDB />} />
+                                            <Route path="/documents" element={<ChatDocs />} />
                                         </Route>
                                     </Routes>
                                 </FavoriteMessageContextProvider>

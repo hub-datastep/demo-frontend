@@ -20,8 +20,8 @@ const SkeletonMessage = ({ direction, width, height }: ISkeletonMessage) => {
             flexDirection={flexDirection}
             gap="10px"
         >
-            <SkeletonCircle size="10" />
-            <Skeleton height={height} width={width} />
+            <SkeletonCircle endColor="purple.100" size="10" />
+            <Skeleton endColor="purple.100" height={height} width={width} />
         </Flex>
     )
 }

@@ -1,14 +1,15 @@
-import { useMutation } from "react-query"
-import { useContext } from "react"
-import { ModeContext, ModeContextI } from "context/modeContext"
 import { getChatPdfPrediction, getDatastepPrediction } from "api/predictionApi"
+import { useMutation } from "react-query"
 
-const usePrediction = () => {
-    const { currentMode } = useContext<ModeContextI>(ModeContext)
-    const predictionFunc = currentMode === "databases" ? getDatastepPrediction : getChatPdfPrediction
-    return useMutation(predictionFunc)
+const useDBPrediction = () => {
+    return useMutation(getDatastepPrediction)
+}
+
+const useDocsPrediction = () => {
+    return useMutation(getChatPdfPrediction)
 }
 
 export {
-    usePrediction
+    useDBPrediction,
+    useDocsPrediction
 }

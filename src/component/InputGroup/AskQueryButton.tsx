@@ -5,7 +5,7 @@ import InputGroupContext from "component/InputGroup/context"
 
 interface IAskQueryButton {
     query: string
-    limit: number
+    limit?: number
 }
 
 const AskQueryButton = ({ query, limit }: IAskQueryButton) => {

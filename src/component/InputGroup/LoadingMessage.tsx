@@ -41,7 +41,7 @@ const LoadingMessage = () => {
 
     return (
         <HStack>
-            <Spinner />
+            <Spinner color="purple" />
             <Text>{messages[messageIndex]}</Text>
         </HStack>
 
