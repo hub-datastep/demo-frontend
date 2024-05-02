@@ -125,6 +125,7 @@ const FilesHistory: FC<IFilesHistory> = ({
 
                         return (
                             <FileRow
+                                key={index}
                                 file={file}
                                 isSelected={isSelected}
                                 setThisFileIndex={setThisFileIndex}

@@ -1,8 +1,7 @@
 import { Container, Flex } from "@chakra-ui/react"
+import Header from "component/Header"
 import { FC } from "react"
 import { Outlet } from "react-router-dom"
-import Footer from "component/Footer"
-import Header from "component/Header"
 
 export const AppLayout: FC = () => {
     return (
@@ -12,7 +11,6 @@ export const AppLayout: FC = () => {
                 <Container maxW="container.ml" flexGrow="1">
                     <Outlet/>
                 </Container>
-                <Footer />
             </Flex>
         </div>
     )

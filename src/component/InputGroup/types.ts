@@ -1,7 +1,13 @@
 import { Dispatch, SetStateAction } from "react"
 
-interface IInputGroup {
-    setTable: Dispatch<SetStateAction<string>>
+interface IInputGroupDB {
+    table?: string,
+    setTable: Dispatch<SetStateAction<string | undefined>>
+    isLoading: boolean
+    errorMessage: string | undefined
+}
+
+interface IInputGroupDocs {
     isLoading: boolean
     errorMessage: string | undefined
     openSourcesHistory: () => void
@@ -9,11 +15,12 @@ interface IInputGroup {
 }
 
 interface IInputGroupContext {
-    handleSubmit: (query: string, limit: number) => void
+    handleSubmit: (query: string, limit?: number) => void
     similarQueries: string[]
 }
 
 export type {
-    IInputGroup,
+    IInputGroupDB,
+    IInputGroupDocs,
     IInputGroupContext,
 }
