@@ -1,11 +1,10 @@
-import { Button, Flex } from "@chakra-ui/react"
+import { Flex, IconButton } from "@chakra-ui/react"
 import { getOrCreateChat } from "api/chatApi"
 import queryClient from "api/queryClient"
 import InputGroupDB from "component/InputGroup/InputGroupDB"
 import LoadingMessage from "component/InputGroup/LoadingMessage"
 import InputGroupContext from "component/InputGroup/context"
 import { Message, createMessage } from "component/Message/Message"
-import SkeletonMessage from "component/Message/SkeletonMessage"
 import { ModeContext, ModeContextI } from "context/modeContext"
 import { UserContext } from "context/userContext"
 import { getLastN } from "misc/util"
@@ -13,6 +12,7 @@ import ChatModel from "model/ChatModel"
 import QueryModel from "model/QueryModel"
 import { UserModel } from "model/UserModel"
 import { useContext, useEffect, useRef, useState } from "react"
+import { TbSquareRoundedArrowUpFilled } from "react-icons/tb"
 import { useQuery } from "react-query"
 import { useCreateMessage } from "service/messageService"
 import { useDBPrediction } from "service/predictionService"
@@ -81,68 +81,68 @@ function ChatDB() {
     }
 
     const handleShowMore = () => {
-        setShownMessageCount((lastN) => lastN + 10)
+        if (!isLoading) {
+            setShownMessageCount((lastN) => lastN + 10)
+        }
     }
 
     return (
         <Flex
-            position="relative"
             direction="row"
             justifyContent="center"
             alignItems="flex-start"
             pt="100"
-            // pb="10"
+            pb="10"
             h="full"
+            // backgroundColor="gray.200"
         >
             <Flex
                 ref={chatRef}
-                position="relative"
                 direction="column"
                 justifyContent="flex-start"
-                p="10"
                 h="full"
-                w="768px"
+                w="2xl"
                 gap={10}
             >
                 {chat && !!chat.messages.length && chat.messages.length > shownMessageCount && (
-                    <Button colorScheme="purple" variant="ghost" onClick={handleShowMore}>
-                        Предыдущие сообщения
-                    </Button>
+                    <IconButton
+                        aria-label="Load more messages"
+                        icon={<TbSquareRoundedArrowUpFilled size={36} />}
+                        title="Прошлые сообщения"
+                        variant="ghost"
+                        color="purple.400"
+                        onClick={handleShowMore}
+                    />
                 )}
-                {chatQueryStatus !== "loading" ?(
-                    <Flex direction="column" gap="5" flexGrow="1" ref={messageWindowRef}>
-                        {chat && !!chat.messages.length && getLastN(shownMessageCount, chat.messages.map((message, i) => createMessage(message, i)))}
-                    </Flex>
-                ) : (
-                    <Flex direction="column" gap="5" flexGrow="1" ref={messageWindowRef}>
-                        <SkeletonMessage direction="outgoing" width="35%" height="60px" />
-                        <SkeletonMessage direction="incoming" width="65%" height="95px" />
-                        <SkeletonMessage direction="outgoing" width="30%" height="55px" />
-                        <SkeletonMessage direction="incoming" width="68%" height="75px" />
-                        <SkeletonMessage direction="outgoing" width="45%" height="65px" />
-                        <SkeletonMessage direction="incoming" width="63%" height="105px" />
-                    </Flex>
-                )}
+
+                <Flex direction="column" gap="5" flexGrow="1" ref={messageWindowRef}>
+                    {chat && !!chat.messages.length && (
+                        getLastN(
+                            shownMessageCount, 
+                            chat.messages.map((message, i) => createMessage(message, i))
+                        )
+                    )}
+
+                    {isLoading && (
+                        <Message
+                            direction="incoming"
+                            messageId={-1}
+                            src="/image/avatar/bot.svg"
+                            callback={false}
+                        >
+                            <LoadingMessage />
+                        </Message>
+                    )}
+                </Flex>
 
                 {chat && !chat.messages.length && (
                     <Message
-                        direction='incoming'
+                        direction="incoming"
                         messageId={-1}
-                        src={"/image/avatar/bot.svg"}
+                        src="/image/avatar/bot.svg"
                         callback={false}
                     >
                         Какой у вас запрос?
-                    </Message>
-                )}
-
-                {isLoading && (
-                    <Message
-                        direction='incoming'
-                        messageId={-1}
-                        src={"/image/avatar/bot.svg"}
-                        callback={false}
-                    >
-                        <LoadingMessage />
                     </Message>
                 )}
                 
@@ -154,7 +154,6 @@ function ChatDB() {
                         errorMessage={errorMessage}
                     />
                 </InputGroupContext.Provider>
-
             </Flex>
         </Flex>
     )
