@@ -1,25 +1,23 @@
 import {
-    Button,
     Flex,
     Grid,
     GridItem,
     HStack,
-    Menu,
-    MenuButton,
-    MenuGroup,
-    MenuItem,
-    MenuList,
+    IconButton,
     Text,
     Textarea,
     VStack
 } from "@chakra-ui/react"
 import { getTenantTables } from "api/promptApi"
+import { ClearChatButton } from "component/ClearChatButton"
 import AskQueryButton from "component/InputGroup/AskQueryButton"
 import InputGroupContext from "component/InputGroup/context"
 import { IInputGroupContext, IInputGroupDB } from "component/InputGroup/types"
+import { QueryTableSelect } from "component/QueryTableSelect"
 import { FavoriteMessageContext, IFavoriteMessageContext } from "context/favoriteMessageContext"
 import { UserContext } from "context/userContext"
 import { ChangeEvent, FC, KeyboardEvent, useContext, useEffect, useState } from "react"
+import { IoMdArrowRoundUp } from "react-icons/io"
 import { useQuery } from "react-query"
 
 const InputGroupDB: FC<IInputGroupDB> = ({
@@ -42,8 +40,7 @@ const InputGroupDB: FC<IInputGroupDB> = ({
 
     const isTextAreaDisable = isLoading
     const isSubmitButtonLoading = isLoading
-
-    const isSubmitBtnDisable = query.trim() === ""
+    const isSubmitBtnDisabled = query.trim() === "" || !table
 
     const handleTableSelectChange = (table: string) => {
         setTable(table)
@@ -70,12 +67,12 @@ const InputGroupDB: FC<IInputGroupDB> = ({
     },[selectedFavoriteQuery])
 
     return (
-        <Flex direction="column" gap="5">
+        <Flex direction="column" gap="5" justifySelf="flex-end">
             {similarQueries.length > 0 && (
                 <Grid
-                    h='200px'
-                    templateRows='repeat(2, 1fr)'
-                    templateColumns='repeat(2, 1fr)'
+                    h="200px"
+                    templateRows="repeat(2, 1fr)"
+                    templateColumns="repeat(2, 1fr)"
                     gap={4}
                 >
                     {similarQueries.map((query: string) => (
@@ -87,60 +84,60 @@ const InputGroupDB: FC<IInputGroupDB> = ({
             )}
 
             <HStack alignItems="flex-start">
-                <Textarea
-                    colorScheme="purple"
-                    height="full"
-                    value={query}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Ваш вопрос.."
-                    disabled={isTextAreaDisable}
-                />
-                <VStack alignItems="flex-start">
-                    <Button
-                        width="full"
-                        colorScheme="purple"
-                        onClick={handleSubmitClick}
-                        isLoading={isSubmitButtonLoading}
-                        isDisabled={isSubmitBtnDisable}
-                    >
-                        Отправить
-                    </Button>
-                    <Menu>
-                        <MenuButton 
+                <VStack width="full" alignItems="flex-start">
+                    <HStack>
+                        <ClearChatButton />
+
+                        <QueryTableSelect
+                            tables={tables}
+                            table={table}
+                            isTablesLoading={isTablesLoading}
+                            handleTableSelectChange={handleTableSelectChange}
+                        />
+                    </HStack>
+                
+                    <Flex width="full" position="relative">
+                        <Textarea
+                            backgroundColor="gray.100"
+                            height="full"
                             width="full"
-                            isLoading={isTablesLoading} 
-                            as={Button}
-                            variant="outline"
-                        >
-                            <Text>
-                                {table || "Выберите таблицу"}
-                            </Text>
-                        </MenuButton>
-                        <MenuList>
-                            <MenuGroup>
-                                {tables?.map((table, key) => (
-                                    <MenuItem
-                                        key={key}
-                                        onClick={() => handleTableSelectChange(table)}
-                                    >
-                                        {table}
-                                    </MenuItem>
-                                ))}
-                            </MenuGroup>
-                        </MenuList>
-                    </Menu>
+                            value={query}
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}
+                            placeholder="Ваш вопрос.."
+                            disabled={isTextAreaDisable}
+                            variant="solid"
+                            resize="none"
+                            overflowY="hidden"
+                        />
+                        <IconButton
+                            aria-label="Send query"
+                            icon={<IoMdArrowRoundUp size={20} />}
+                            colorScheme="purple"
+                            variant="solid"
+                            onClick={handleSubmitClick}
+                            isLoading={isSubmitButtonLoading}
+                            isDisabled={isSubmitBtnDisabled}
+                            position="absolute"
+                            top={2}
+                            right={2}
+                            zIndex={100}
+                        />
+                    </Flex>
                 </VStack>
             </HStack>
-            {errorMessage && <Text color="red">{errorMessage}</Text>}
 
-            <HStack gap="55">
-                {/* <Button onClick={handleIgnoreNullButtonClick}>Не учитывать NULL</Button>
+            {errorMessage && (
+                <Text color="red">{errorMessage}</Text>
+            )}
+
+            {/* <HStack gap="55">
+                <Button onClick={handleIgnoreNullButtonClick}>Не учитывать NULL</Button>
                 <Box>
                     <Text>Максимальное количество строк в ответе</Text>
                     <Input name="limit" type="number" value={limit} onChange={handleLimitChange} />
-                </Box> */}
-            </HStack>
+                </Box>
+            </HStack> */}
         </Flex>
     )
 }

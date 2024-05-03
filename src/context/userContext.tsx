@@ -1,4 +1,4 @@
-import { Grid, Spinner } from "@chakra-ui/react"
+import { Flex, Grid, Spinner } from "@chakra-ui/react"
 import { clearUserToken } from "api/axiosClient"
 import { getCurrentUser } from "api/userApi"
 import { UserModel } from "model/UserModel"
@@ -27,9 +27,9 @@ const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
 
     if (!user || !isSuccess) {
         return (
-            <Grid h="100vh" w="100vw" placeItems="center">
+            <Flex h="100vh" w="100vw"  justifyContent="center" alignItems="center">
                 <Spinner color="purple" />
-            </Grid>
+            </Flex>
         )
     }
 
