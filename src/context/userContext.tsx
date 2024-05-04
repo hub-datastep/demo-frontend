@@ -1,4 +1,4 @@
-import { Flex, Grid, Spinner } from "@chakra-ui/react"
+import { Flex, Spinner } from "@chakra-ui/react"
 import { clearUserToken } from "api/axiosClient"
 import { getCurrentUser } from "api/userApi"
 import { UserModel } from "model/UserModel"

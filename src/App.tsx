@@ -10,6 +10,8 @@ import { ModeContextProvider } from "context/modeContext"
 import { UserContextProvider } from "context/userContext"
 import { QueryClientProvider } from "react-query"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 function App() {
     return (
@@ -31,6 +33,7 @@ function App() {
                                             <Route path="/documents" element={<ChatDocs />} />
                                         </Route>
                                     </Routes>
+                                    <ToastContainer />
                                 </FavoriteMessageContextProvider>
                             </ModeContextProvider>
                         </UserContextProvider>
