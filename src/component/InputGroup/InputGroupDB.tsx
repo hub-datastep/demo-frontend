@@ -28,20 +28,13 @@ const InputGroupDB: FC<IInputGroupDB> = ({
 }) => {
     const [limit, setLimit] = useState<number>(100)
     const [query, setQuery] = useState<string>("")
-    const { handleSubmit } = useContext<IInputGroupContext>(InputGroupContext)
+    const { handleSubmit, similarQueries } = useContext<IInputGroupContext>(InputGroupContext)
     const { selectedFavoriteQuery } = useContext<IFavoriteMessageContext>(FavoriteMessageContext)
     const user = useContext(UserContext)
     const { data: tables, status: queryTablesStatus } = useQuery<string[]>(
         "tables", 
         () => getTenantTables(user.tenants[0].id)
     )
-
-    const similarQueries = [
-        "fsgdhfgjhjhkjfghdsfsg",
-        "fsgdhfgjhjhkjfghdsfs gfsgdhfgjhjhkjfghdsfsgfsg dhfgjhjhkjfghdsfsgfsgdhfgjhjhkj fghdsfsg",
-        "fsgdhfgjhjhkjfghdsfsg",
-        "fsgdhfgjhjhkjfghdsfsg",
-    ]
 
     const isTablesLoading = queryTablesStatus !== "success"
 
