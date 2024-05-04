@@ -28,13 +28,20 @@ const InputGroupDB: FC<IInputGroupDB> = ({
 }) => {
     const [limit, setLimit] = useState<number>(100)
     const [query, setQuery] = useState<string>("")
-    const { handleSubmit, similarQueries } = useContext<IInputGroupContext>(InputGroupContext)
+    const { handleSubmit } = useContext<IInputGroupContext>(InputGroupContext)
     const { selectedFavoriteQuery } = useContext<IFavoriteMessageContext>(FavoriteMessageContext)
     const user = useContext(UserContext)
     const { data: tables, status: queryTablesStatus } = useQuery<string[]>(
         "tables", 
         () => getTenantTables(user.tenants[0].id)
     )
+
+    const similarQueries = [
+        "fsgdhfgjhjhkjfghdsfsg",
+        "fsgdhfgjhjhkjfghdsfs gfsgdhfgjhjhkjfghdsfsgfsg dhfgjhjhkjfghdsfsgfsgdhfgjhjhkj fghdsfsg",
+        "fsgdhfgjhjhkjfghdsfsg",
+        "fsgdhfgjhjhkjfghdsfsg",
+    ]
 
     const isTablesLoading = queryTablesStatus !== "success"
 
@@ -70,10 +77,9 @@ const InputGroupDB: FC<IInputGroupDB> = ({
         <Flex direction="column" gap="5" justifySelf="flex-end" pb={10}>
             {similarQueries.length > 0 && (
                 <Grid
-                    // h="200px"
                     templateRows="repeat(2, 1fr)"
                     templateColumns="repeat(2, 1fr)"
-                    gap={4}
+                    gap={2}
                 >
                     {similarQueries.map((query: string) => (
                         <GridItem>

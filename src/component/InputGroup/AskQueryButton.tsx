@@ -16,13 +16,14 @@ const AskQueryButton = ({ query, setQuery }: IAskQueryButton) => {
             w="full"
             h="full"
             py={2}
+            variant="outline"
             justifyContent="flex-start"
             alignItems="flex-start"
             textAlign="left"
             whiteSpace="initial"
             onClick={handleClick}
         >
-            <Text fontSize="sm">
+            <Text fontSize="sm" fontWeight="normal">
                 {query}
             </Text>
         </Button>
