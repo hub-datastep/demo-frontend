@@ -1,6 +1,5 @@
 import {
     Button,
-    Flex,
     HStack
 } from "@chakra-ui/react"
 import Logo from "component/Logo"
