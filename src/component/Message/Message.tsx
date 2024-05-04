@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, Flex, Text } from "@chakra-ui/react"
+import { Card, CardBody, Flex, Text } from "@chakra-ui/react"
 import Accordion from "component/Accordion"
 import Code from "component/Code"
 import Avatar from "component/Message/Avatar"
@@ -51,13 +51,14 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
     let messageContent = ""
     let src = ""
 
+    // If message from user
     if (messageModel.query) {
-        messageContent += messageModel.query
+        messageContent = messageModel.query
         src = "/image/avatar/user.svg"
     }
 
+    // If message from assistant
     if (messageModel.answer || messageModel.sql || messageModel.table) {
-        messageContent = messageModel.answer ?? ""
         src = "/image/avatar/bot.svg"
     }
 
@@ -66,11 +67,17 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
 
     if (messageModel.sql) {
         titles.push("Как получился результат")
+        if (messageModel.answer) {
+            panels.push(<Text><Markdown>{messageModel.answer}</Markdown></Text>)
+        }
+    }
+
+    if (messageModel.sql) {
+        titles.push("SQL запрос")
         panels.push(<Code>{messageModel.sql}</Code>)
     }
 
-    titles.push("Результат")
-
+    titles.push("Ответ из таблицы")
     if (messageModel.table) {
         panels.push(<Text mt="5"><Markdown>{messageModel.table}</Markdown></Text>)
     } else {
@@ -89,13 +96,10 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
         >
             <Markdown>{messageContent}</Markdown>
             {messageModel.sql && (
-                <Box mt="5">
-                    <Accordion
-                        titles={titles}
-                        panels={panels}
-                        defaultIndex={1}
-                    />
-                </Box>
+                <Accordion
+                    titles={titles}
+                    panels={panels}
+                />
             )}
         </Message>
     )

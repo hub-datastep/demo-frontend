@@ -102,7 +102,7 @@ function ChatDB() {
                 w="2xl"
                 gap={10}
             >
-                {chat && !!chat.messages.length && chat.messages.length > shownMessageCount && (
+                {chat && chat.messages.length > shownMessageCount && (
                     <IconButton
                         aria-label="Load more messages"
                         icon={<TbSquareRoundedArrowUpFilled size={36} />}
@@ -113,7 +113,13 @@ function ChatDB() {
                     />
                 )}
 
-                <Flex direction="column" gap="5" flexGrow="1" ref={messageWindowRef}>
+                <Flex
+                    ref={messageWindowRef}
+                    direction="column"
+                    gap="5"
+                    flexGrow="1"
+                >
+                    {/* Messages from history */}
                     {chat && !!chat.messages.length && (
                         getLastN(
                             shownMessageCount, 
@@ -121,6 +127,7 @@ function ChatDB() {
                         )
                     )}
 
+                    {/* Loading message */}
                     {isLoading && (
                         <Message
                             direction="incoming"
@@ -131,18 +138,19 @@ function ChatDB() {
                             <LoadingMessage />
                         </Message>
                     )}
-                </Flex>
 
-                {chat && !chat.messages.length && (
-                    <Message
-                        direction="incoming"
-                        messageId={-1}
-                        src="/image/avatar/bot.svg"
-                        callback={false}
-                    >
-                        Какой у вас запрос?
-                    </Message>
-                )}
+                    {/* Assistant message if not messages */}
+                    {chat && chat.messages.length === 0 && (
+                        <Message
+                            direction="incoming"
+                            messageId={-1}
+                            src="/image/avatar/bot.svg"
+                            callback={false}
+                        >
+                            Какой у вас запрос?
+                        </Message>
+                    )}
+                </Flex>
                 
                 <InputGroupContext.Provider value={{ handleSubmit, similarQueries }}>
                     <InputGroupDB
