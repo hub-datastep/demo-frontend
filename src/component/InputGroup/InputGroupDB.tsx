@@ -70,14 +70,13 @@ const InputGroupDB: FC<IInputGroupDB> = ({
         <Flex direction="column" gap="5" justifySelf="flex-end" pb={10}>
             {similarQueries.length > 0 && (
                 <Grid
-                    h="200px"
                     templateRows="repeat(2, 1fr)"
                     templateColumns="repeat(2, 1fr)"
-                    gap={4}
+                    gap={2}
                 >
                     {similarQueries.map((query: string) => (
                         <GridItem>
-                            <AskQueryButton query={query} limit={limit} />
+                            <AskQueryButton query={query} setQuery={setQuery} />
                         </GridItem>
                     ))}
                 </Grid>

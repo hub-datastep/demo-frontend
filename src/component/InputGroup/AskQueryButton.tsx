@@ -1,32 +1,31 @@
-import { useContext, MouseEvent } from "react"
-import { Button } from "@chakra-ui/react"
-import { IInputGroupContext } from "component/InputGroup/types"
-import InputGroupContext from "component/InputGroup/context"
+import { Button, Text } from "@chakra-ui/react"
+import { MouseEvent } from "react"
 
 interface IAskQueryButton {
     query: string
-    limit?: number
+    setQuery: (query: string) => void
 }
 
-const AskQueryButton = ({ query, limit }: IAskQueryButton) => {
-    const { handleSubmit } = useContext<IInputGroupContext>(InputGroupContext)
-
+const AskQueryButton = ({ query, setQuery }: IAskQueryButton) => {
     const handleClick = (_: MouseEvent<HTMLButtonElement>) => {
-        handleSubmit(query, limit)
+        setQuery(query)
     }
 
     return (
         <Button
             w="full"
             h="full"
-            pt="10px"
+            py={2}
+            variant="outline"
             justifyContent="flex-start"
-            alignItems="start"
+            alignItems="flex-start"
             textAlign="left"
             whiteSpace="initial"
             onClick={handleClick}
         >
-            {query}
+            <Text fontSize="sm" fontWeight="normal">
+                {query}
+            </Text>
         </Button>
     )
 }
