@@ -67,7 +67,7 @@ const InputGroupDB: FC<IInputGroupDB> = ({
     },[selectedFavoriteQuery])
 
     return (
-        <Flex direction="column" gap="5" justifySelf="flex-end">
+        <Flex direction="column" gap="5" justifySelf="flex-end" pb={10}>
             {similarQueries.length > 0 && (
                 <Grid
                     h="200px"

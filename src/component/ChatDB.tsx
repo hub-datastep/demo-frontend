@@ -92,9 +92,7 @@ function ChatDB() {
             justifyContent="center"
             alignItems="flex-start"
             pt="100"
-            pb="10"
             h="full"
-            // backgroundColor="gray.200"
         >
             <Flex
                 ref={chatRef}
