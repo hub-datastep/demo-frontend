@@ -1,44 +1,32 @@
-import React, { ReactElement } from "react"
-import { Accordion as ChakraAccordion, AccordionButton, AccordionIcon, AccordionItem as ChakraAccordionItem, AccordionPanel, Box } from "@chakra-ui/react"
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react"
+import { ReactElement } from "react"
 
 interface IAccordion {
     titles: string[]
     panels: ReactElement[]
-    defaultIndex: number
 }
 
-interface IAccordionItem {
-    title: string
-    panel: ReactElement
-}
-
-const Accordion = ({ titles, panels, defaultIndex }: IAccordion) => {
+const Accordion = ({ titles, panels }: IAccordion) => {
     if (titles.length !== panels.length) {
         throw Error("Length of the title and panels aren't identical in Accordion component")
     }
 
-    const AccordionItem = ({ title, panel }: IAccordionItem) => {
-        return (
-            <ChakraAccordionItem>
-                <h2>
-                    <AccordionButton>
-                        <Box as="span" flex='1' textAlign='left' fontWeight="bold">
-                            {title}
-                        </Box>
-                        <AccordionIcon />
-                    </AccordionButton>
-                </h2>
-                <AccordionPanel pb={4}>
-                    {panel}
-                </AccordionPanel>
-            </ChakraAccordionItem>
-        )
-    }
-
     return (
-        <ChakraAccordion defaultIndex={[defaultIndex]} allowMultiple>
-            {titles.map((title, i) => <AccordionItem title={title} panel={panels[i]} />)}
-        </ChakraAccordion>
+        <Tabs>
+            <TabList>
+                {titles.map((title) => (
+                    <Tab>{title}</Tab>
+                ))}
+            </TabList>
+
+            <TabPanels>
+                {panels.map((panelContent) => (
+                    <TabPanel>
+                        {panelContent}
+                    </TabPanel>
+                ))}
+            </TabPanels>
+        </Tabs>
     )
 }
 
