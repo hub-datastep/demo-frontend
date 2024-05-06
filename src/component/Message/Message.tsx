@@ -82,9 +82,12 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
         panels.push(<Text mt="5">В таблице нет информации для данных фильтров</Text>)
     }
 
-    const isOnlyAnswer = messageModel.answer?.trim() !== "" && !messageModel.sql && !messageModel.table
+    const isOnlyAnswerFromAssistant = messageModel.answer?.trim() !== "" &&
+                         !messageModel.sql &&
+                         !messageModel.table &&
+                         !messageModel.query
 
-    if (isOnlyAnswer) {
+    if (isOnlyAnswerFromAssistant) {
         messageContent = messageModel.answer!
     }
 

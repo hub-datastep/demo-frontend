@@ -38,7 +38,7 @@ const InputGroupDB: FC<IInputGroupDB> = ({
 
     const isTablesLoading = queryTablesStatus !== "success"
 
-    const isTextAreaDisable = isLoading
+    const isTextAreaDisabled = isLoading
     const isSubmitButtonLoading = isLoading
     const isSubmitBtnDisabled = query.trim() === "" || !table
 
@@ -104,7 +104,7 @@ const InputGroupDB: FC<IInputGroupDB> = ({
                             onChange={handleChange}
                             onKeyDown={handleKeyDown}
                             placeholder="Ваш вопрос.."
-                            disabled={isTextAreaDisable}
+                            disabled={isTextAreaDisabled}
                             variant="solid"
                             resize="none"
                             overflowY="hidden"
@@ -129,14 +129,6 @@ const InputGroupDB: FC<IInputGroupDB> = ({
             {errorMessage && (
                 <Text color="red">{errorMessage}</Text>
             )}
-
-            {/* <HStack gap="55">
-                <Button onClick={handleIgnoreNullButtonClick}>Не учитывать NULL</Button>
-                <Box>
-                    <Text>Максимальное количество строк в ответе</Text>
-                    <Input name="limit" type="number" value={limit} onChange={handleLimitChange} />
-                </Box>
-            </HStack> */}
         </Flex>
     )
 }

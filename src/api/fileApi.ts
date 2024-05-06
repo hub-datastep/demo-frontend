@@ -8,7 +8,7 @@ const getAllFiles = (): Promise<FileModel[]> => {
 const uploadFile = (body: FileUploadModel): Promise<FileModel> => {
     return axiosClient.postForm(
         "/file",
-        { fileObject: body.file },
+        { file_object: body.file },
         {
             headers: {
                 "Content-Type": "multipart/form-data"
@@ -17,14 +17,11 @@ const uploadFile = (body: FileUploadModel): Promise<FileModel> => {
     ).then(response => response.data)
 }
 
-const removeFile = (body: Omit<FileModel, "file">) => {
-    return axiosClient.delete("/file/", {
-        data: body
-    })
+const removeFile = (file_id: number) => {
+    return axiosClient.delete(`/file/${file_id}`)
 }
 
 export {
-    getAllFiles,
-    uploadFile,
-    removeFile
+    getAllFiles, removeFile, uploadFile
 }
+

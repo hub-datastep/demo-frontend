@@ -38,8 +38,18 @@ const useSearchQuery = () => {
     return useMemo(() => new URLSearchParams(search), [search])
 }
 
-export {
-    formatDate, getBaseUrl,
-    getLastN, sortDate,
-    useSearchQuery, getHostPath
+const getShortFileName = (filename: string) => {
+    if (filename?.length > 50)
+        return (
+            filename.substring(0, 25) +
+            "..." +
+            filename.substring(filename.length - 25)
+        )
+    return filename
 }
+
+export {
+    formatDate, getBaseUrl, getHostPath, getLastN, getShortFileName, sortDate,
+    useSearchQuery
+}
+
