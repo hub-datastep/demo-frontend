@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     container_name: client-demo
+    command: npx serve build
     ports:
       - "3003:3000"
     environment:
