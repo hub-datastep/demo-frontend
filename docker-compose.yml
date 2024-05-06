@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    container_name: backend
+    container_name: client-demo
     ports:
       - "3003:3000"
     environment:
