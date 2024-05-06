@@ -65,11 +65,9 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
     const titles = []
     const panels = []
 
-    if (messageModel.sql) {
+    if (messageModel.answer) {
         titles.push("Как получился результат")
-        if (messageModel.answer) {
-            panels.push(<Text><Markdown>{messageModel.answer}</Markdown></Text>)
-        }
+        panels.push(<Text><Markdown>{messageModel.answer}</Markdown></Text>)
     }
 
     if (messageModel.sql) {
@@ -84,6 +82,12 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
         panels.push(<Text mt="5">В таблице нет информации для данных фильтров</Text>)
     }
 
+    const isOnlyAnswer = messageModel.answer?.trim() !== "" && !messageModel.sql && !messageModel.table
+
+    if (isOnlyAnswer) {
+        messageContent = messageModel.answer!
+    }
+
     return (
         <Message
             key={key}
@@ -95,6 +99,7 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
             query={messageModel.query}
         >
             <Markdown>{messageContent}</Markdown>
+
             {messageModel.sql && (
                 <Accordion
                     titles={titles}

@@ -47,7 +47,7 @@ const InputGroupDB: FC<IInputGroupDB> = ({
     }
 
     const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === "Enter" && !e.shiftKey) {
+        if (e.key === "Enter" && !e.shiftKey && !isSubmitBtnDisabled) {
             handleSubmit(query, limit)
             setQuery("")
         }
