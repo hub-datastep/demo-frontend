@@ -65,11 +65,9 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
     const titles = []
     const panels = []
 
-    if (messageModel.sql) {
+    if (messageModel.answer) {
         titles.push("Как получился результат")
-        if (messageModel.answer) {
-            panels.push(<Text><Markdown>{messageModel.answer}</Markdown></Text>)
-        }
+        panels.push(<Text><Markdown>{messageModel.answer}</Markdown></Text>)
     }
 
     if (messageModel.sql) {
