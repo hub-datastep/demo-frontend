@@ -1,16 +1,18 @@
 import { FileModel } from "model/FileModel"
 import { FileUploadTaskModel } from "model/FileUploadTaskModel"
+import { Dispatch, SetStateAction } from "react"
 
 interface IDeleteFileModal {
-    handleDeleteFile: () => void
     isOpenModal: boolean
     onCloseModal: () => void
+    onConfirm: () => void
 }
 
 interface IFileRow {
+    fileIndex: number
     file: FileModel
-    isSelected: boolean
-    setThisFileIndex: () => void
+    currentFileIndex: number
+    setCurrentFileIndex: Dispatch<SetStateAction<number>>
 }
 
 interface IFileUploadingProgress {

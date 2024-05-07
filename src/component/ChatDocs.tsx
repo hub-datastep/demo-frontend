@@ -1,12 +1,16 @@
-import { Box, Flex, Spacer, useDisclosure } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 import { getOrCreateChat } from "api/chatApi"
 import { getAllFiles } from "api/fileApi"
 import queryClient from "api/queryClient"
-import FilesHistory from "component/FilesHistory/FilesHistory"
+import { FileViewer } from "component/FilesHistory/FileViewer"
 import InputGroupDocs from "component/InputGroup/InputGroupDocs"
+import LoadingMessage from "component/InputGroup/LoadingMessage"
 import InputGroupContext from "component/InputGroup/context"
-import { PDFViewer } from "component/PDFViewer"
+import { LoadMoreMessagesBtn } from "component/LoadMoreMessagesBtn"
+import { Message, createMessage } from "component/Message/Message"
+import { ModeContext, ModeContextI } from "context/modeContext"
 import { UserContext } from "context/userContext"
+import { getLastN } from "misc/util"
 import ChatModel from "model/ChatModel"
 import { FileModel } from "model/FileModel"
 import QueryModel from "model/QueryModel"
@@ -17,16 +21,14 @@ import { useCreateMessage } from "service/messageService"
 import { useDocsPrediction } from "service/predictionService"
 
 function ChatDocs() {
+    const messageWindowRef = useRef<HTMLDivElement | null>(null)
     const chatRef = useRef<HTMLDivElement | null>(null)
     const [currentPage, setCurrentPage] = useState<number>(0)
-    const [currentFileIndex, setCurrentFileIndex] = useState<number>(0)
+    const [currentFileIndex, setCurrentFileIndex] = useState<number>(-1)
     const user = useContext<UserModel>(UserContext)
     const [similarQueries, setSimilarQueries] = useState<string[]>([])
-    const {
-        isOpen: isSourcesHistoryOpen,
-        onOpen: openSourcesHistory,
-        onClose: closeSourcesHistory
-    } = useDisclosure()
+
+    const { shownMessageCount } = useContext<ModeContextI>(ModeContext)
     
     const messageCreateMutation = useCreateMessage()
     const predictionMutation = useDocsPrediction()
@@ -35,9 +37,9 @@ function ChatDocs() {
         return getOrCreateChat(user.id)
     })
 
-    const { data: filesList } = useQuery<FileModel[]>(
+    const { data: filesList = [] } = useQuery<FileModel[]>(
         "filesList",
-        () => getAllFiles(),
+        getAllFiles,
         { enabled: !!chat?.id }
     )
 
@@ -46,14 +48,7 @@ function ChatDocs() {
         || chatQueryStatus === "loading"
 
     const errorMessage = predictionMutation.isError ? "Произошла ошибка. Попробуйте ещё раз" : undefined
-
-    useEffect(() => {
-        window.scroll({
-            top: chatRef.current?.offsetHeight,
-            behavior: "smooth",
-        })
-    }, [chat?.messages.length])
-
+    
     const handleSubmit = async (finalQuery: string, limit?: number) => {
         if (chat && finalQuery.trim() !== "") {
             const { id: queryMessageId } = await messageCreateMutation.mutateAsync({
@@ -88,59 +83,90 @@ function ChatDocs() {
         }
     }
 
+    useEffect(() => {
+        window.scroll({
+            top: chatRef.current?.offsetHeight,
+            behavior: "smooth",
+        })
+    }, [chat?.messages.length])
+    
     return (
         <Flex
-            position="relative"
             direction="row"
-            justifyContent="center"
+            justifyContent="flex-end"
             alignItems="flex-start"
+            alignSelf="flex-end"
             pt="100"
-            pb="10"
+            // pb="10"
             h="full"
+            w="50%"
         >
             <Flex
                 ref={chatRef}
-                position="relative"
                 direction="column"
                 justifyContent="flex-start"
-                p="10"
+                px="10"
                 h="full"
-                w="768px"
+                w="full"
                 gap={10}
             >
-                {filesList && currentFileIndex >= 0 && (
-                    <>
-                        <Box position="fixed" left="0" top="80px">
-                            <PDFViewer fileUrl={filesList[currentFileIndex].file_path} page={currentPage} />
-                        </Box>
-                        <Spacer />
-                    </>
+                <FileViewer
+                    filesList={filesList}
+                    currentFileIndex={currentFileIndex}
+                    currentPage={currentPage}
+                    setCurrentFileIndex={setCurrentFileIndex}
+                />
+
+                {chat && chat.messages.length > shownMessageCount && (
+                    <LoadMoreMessagesBtn isLoading={isLoading} />
                 )}
 
-                {filesList && (
-                    <FilesHistory
-                        filesList={filesList}
-                        currentFileIndex={currentFileIndex}
-                        setCurrentFileIndex={setCurrentFileIndex}
-                        isOpen={isSourcesHistoryOpen}
-                        onClose={closeSourcesHistory}
-                    />
-                )}
+                <Flex
+                    ref={messageWindowRef}
+                    direction="column"
+                    gap="5"
+                    flexGrow="1"
+                >
+                    {/* Messages from history */}
+                    {chat && !!chat.messages.length && (
+                        getLastN(
+                            shownMessageCount,
+                            chat.messages.map((message, i) => createMessage(message, i))
+                        )
+                    )}
 
-                {/* {filesList && currentFileIndex >= 0 ? (
-                    <Text color="black">{filesList[currentFileIndex].original_filename}</Text>
-                ) : (
-                    <Text color="gray" fontStyle="italic">
-                        Выберите файл через кнопку «Документы»
-                    </Text>
-                )} */}
+                    {/* Loading message */}
+                    {isLoading && (
+                        <Message
+                            direction="incoming"
+                            messageId={-1}
+                            src="/image/avatar/bot.svg"
+                            callback={false}
+                        >
+                            <LoadingMessage />
+                        </Message>
+                    )}
+
+                    {/* Assistant message if not messages */}
+                    {chat && chat.messages.length === 0 && (
+                        <Message
+                            direction="incoming"
+                            messageId={-1}
+                            src="/image/avatar/bot.svg"
+                            callback={false}
+                        >
+                            Какой у вас запрос?
+                        </Message>
+                    )}
+                </Flex>
 
                 <InputGroupContext.Provider value={{ handleSubmit, similarQueries }}>
                     <InputGroupDocs
+                        filesList={filesList}
                         isLoading={isLoading}
                         errorMessage={errorMessage}
-                        openSourcesHistory={openSourcesHistory}
                         currentFileIndex={currentFileIndex}
+                        setCurrentFileIndex={setCurrentFileIndex}
                     />
                 </InputGroupContext.Provider>
             </Flex>

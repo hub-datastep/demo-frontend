@@ -1,9 +1,10 @@
-import { Flex, IconButton } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 import { getOrCreateChat } from "api/chatApi"
 import queryClient from "api/queryClient"
 import InputGroupDB from "component/InputGroup/InputGroupDB"
 import LoadingMessage from "component/InputGroup/LoadingMessage"
 import InputGroupContext from "component/InputGroup/context"
+import { LoadMoreMessagesBtn } from "component/LoadMoreMessagesBtn"
 import { Message, createMessage } from "component/Message/Message"
 import { ModeContext, ModeContextI } from "context/modeContext"
 import { UserContext } from "context/userContext"
@@ -12,7 +13,6 @@ import ChatModel from "model/ChatModel"
 import QueryModel from "model/QueryModel"
 import { UserModel } from "model/UserModel"
 import { useContext, useEffect, useRef, useState } from "react"
-import { TbSquareRoundedArrowUpFilled } from "react-icons/tb"
 import { useQuery } from "react-query"
 import { useCreateMessage } from "service/messageService"
 import { useDBPrediction } from "service/predictionService"
@@ -23,10 +23,7 @@ function ChatDB() {
     const [table, setTable] = useState<string>()
     const user = useContext<UserModel>(UserContext)
     const [similarQueries, setSimilarQueries] = useState<string[]>([])
-    const {
-        shownMessageCount,
-        setShownMessageCount
-    } = useContext<ModeContextI>(ModeContext)
+    const { shownMessageCount } = useContext<ModeContextI>(ModeContext)
     
     const messageCreateMutation = useCreateMessage()
     const predictionMutation = useDBPrediction()
@@ -40,13 +37,6 @@ function ChatDB() {
         || chatQueryStatus === "loading"
 
     const errorMessage = predictionMutation.isError ? "Произошла ошибка. Попробуйте ещё раз" : undefined
-
-    useEffect(() => {
-        window.scroll({
-            top: chatRef.current?.offsetHeight,
-            behavior: "smooth",
-        })
-    }, [chat?.messages.length])
 
     const handleSubmit = async (finalQuery: string, limit?: number) => {
         if (chat && finalQuery.trim() !== "") {
@@ -80,11 +70,12 @@ function ChatDB() {
         }
     }
 
-    const handleShowMore = () => {
-        if (!isLoading) {
-            setShownMessageCount((lastN) => lastN + 10)
-        }
-    }
+    useEffect(() => {
+        window.scroll({
+            top: chatRef.current?.offsetHeight,
+            behavior: "smooth",
+        })
+    }, [chat?.messages.length])
 
     return (
         <Flex
@@ -103,14 +94,7 @@ function ChatDB() {
                 gap={10}
             >
                 {chat && chat.messages.length > shownMessageCount && (
-                    <IconButton
-                        aria-label="Load more messages"
-                        icon={<TbSquareRoundedArrowUpFilled size={36} />}
-                        title="Прошлые сообщения"
-                        variant="ghost"
-                        color="purple.400"
-                        onClick={handleShowMore}
-                    />
+                    <LoadMoreMessagesBtn isLoading={isLoading} />
                 )}
 
                 <Flex

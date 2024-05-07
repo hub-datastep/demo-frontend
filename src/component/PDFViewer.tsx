@@ -4,9 +4,9 @@ import { pageNavigationPlugin } from "@react-pdf-viewer/page-navigation"
 import { FC, useEffect } from "react"
 
 // Import styles
+import { VStack } from "@chakra-ui/react"
 import "@react-pdf-viewer/core/lib/styles/index.css"
 import "@react-pdf-viewer/default-layout/lib/styles/index.css"
-import { VStack } from "@chakra-ui/react"
 import { getHostPath } from "misc/util"
 
 interface IPDFViewer {
@@ -33,8 +33,8 @@ export const PDFViewer: FC<IPDFViewer> = ({ page, fileUrl }) => {
     return (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
             <VStack
-                width="40vw"
-                height="100vh"
+                width="50vw"
+                height="full"
             >
                 <Viewer
                     fileUrl={fullFileUrl}

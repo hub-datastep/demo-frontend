@@ -1,42 +1,53 @@
-import React, { FC, MouseEventHandler } from "react"
 import {
     Button,
+    Flex,
     Modal,
     ModalBody,
     ModalCloseButton,
     ModalContent,
     ModalFooter,
     ModalHeader,
+    ModalOverlay,
 } from "@chakra-ui/react"
 import { IDeleteFileModal } from "component/FilesHistory/types"
+import { FC } from "react"
 
-const DeleteFileModal: FC<IDeleteFileModal> = ({ isOpenModal, onCloseModal, handleDeleteFile }) => {
-    const handleDeleteButtonClick: MouseEventHandler<HTMLButtonElement> = (_) => {
-        handleDeleteFile()
-    }
+const DeleteFileModal: FC<IDeleteFileModal> = (props) => {
+    const { isOpenModal, onCloseModal, onConfirm } = props
 
     return (
-        <Modal
-            isOpen={isOpenModal}
-            onClose={onCloseModal}
-            isCentered
-        >
+        <Modal isCentered isOpen={isOpenModal} onClose={onCloseModal}>
+            <ModalOverlay
+                bg="blackAlpha.300"
+                backdropFilter="blur(10px)"
+            />
+        
             <ModalContent>
-                <ModalHeader>Удалить файл</ModalHeader>
+                <ModalHeader>Удаление документа</ModalHeader>
                 <ModalCloseButton />
+
                 <ModalBody>
-                    Вы уверены, что хотите удалить файл?
+                    Вы решили удалить этот документ?
                 </ModalBody>
+
                 <ModalFooter>
-                    <Button mr={3} onClick={onCloseModal}>
-                        Отмена
-                    </Button>
-                    <Button
-                        colorScheme="red"
-                        onClick={handleDeleteButtonClick}
-                    >
-                        Удалить
-                    </Button>
+                    <Flex gap={5}>
+                        <Button
+                            variant="outline"
+                            colorScheme="red"
+                            onClick={onConfirm}
+                        >
+                            Да
+                        </Button>
+
+                        <Button
+                            variant="outline"
+                            colorScheme="blue"
+                            onClick={onCloseModal}
+                        >
+                            Нет
+                        </Button>
+                    </Flex>
                 </ModalFooter>
             </ModalContent>
         </Modal>

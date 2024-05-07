@@ -1,4 +1,4 @@
-import { Button, Flex, Text } from "@chakra-ui/react"
+import { Button, Text } from "@chakra-ui/react"
 import { ClearChatModal } from "component/ClearChatModal"
 import { ModeContext, ModeContextI } from "context/modeContext"
 import ChatModel from "model/ChatModel"
@@ -31,15 +31,7 @@ export const ClearChatButton = () => {
 
     const showSuccefullToast = () => {
         toast.success((
-            <Flex
-                direction="column"
-                alignItems="flex-start"
-                gap={5}
-            >
-                <Text fontSize="md">
-                    Чат успешно очищен
-                </Text>
-            </Flex>
+            <Text fontSize="md">Чат успешно очищен</Text>
         ), clearChatSuccessToastOptions)
     }
 

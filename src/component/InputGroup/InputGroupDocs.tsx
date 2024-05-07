@@ -1,43 +1,36 @@
 import {
-    Button,
     Flex,
-    Grid,
     HStack,
+    IconButton,
     Text,
     Textarea,
     VStack
 } from "@chakra-ui/react"
+import { ClearChatButton } from "component/ClearChatButton"
 import InputGroupContext from "component/InputGroup/context"
 import { IInputGroupContext, IInputGroupDocs } from "component/InputGroup/types"
-import { FavoriteMessageContext, IFavoriteMessageContext } from "context/favoriteMessageContext"
-import { ChangeEvent, FC, KeyboardEvent, useContext, useEffect, useState } from "react"
+import { QueryFileSelect } from "component/QueryFileSelect"
+import { ChangeEvent, FC, KeyboardEvent, useContext, useState } from "react"
+import { IoMdArrowRoundUp } from "react-icons/io"
 
-const InputGroupDocs: FC<IInputGroupDocs> = ({
-    isLoading,
-    errorMessage,
-    openSourcesHistory,
-    currentFileIndex
-}) => {
+const InputGroupDocs: FC<IInputGroupDocs> = (props) => {
+    const {
+        filesList,
+        isLoading,
+        errorMessage,
+        currentFileIndex,
+        setCurrentFileIndex,
+    } = props
+
     const [query, setQuery] = useState<string>("")
     const { handleSubmit } = useContext<IInputGroupContext>(InputGroupContext)
-    const { selectedFavoriteQuery } = useContext<IFavoriteMessageContext>(FavoriteMessageContext)
 
-    const isTextAreaDisable = () => {
-        if (currentFileIndex < 0) {
-            return true
-        }
-    }
-
-    const isSubmitBtnDisable = () => {
-        return query.trim() === ""
-    }
-
-    const isSubmitButtonLoading = () => {
-        return isLoading
-    }
+    const isTextAreaDisabled = currentFileIndex < 0
+    const isSubmitButtonLoading = isLoading
+    const isSubmitBtnDisabled = query.trim() === ""
 
     const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === "Enter" && !e.shiftKey) {
+        if (e.key === "Enter" && !e.shiftKey && !isSubmitBtnDisabled) {
             handleSubmit(query)
             setQuery("")
         }
@@ -52,53 +45,68 @@ const InputGroupDocs: FC<IInputGroupDocs> = ({
         setQuery("")
     }
 
-    useEffect(() => {
-        setQuery(selectedFavoriteQuery)
-    },[selectedFavoriteQuery])
-
     return (
-        <Flex direction="column" gap="5">
-            <Grid
-                h='200px'
-                templateRows='repeat(2, 1fr)'
-                templateColumns='repeat(2, 1fr)'
-                gap={4}
-            >
-                {/* {similarQueries && similarQueries.map((query: string) => (
-                    <GridItem>
-                        <AskQueryButton query={query} limit={limit} />
-                    </GridItem>
-                ))} */}
-            </Grid>
+        <Flex direction="column" gap="5" justifySelf="flex-end" pb={10}>
+            {/* {similarQueries.length > 0 && (
+                <Grid
+                    templateRows="repeat(2, 1fr)"
+                    templateColumns="repeat(2, 1fr)"
+                    gap={2}
+                >
+                    {similarQueries.map((query: string) => (
+                        <GridItem>
+                            <AskQueryButton query={query} setQuery={setQuery} />
+                        </GridItem>
+                    ))}
+                </Grid>
+            )} */}
 
             <HStack alignItems="flex-start">
-                <Textarea
-                    height="full"
-                    value={query}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Ваш вопрос.."
-                    disabled={isTextAreaDisable()}
-                />
-                <VStack alignItems="flex-start">
-                    <Button
-                        width="full"
-                        colorScheme="blue"
-                        onClick={handleSubmitClick}
-                        isLoading={isSubmitButtonLoading()}
-                        isDisabled={isSubmitBtnDisable()}
-                    >
-                        Отправить
-                    </Button>
+                <VStack width="full" alignItems="flex-start">
+                    <HStack>
+                        <ClearChatButton />
 
-                    <Button
-                        aria-label="open files history"
-                        onClick={openSourcesHistory}
-                        children="Документы"
-                    />
+                        <QueryFileSelect
+                            filesList={filesList}
+                            currentFileIndex={currentFileIndex}
+                            setCurrentFileIndex={setCurrentFileIndex}
+                        />
+                    </HStack>
+                
+                    <Flex width="full" position="relative">
+                        <Textarea
+                            backgroundColor="gray.100"
+                            height="full"
+                            width="full"
+                            value={query}
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}
+                            placeholder="Ваш вопрос.."
+                            disabled={isTextAreaDisabled}
+                            variant="solid"
+                            resize="none"
+                            overflowY="hidden"
+                        />
+                        <IconButton
+                            aria-label="Send query"
+                            icon={<IoMdArrowRoundUp size={20} />}
+                            colorScheme="purple"
+                            variant="solid"
+                            onClick={handleSubmitClick}
+                            isLoading={isSubmitButtonLoading}
+                            isDisabled={isSubmitBtnDisabled}
+                            position="absolute"
+                            top={2}
+                            right={2}
+                            zIndex={100}
+                        />
+                    </Flex>
                 </VStack>
             </HStack>
-            {errorMessage && <Text color="red">{errorMessage}</Text>}
+
+            {errorMessage && (
+                <Text color="red">{errorMessage}</Text>
+            )}
         </Flex>
     )
 }
