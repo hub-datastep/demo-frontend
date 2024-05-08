@@ -12,11 +12,10 @@ RUN apk --update --no-cache --virtual build-dependencies add \
         g++
 
 RUN yarn install
-RUN yarn add serve
 
 RUN apk del build-dependencies
 
-COPY . .
+COPY . /app/
 
 RUN yarn run build
 

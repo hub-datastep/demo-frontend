@@ -14,7 +14,7 @@ interface FileViewerProps {
 export const FileViewer: FC<FileViewerProps> = (props) => {
     const { filesList, currentFileIndex, currentPage, setCurrentFileIndex } = props
 
-    const isFileSelected = filesList.length > 0 && currentFileIndex > 0
+    const isFileSelected = filesList.length > 0 && currentFileIndex >= 0
 
     return (
         <Flex
@@ -36,13 +36,6 @@ export const FileViewer: FC<FileViewerProps> = (props) => {
                     page={currentPage}
                 />
             ) : (
-                // <Button
-                //     variant="outline"
-                //     colorScheme="purple"
-                //     size="lg"
-                // >
-                //     <Text fontSize="xl">Выберите документ</Text>
-                // </Button>
                 <QueryFileSelect
                     size="large"
                     filesList={filesList}

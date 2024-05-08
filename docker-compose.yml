@@ -9,6 +9,6 @@ services:
     ports:
       - "3003:3003"
     env_file:
-      - .env.production
+      - .env
     volumes:
       - ./ngnix.conf:/etc/nginx/conf.d/default.conf

@@ -5,7 +5,7 @@ node_modules/
 build/
 
 # Environment
-*.env.*
+*.env*
 !.env.template
 
 # IDEA
