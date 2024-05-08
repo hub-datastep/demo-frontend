@@ -16,13 +16,11 @@ export const QueryTableSelect: FC<QueryTableSelectProps> = (props) => {
             <MenuButton 
                 isLoading={isTablesLoading} 
                 as={Button}
-                // variant="solid"
                 variant="outline"
+                colorScheme="gray"
             >
                 <Text fontSize="sm">
-                    {table ?
-                        `Таблица: ${table}`
-                        : "Выберите таблицу"}
+                    {table ? `Таблица: ${table}` : "Выбрать таблицу"}
                 </Text>
             </MenuButton>
 

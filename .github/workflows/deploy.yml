@@ -1,0 +1,36 @@
+name: Docker Build CI
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy_to_demostand:
+    name: Update server by ssh
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+
+      - name: Connect and run script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEMOSTAND_HOST }}
+          port: ${{ secrets.DEMOSTAND_PORT }}
+          username: ${{ secrets.DEMOSTAND_DATASTEP_USERNAME }}
+          password: ${{ secrets.DEMOSTAND_DATASTEP_PASSWORD }}
+          script_stop: true
+          script: |
+            cd datastep-demo
+            cd datastep-demo-frontend
+            git checkout main
+            git pull
+
+            echo "Stop demo frontend container"
+            docker-compose down
+
+            echo "Run updated demo frontend container"
+            docker-compose up -d --build
+
+            echo "Clean docker files"
+            docker system prune -f

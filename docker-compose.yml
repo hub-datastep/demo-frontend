@@ -6,10 +6,9 @@ services:
       context: .
       dockerfile: ./Dockerfile
     container_name: client-demo
-    command: npx serve build
     ports:
-      - "3003:3000"
-    environment:
-      - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
-      - REACT_APP_STATIC_URL=${REACT_APP_STATIC_URL}
-      - REACT_APP_PAGE_TITLE=${REACT_APP_PAGE_TITLE}
+      - "3003:3003"
+    env_file:
+      - .env
+    volumes:
+      - ./ngnix.conf:/etc/nginx/conf.d/default.conf

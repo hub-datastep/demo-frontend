@@ -1,3 +1,4 @@
+import { FileModel } from "model/FileModel"
 import { Dispatch, SetStateAction } from "react"
 
 interface IInputGroupDB {
@@ -8,10 +9,11 @@ interface IInputGroupDB {
 }
 
 interface IInputGroupDocs {
+    filesList: FileModel[]
     isLoading: boolean
     errorMessage: string | undefined
-    openSourcesHistory: () => void
     currentFileIndex: number
+    setCurrentFileIndex: Dispatch<SetStateAction<number>>
 }
 
 interface IInputGroupContext {
@@ -20,7 +22,6 @@ interface IInputGroupContext {
 }
 
 export type {
-    IInputGroupDB,
-    IInputGroupDocs,
-    IInputGroupContext,
+    IInputGroupContext, IInputGroupDB,
+    IInputGroupDocs
 }

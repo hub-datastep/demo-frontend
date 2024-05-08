@@ -1,84 +1,22 @@
-import React, { FC, MouseEventHandler, useContext } from "react"
-import {
-    Button,
-    Flex,
-    IconButton,
-    Text, useDisclosure,
-} from "@chakra-ui/react"
-import { BsCheck } from "react-icons/bs"
-import { FaTrashAlt } from "react-icons/fa"
-import DeleteFileModal from "component/FilesHistory/DeleteFileModal"
+import { Flex, Text } from "@chakra-ui/react"
+import { RowButtons } from "component/FilesHistory/RowButtons"
 import { IFileRow } from "component/FilesHistory/types"
-import { ModeContext } from "context/modeContext"
-import { useDeleteFileMutation } from "service/fileService"
+import { getShortFileName } from "misc/util"
+import { FC } from "react"
 
-const getShortFileName = (filename: string) => {
-    if (filename.length > 50)
-        return (
-            filename.substring(0, 25) +
-            "..." +
-            filename.substring(filename.length - 25)
-        )
-    return filename
-}
-
-const FileRow: FC<IFileRow> = ({
-    file,
-    isSelected,
-    setThisFileIndex,
-}) => {
+const FileRow: FC<IFileRow> = (props) => {
     const {
-        isOpen: isOpenModal,
-        onOpen: onOpenModal,
-        onClose: onCloseModal,
-    } = useDisclosure()
+        fileIndex,
+        file,
+        currentFileIndex,
+        setCurrentFileIndex
+    } = props
 
-    const { setMode } = useContext(ModeContext)
+    const isSelected = currentFileIndex === fileIndex
 
-    const deleteFileMutation = useDeleteFileMutation()
-
-    const handleDeleteFile = () => {
-        deleteFileMutation.mutate(file)
-        onCloseModal()
-    }
+    const shortFileName = getShortFileName(file.original_filename)
 
     const backgroundColor = isSelected ? "gray.100" : "transparent"
-
-    const handleSelectButtonClick: MouseEventHandler<HTMLButtonElement> = () => {
-        setMode("wiki")
-        setThisFileIndex()
-    }
-
-    let buttons
-    if (isSelected) {
-        buttons = <BsCheck size={24} />
-    } else {
-        buttons = (
-            <Flex gap={10}>
-                <Button
-                    colorScheme="blue"
-                    variant="link"
-                    size="sm"
-                    onClick={handleSelectButtonClick}
-                >
-                    Выбрать
-                </Button>
-                <IconButton
-                    aria-label="close-button"
-                    colorScheme="red"
-                    icon={<FaTrashAlt color="white" />}
-                    isLoading={deleteFileMutation.isLoading}
-                    onClick={onOpenModal}
-                />
-
-                <DeleteFileModal
-                    handleDeleteFile={handleDeleteFile}
-                    isOpenModal={isOpenModal}
-                    onCloseModal={onCloseModal}
-                />
-            </Flex>
-        )
-    }
 
     return (
         <Flex
@@ -86,13 +24,19 @@ const FileRow: FC<IFileRow> = ({
             justifyContent="space-between"
             alignItems="center"
             backgroundColor={backgroundColor}
-            padding={3}
+            width="full"
+            px={2}
+            py={1}
             borderRadius={10}
         >
-            <Flex direction="column">
-                <Text>{getShortFileName(file.original_filename)}</Text>
-            </Flex>
-            {buttons}
+            <Text px={2}>{shortFileName}</Text>
+
+            <RowButtons
+                fileIndex={fileIndex}
+                file={file}
+                isSelected={isSelected}
+                setCurrentFileIndex={setCurrentFileIndex}
+            />
         </Flex>
     )
 }
