@@ -29,7 +29,7 @@ function App() {
                                                     <EditPromptForm />
                                                 </Box>
                                             } />
-                                            <Route index element={<ChatDB />} />
+                                            <Route path="/databases" element={<ChatDB />} />
                                             <Route path="/documents" element={<ChatDocs />} />
                                         </Route>
                                     </Routes>
