@@ -22,7 +22,7 @@ jobs:
           script_stop: true
           script: |
             cd ~/datastep-demo/
-            cd ~/datastep-demo-frontend/
+            cd ~/demo-frontend/
             git checkout main
             git pull
 
