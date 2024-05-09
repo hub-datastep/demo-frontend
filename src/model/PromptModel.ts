@@ -1,9 +1,8 @@
 interface PromptEditModel {
     prompt: string
-    name: string
-    description: string
-    is_active: boolean
-    updated_by: string | null
+    table: string
+    scheme?: string
+    is_active?: boolean
 }
 
 interface PromptModel extends PromptEditModel {
@@ -11,10 +10,8 @@ interface PromptModel extends PromptEditModel {
     tenant_id: number
     created_at: string
     updated_at: string
-    created_by: string | null
 }
 
 export type {
-    PromptModel,
-    PromptEditModel
+    PromptEditModel, PromptModel
 }
