@@ -1,7 +1,7 @@
-import { useMutation } from "react-query"
 import { editActivePrompt } from "api/promptApi"
 import queryClient from "api/queryClient"
 import { PromptEditModel } from "model/PromptModel"
+import { useMutation } from "react-query"
 
 interface IEditFunc {
     prompt_id: number,
@@ -9,8 +9,7 @@ interface IEditFunc {
 }
 
 const usePrompt = () => {
-    const func = ({ prompt_id, body }: IEditFunc) =>
-        editActivePrompt(prompt_id, body)
+    const func = ({ prompt_id, body }: IEditFunc) => editActivePrompt(prompt_id, body)
 
     const options = {
         onSuccess: () => queryClient.invalidateQueries("prompt")

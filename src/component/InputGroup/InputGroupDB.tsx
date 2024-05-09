@@ -15,7 +15,6 @@ import InputGroupContext from "component/InputGroup/context"
 import { IInputGroupContext, IInputGroupDB } from "component/InputGroup/types"
 import { QueryTableSelect } from "component/QueryTableSelect"
 import { FavoriteMessageContext, IFavoriteMessageContext } from "context/favoriteMessageContext"
-import { UserContext } from "context/userContext"
 import { ChangeEvent, FC, KeyboardEvent, useContext, useEffect, useState } from "react"
 import { IoMdArrowRoundUp } from "react-icons/io"
 import { useQuery } from "react-query"
@@ -30,11 +29,7 @@ const InputGroupDB: FC<IInputGroupDB> = ({
     const [query, setQuery] = useState<string>("")
     const { handleSubmit, similarQueries } = useContext<IInputGroupContext>(InputGroupContext)
     const { selectedFavoriteQuery } = useContext<IFavoriteMessageContext>(FavoriteMessageContext)
-    const user = useContext(UserContext)
-    const { data: tables, status: queryTablesStatus } = useQuery<string[]>(
-        "tables", 
-        () => getTenantTables(user.tenants[0].id)
-    )
+    const { data: tables, status: queryTablesStatus } = useQuery<string[]>("tables", getTenantTables)
 
     const isTablesLoading = queryTablesStatus !== "success"
 

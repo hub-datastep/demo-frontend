@@ -1,11 +1,10 @@
-import React, { ChangeEvent, useContext } from "react"
 import { Box, Button, Text, Textarea } from "@chakra-ui/react"
 import { getActivePrompt } from "api/promptApi"
-import { usePrompt } from "service/promptService"
 import queryClient from "api/queryClient"
 import { PromptModel } from "model/PromptModel"
+import { ChangeEvent } from "react"
 import { useQuery } from "react-query"
-import { UserContext } from "context/userContext"
+import { usePrompt } from "service/promptService"
 
 const updatePrompt = (promptModel: PromptModel, newPrompt: string) => {
     promptModel.prompt = newPrompt
@@ -13,9 +12,7 @@ const updatePrompt = (promptModel: PromptModel, newPrompt: string) => {
 }
 
 const EditPromptForm = () => {
-    const user = useContext(UserContext)
-    const { data: prompt, status: queryPromptStatus } =
-        useQuery<PromptModel>("prompt", () => getActivePrompt(user.tenants[0].id))
+    const { data: prompt, status: queryPromptStatus } = useQuery<PromptModel>("prompt", getActivePrompt)
     const promptService = usePrompt()
 
     const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -28,13 +25,7 @@ const EditPromptForm = () => {
         if (prompt?.prompt) {
             promptService.mutate({
                 prompt_id: prompt.id,
-                body: {
-                    prompt: prompt.prompt,
-                    name: "",
-                    description: "",
-                    is_active: prompt.is_active,
-                    updated_by: user.id
-                }
+                body: prompt
             })
         }
     }
@@ -44,9 +35,24 @@ const EditPromptForm = () => {
 
     return (
         <Box p="10">
-            <Textarea defaultValue={prompt?.prompt} onChange={handleTextareaChange} isDisabled={isLoading} rows={20} />
-            <Button mt="5" onClick={handleButtonClick} isLoading={isLoading} loadingText="Подождите...">Сохранить</Button>
-            {isError && <Text color="red">Произошла ошибка</Text>}
+            <Textarea
+                value={prompt?.prompt}
+                onChange={handleTextareaChange}
+                isDisabled={isLoading}
+                rows={20}
+            />
+
+            <Button
+                onClick={handleButtonClick}
+                isLoading={isLoading}
+                mt="5"
+            >
+                Сохранить
+            </Button>
+
+            {isError && (
+                <Text color="red">Произошла ошибка</Text>
+            )}
         </Box>
     )
 }
