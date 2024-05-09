@@ -26,7 +26,7 @@ jobs:
             git pull
 
             echo "Stop demo frontend container"
-            docker-compose down
+            docker-compose stop client-demo
 
             echo "Run updated demo frontend container"
             docker-compose up -d --build
