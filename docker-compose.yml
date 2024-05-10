@@ -1,11 +1,10 @@
 version: "3"
 
 services:
-  client-demo:
+  client:
     build:
       context: .
       dockerfile: ./Dockerfile
-    container_name: client-demo
     ports:
       - "3003:3003"
     volumes:
