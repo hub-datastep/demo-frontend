@@ -58,7 +58,7 @@
     "rules": {
       "indent": [
         "warn",
-        4
+        2
       ],
       "no-console": "warn",
       "semi": [
