@@ -15,10 +15,10 @@ jobs:
       - name: Connect and run script
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.DEMOSTAND_HOST }}
-          port: ${{ secrets.DEMOSTAND_PORT }}
-          username: ${{ secrets.DEMOSTAND_DATASTEP_USERNAME }}
-          password: ${{ secrets.DEMOSTAND_DATASTEP_PASSWORD }}
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.SERVER_PORT }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           script_stop: true
           script: |
             cd ~/datastep-demo/demo-frontend/
