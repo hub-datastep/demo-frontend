@@ -40,12 +40,19 @@ export const ChatDocs = () => {
   const isMessagesExistsInChat = chat && chat.messages.length !== 0
   const isMoreMessagesInChat = isMessagesExistsInChat && chat.messages.length > shownMessageCount
 
-  const { data: filesList = [] } = useQuery<FileModel[]>("filesList", getAllFiles, {
-    enabled: !!chat?.id,
-  })
+  const { data: filesList = [], status: filesListQueryStatus } = useQuery<FileModel[]>(
+    "filesList",
+    getAllFiles,
+    {
+      enabled: !!chat?.id,
+    }
+  )
 
   const isLoading =
-    predictionMutation.isLoading || messageCreateMutation.isLoading || chatQueryStatus === "loading"
+    predictionMutation.isLoading ||
+    messageCreateMutation.isLoading ||
+    chatQueryStatus === "loading" ||
+    filesListQueryStatus === "loading"
 
   const errorMessage = predictionMutation.isError
     ? "Произошла ошибка. Попробуйте ещё раз"
@@ -157,6 +164,7 @@ export const ChatDocs = () => {
         currentFileIndex={currentFileIndex}
         currentPage={currentPage}
         setCurrentFileIndex={setCurrentFileIndex}
+        isLoading={isLoading}
       />
     </Flex>
   )

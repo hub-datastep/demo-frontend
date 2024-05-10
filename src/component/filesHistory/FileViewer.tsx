@@ -9,10 +9,11 @@ interface FileViewerProps {
   currentFileIndex: number
   currentPage: number
   setCurrentFileIndex: Dispatch<SetStateAction<number>>
+  isLoading: boolean
 }
 
 export const FileViewer: FC<FileViewerProps> = (props) => {
-  const { filesList, currentFileIndex, currentPage, setCurrentFileIndex } = props
+  const { filesList, currentFileIndex, currentPage, setCurrentFileIndex, isLoading } = props
 
   const isFileSelected = filesList.length > 0 && currentFileIndex >= 0
 
@@ -26,6 +27,7 @@ export const FileViewer: FC<FileViewerProps> = (props) => {
           filesList={filesList}
           currentFileIndex={currentFileIndex}
           setCurrentFileIndex={setCurrentFileIndex}
+          isLoading={isLoading}
         />
       )}
     </Flex>

@@ -81,7 +81,7 @@ const InputGroupDB: FC<IInputGroupDB> = ({
             <HStack alignItems="flex-start">
                 <VStack width="full" alignItems="flex-start">
                     <HStack>
-                        <ClearChatButton />
+                        <ClearChatButton isLoading />
 
                         <QueryTableSelect
                             tables={tables}

@@ -9,10 +9,11 @@ interface QueryFileSelectProps {
   filesList: FileModel[]
   currentFileIndex: number
   setCurrentFileIndex: Dispatch<SetStateAction<number>>
+  isLoading: boolean
 }
 
 export const QueryFileSelect: FC<QueryFileSelectProps> = (props) => {
-  const { size = "small", filesList, currentFileIndex, setCurrentFileIndex } = props
+  const { size = "small", filesList, currentFileIndex, setCurrentFileIndex, isLoading } = props
 
   const {
     isOpen: isSourcesHistoryOpen,
@@ -30,6 +31,7 @@ export const QueryFileSelect: FC<QueryFileSelectProps> = (props) => {
         onClick={openSourcesHistory}
         variant={isSmallBtn ? "outline" : "solid"}
         colorScheme={isSmallBtn ? "gray" : "purple"}
+        isLoading={isLoading}
       >
         <Text fontSize={isSmallBtn ? "sm" : "lg"}>
           {currentFileIndex < 0 ? "Выбрать документ" : `Документ: ${fileName}`}

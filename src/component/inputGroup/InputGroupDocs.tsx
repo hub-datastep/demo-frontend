@@ -13,7 +13,6 @@ const InputGroupDocs: FC<IInputGroupDocs> = (props) => {
   const { handleSubmit } = useContext<IInputGroupContext>(InputGroupContext)
 
   const isTextAreaDisabled = currentFileIndex < 0
-  const isSubmitButtonLoading = isLoading
   const isSubmitBtnDisabled = query.trim() === ""
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -52,12 +51,13 @@ const InputGroupDocs: FC<IInputGroupDocs> = (props) => {
       <HStack alignItems="flex-start">
         <VStack width="full" alignItems="flex-start">
           <HStack>
-            <ClearChatButton />
+            <ClearChatButton isLoading={isLoading} />
 
             <QueryFileSelect
               filesList={filesList}
               currentFileIndex={currentFileIndex}
               setCurrentFileIndex={setCurrentFileIndex}
+              isLoading={isLoading}
             />
           </HStack>
 
@@ -81,7 +81,7 @@ const InputGroupDocs: FC<IInputGroupDocs> = (props) => {
               colorScheme="purple"
               variant="solid"
               onClick={handleSubmitClick}
-              isLoading={isSubmitButtonLoading}
+              isLoading={isLoading}
               isDisabled={isSubmitBtnDisabled}
               position="absolute"
               top={2}
