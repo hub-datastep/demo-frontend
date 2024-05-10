@@ -26,7 +26,7 @@ jobs:
             git pull
 
             echo "Stop containers"
-            docker-compose down
+            docker-compose stop
 
             echo "Build new containers"
             docker-compose build
