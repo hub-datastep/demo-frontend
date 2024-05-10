@@ -1,4 +1,4 @@
-name: Docker Build CI
+name: 🚀 Deploy to Demostand
 
 on:
   push:
@@ -25,11 +25,11 @@ jobs:
             git checkout main
             git pull
 
-            echo "Stop demo frontend container"
-            docker-compose stop client-demo
+            echo "Stop containers"
+            docker-compose down
 
-            echo "Run updated demo frontend container"
-            docker-compose up -d --build
+            echo "Build new containers"
+            docker-compose build
 
-            echo "Clean docker files"
-            docker system prune -f
+            echo "Run new containers"
+            docker-compose up -d
