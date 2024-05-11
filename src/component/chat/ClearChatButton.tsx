@@ -1,8 +1,7 @@
 import { Button, Text } from "@chakra-ui/react"
 import { ClearChatModal } from "component/chat/ClearChatModal"
-import { ModeContext, ModeContextI } from "context/modeContext"
 import ChatModel from "model/ChatModel"
-import { FC, useContext, useState } from "react"
+import { FC, useState } from "react"
 import { useQueryClient } from "react-query"
 import { Bounce, ToastOptions, toast } from "react-toastify"
 import { useClearMessages } from "service/messageService"
@@ -17,7 +16,6 @@ export const ClearChatButton: FC<ClearChatButtonProps> = (props) => {
 
   const queryClient = useQueryClient()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  // const { chatID } = useContext<ModeContextI>(ModeContext)
   const clearMessagesMutation = useClearMessages()
 
   const clearChatSuccessToastOptions: ToastOptions = {
@@ -61,7 +59,7 @@ export const ClearChatButton: FC<ClearChatButtonProps> = (props) => {
 
   return (
     <>
-      <Button variant="outline" colorScheme="red" onClick={handleClearChat} isLoading={isLoading}>
+      <Button variant="outline" colorScheme="red" onClick={handleClearChat} isDisabled={isLoading}>
         <Text fontSize="sm">Очистить чат</Text>
       </Button>
 

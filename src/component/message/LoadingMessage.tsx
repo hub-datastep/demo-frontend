@@ -1,15 +1,16 @@
-import { Flex, Spinner } from "@chakra-ui/react"
+import { HStack, Spinner } from "@chakra-ui/react"
+import { Message } from "component/message/Message"
 import { FC } from "react"
 
 export const LoadingMessage: FC = () => {
   return (
-    // <Message direction="incoming" messageId={-1} src="/image/avatar/bot.svg" callback={false}>
-    //   <HStack px={20}>
-    //     <Spinner color="purple" />
-    //   </HStack>
-    // </Message>
-    <Flex alignSelf="center" justifySelf="center">
-      <Spinner color="purple" />
-    </Flex>
+    <Message direction="incoming" messageId={-1} src="/image/avatar/bot.svg" callback={false}>
+      <HStack px={20}>
+        <Spinner color="purple" />
+      </HStack>
+    </Message>
+    // <Flex alignSelf="center" justifySelf="center">
+    //   <Spinner color="purple" />
+    // </Flex>
   )
 }

@@ -31,7 +31,7 @@ export const QueryFileSelect: FC<QueryFileSelectProps> = (props) => {
         onClick={openSourcesHistory}
         variant={isSmallBtn ? "outline" : "solid"}
         colorScheme={isSmallBtn ? "gray" : "purple"}
-        isLoading={isLoading}
+        isDisabled={isLoading}
       >
         <Text fontSize={isSmallBtn ? "sm" : "lg"}>
           {currentFileIndex < 0 ? "Выбрать документ" : `Документ: ${fileName}`}

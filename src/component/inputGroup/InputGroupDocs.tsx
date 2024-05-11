@@ -71,7 +71,7 @@ const InputGroupDocs: FC<IInputGroupDocs> = (props) => {
               onChange={handleChange}
               onKeyDown={handleKeyDown}
               placeholder="Ваш вопрос.."
-              disabled={isTextAreaDisabled}
+              isDisabled={isTextAreaDisabled || isLoading}
               variant="solid"
               resize="none"
               overflowY="hidden"
