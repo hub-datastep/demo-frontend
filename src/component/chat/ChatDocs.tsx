@@ -72,7 +72,7 @@ export const ChatDocs = () => {
       }
 
       if (filesList) {
-        body["filename"] = filesList[currentFileIndex].storage_filename
+        body["file_id"] = filesList[currentFileIndex].id
       }
 
       const {
