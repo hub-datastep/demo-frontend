@@ -8,16 +8,7 @@ import { MessageModel } from "model/MessageModel"
 import { FC, ReactNode } from "react"
 
 export const Message: FC<IMessage> = (props) => {
-  const {
-    messageId,
-    src,
-    direction,
-    children,
-    reviewModels,
-    markModel,
-    callback = true,
-    query,
-  } = props
+  const { src, direction, children } = props
 
   const isMessageFromUser = direction === "outgoing"
   const avatarName = isMessageFromUser ? "user" : "bot"
@@ -68,7 +59,7 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
   titles.push("Ответ из таблицы")
   if (messageModel.table) {
     panels.push(
-      <Text mt="5">
+      <Text>
         <Markdown>{messageModel.table}</Markdown>
       </Text>
     )
