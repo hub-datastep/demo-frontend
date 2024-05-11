@@ -27,6 +27,7 @@ export const ChatDocs = () => {
   const [currentPage, setCurrentPage] = useState<number>(0)
   const [currentFileIndex, setCurrentFileIndex] = useState<number>(-1)
   const user = useContext<UserModel>(UserContext)
+  const modeId = 1
   const [similarQueries, setSimilarQueries] = useState<string[]>([])
 
   const { shownMessageCount } = useContext<ModeContextI>(ModeContext)
@@ -35,7 +36,7 @@ export const ChatDocs = () => {
   const predictionMutation = useDocsPrediction()
 
   const { data: chat, status: chatQueryStatus } = useQuery<ChatModel>("chat", () => {
-    return getOrCreateChat(user.id)
+    return getOrCreateChat(user.id, modeId)
   })
   const isMessagesExistsInChat = chat && chat.messages.length !== 0
   const isMoreMessagesInChat = isMessagesExistsInChat && chat.messages.length > shownMessageCount
@@ -155,6 +156,7 @@ export const ChatDocs = () => {
             errorMessage={errorMessage}
             currentFileIndex={currentFileIndex}
             setCurrentFileIndex={setCurrentFileIndex}
+            chatId={chat?.id}
           />
         </InputGroupContext.Provider>
       </Flex>

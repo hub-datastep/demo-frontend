@@ -2,8 +2,8 @@ import { AxiosError } from "axios"
 import axiosClient from "api/axiosClient"
 import ChatModel from "model/ChatModel"
 
-const getChat = async (userId: string): Promise<ChatModel> => {
-    const { data: chatModel } = await axiosClient.get(`/chat/${userId}`)
+const getChat = async (userId: string, modeId: number): Promise<ChatModel> => {
+    const { data: chatModel } = await axiosClient.get(`/chat/${userId}/${modeId}`)
     return chatModel
 }
 
@@ -12,16 +12,16 @@ const createChat = async (body: Omit<ChatModel, "id" | "messages">): Promise<Cha
     return chatModel
 }
 
-const getOrCreateChat = async (userId: string): Promise<ChatModel> => {
+const getOrCreateChat = async (userId: string, modeId: number): Promise<ChatModel> => {
     try {
-        const chat = await getChat(userId)
+        const chat = await getChat(userId, modeId)
         chat.messages.sort(
             (messageA, messageB) => messageA.id - messageB.id
         )
         return chat
     } catch (e) {
         if (e instanceof AxiosError && e.response?.status === 404) {
-            return await createChat({ user_id: userId })
+            return await createChat({ user_id: userId, mode_id: modeId})
         }
 
         throw e

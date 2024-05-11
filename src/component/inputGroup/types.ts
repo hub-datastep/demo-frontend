@@ -6,6 +6,7 @@ interface IInputGroupDB {
     setTable: Dispatch<SetStateAction<string | undefined>>
     isLoading: boolean
     errorMessage: string | undefined
+    chatId?: number
 }
 
 interface IInputGroupDocs {
@@ -14,6 +15,7 @@ interface IInputGroupDocs {
     errorMessage: string | undefined
     currentFileIndex: number
     setCurrentFileIndex: Dispatch<SetStateAction<number>>
+    chatId?: number
 }
 
 interface IInputGroupContext {
