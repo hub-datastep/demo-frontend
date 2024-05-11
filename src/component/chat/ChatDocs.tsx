@@ -117,7 +117,7 @@ export const ChatDocs = () => {
           h="full"
           w="full"
           direction="column"
-          justifyContent={isLoading ? "center" : "flex-start"}
+          justifyContent="flex-start"
           px={5}
           pt={2}
           pb={5}
@@ -126,27 +126,23 @@ export const ChatDocs = () => {
           overflowY="auto"
           flexGrow="1"
         >
-          {/* Loading message */}
-          {isLoading ? (
-            <LoadingMessage />
-          ) : (
-            <>
-              {isMoreMessagesInChat && <LoadMoreMessagesBtn isLoading={isLoading} />}
+          {isMoreMessagesInChat && <LoadMoreMessagesBtn isLoading={isLoading} />}
 
-              <Flex ref={messageWindowRef} direction="column" gap="5" flexGrow="1">
-                {isMessagesExistsInChat ? (
-                  // Show messages from chat history
-                  getLastN(
-                    shownMessageCount,
-                    chat.messages.map((message, i) => createMessage(message, i))
-                  )
-                ) : (
-                  // Show default bot message
-                  <DefaultMessage />
-                )}
-              </Flex>
-            </>
-          )}
+          <Flex ref={messageWindowRef} direction="column" gap="5">
+            {isMessagesExistsInChat ? (
+              // Show messages from chat history
+              getLastN(
+                shownMessageCount,
+                chat.messages.map((message, i) => createMessage(message, i))
+              )
+            ) : (
+              // Show default bot message
+              <DefaultMessage />
+            )}
+          </Flex>
+
+          {/* Loading message */}
+          {isLoading && <LoadingMessage />}
         </Flex>
 
         <InputGroupContext.Provider value={{ handleSubmit, similarQueries }}>
