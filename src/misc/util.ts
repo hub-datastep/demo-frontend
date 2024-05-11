@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom"
 const getBaseUrl = (): string => {
   const backend_url = process.env["REACT_APP_BACKEND_URL"]
   if (!backend_url) {
-    throw Error("REACT_APP_BACKEND_URL must be passed in .env.development or .env.production")
+    throw Error("REACT_APP_BACKEND_URL must be passed in .env")
   }
   return backend_url
 }
@@ -14,7 +14,7 @@ const getBaseUrl = (): string => {
 const getHostPath = (): string => {
   const host = process.env["REACT_APP_STATIC_URL"]
   if (!host) {
-    throw Error("REACT_APP_STATIC_URL must be passed in .env.development or .env.production")
+    throw Error("REACT_APP_STATIC_URL must be passed in .env")
   }
   return host
 }

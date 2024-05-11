@@ -7,7 +7,8 @@ import { ChangeEvent, FC, KeyboardEvent, useContext, useState } from "react"
 import { IoMdArrowRoundUp } from "react-icons/io"
 
 const InputGroupDocs: FC<IInputGroupDocs> = (props) => {
-  const { filesList, isLoading, errorMessage, currentFileIndex, setCurrentFileIndex } = props
+  const { filesList, isLoading, errorMessage, currentFileIndex, setCurrentFileIndex, chatId } =
+    props
 
   const [query, setQuery] = useState<string>("")
   const { handleSubmit } = useContext<IInputGroupContext>(InputGroupContext)
@@ -51,7 +52,7 @@ const InputGroupDocs: FC<IInputGroupDocs> = (props) => {
       <HStack alignItems="flex-start">
         <VStack width="full" alignItems="flex-start">
           <HStack>
-            <ClearChatButton isLoading={isLoading} />
+            <ClearChatButton isLoading={isLoading} chatId={chatId} />
 
             <QueryFileSelect
               filesList={filesList}
