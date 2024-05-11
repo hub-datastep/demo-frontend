@@ -40,7 +40,7 @@ const useSearchQuery = () => {
 
 const getShortFileName = (filename: string) => {
   if (filename?.length > 50)
-    return filename.substring(0, 25) + "..." + filename.substring(filename.length - 25)
+    return filename.substring(0, 20) + "..." + filename.substring(filename.length - 15)
   return filename
 }
 
