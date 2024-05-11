@@ -9,14 +9,15 @@ import { useClearMessages } from "service/messageService"
 
 interface ClearChatButtonProps {
   isLoading: boolean
+  chatId?: number
 }
 
 export const ClearChatButton: FC<ClearChatButtonProps> = (props) => {
-  const { isLoading } = props
+  const { isLoading, chatId } = props
 
   const queryClient = useQueryClient()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const { chatID } = useContext<ModeContextI>(ModeContext)
+  // const { chatID } = useContext<ModeContextI>(ModeContext)
   const clearMessagesMutation = useClearMessages()
 
   const clearChatSuccessToastOptions: ToastOptions = {
@@ -42,8 +43,8 @@ export const ClearChatButton: FC<ClearChatButtonProps> = (props) => {
   const handleClearChatConfirm = () => {
     showSuccefullToast()
     setIsModalOpen(false)
-    if (chatID) {
-      clearMessagesMutation.mutate(chatID)
+    if (chatId) {
+      clearMessagesMutation.mutate(chatId)
     }
   }
 

@@ -11,7 +11,7 @@ interface ModeContextI {
     setMode: Dispatch<SetStateAction<ModeT>>
     shownMessageCount: number
     setShownMessageCount: Dispatch<SetStateAction<number>>
-    chatID: number | undefined
+    // chatID: number | undefined
     isFilesEnabled: boolean
     isDatabaseEnabled: boolean
 }
@@ -31,10 +31,10 @@ const ModeContextProvider: FC<ModeContextProviderProps> = ({ children }) => {
 
     const [mode, setMode] = useState<ModeT>(defaultMode)
     const [shownMessageCount, setShownMessageCount] = useState<number>(INITIAL_MESSAGE_COUNT)
-    const { data: chat } = useQuery<ChatModel>("chat", () => {
-        return getOrCreateChat(user.id)
-    })
-    const chatID = chat?.id
+    // const { data: chat } = useQuery<ChatModel>("chat", () => {
+    //     return getOrCreateChat(user.id)
+    // })
+    // const chatID = chat?.id
 
     const isFilesEnabled = is_wiki_mode
     const isDatabaseEnabled = is_databases_mode
@@ -46,7 +46,7 @@ const ModeContextProvider: FC<ModeContextProviderProps> = ({ children }) => {
                 setMode,
                 shownMessageCount,
                 setShownMessageCount,
-                chatID,
+                // chatID,
                 isFilesEnabled,
                 isDatabaseEnabled
             }}

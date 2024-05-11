@@ -22,6 +22,7 @@ function ChatDB() {
   const chatRef = useRef<HTMLDivElement | null>(null)
   const [table, setTable] = useState<string>()
   const user = useContext<UserModel>(UserContext)
+  const modeId = 2
   const [similarQueries, setSimilarQueries] = useState<string[]>([])
   const { shownMessageCount } = useContext<ModeContextI>(ModeContext)
 
@@ -29,7 +30,7 @@ function ChatDB() {
   const predictionMutation = useDBPrediction()
 
   const { data: chat, status: chatQueryStatus } = useQuery<ChatModel>("chat", () => {
-    return getOrCreateChat(user.id)
+    return getOrCreateChat(user.id, modeId)
   })
 
   const isLoading =
@@ -129,6 +130,7 @@ function ChatDB() {
             setTable={setTable}
             isLoading={isLoading}
             errorMessage={errorMessage}
+            chatId={chat?.id}
           />
         </InputGroupContext.Provider>
       </Flex>
