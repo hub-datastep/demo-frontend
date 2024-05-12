@@ -20,7 +20,7 @@ export const FileViewer: FC<FileViewerProps> = (props) => {
   return (
     <Flex h="100vh" w="50%" backgroundColor="gray.300" justifyContent="center" alignItems="center">
       {isFileSelected ? (
-        <PDFViewer fileUrl={filesList[currentFileIndex].file_path} page={currentPage} />
+        <PDFViewer fileUrl={filesList[currentFileIndex].file_path} page={0} />
       ) : (
         <QueryFileSelect
           size="large"
