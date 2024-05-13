@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom"
 
 export const AppLayout: FC = () => {
   return (
-    <Flex direction="row" maxH="100vh" maxW="100vw">
+    <Flex direction="row" h="full">
       <Header />
 
       <Outlet />

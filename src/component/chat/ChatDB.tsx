@@ -91,27 +91,22 @@ function ChatDB() {
   }, [chat?.messages.length, chat?.id])
 
   return (
-    <Flex
-      h="100vh"
-      w="84%"
-      direction="column"
-      justifyContent="flex-start"
-      alignItems="center"
-      // gap={10}
-    >
+    <Flex h="full" w="84%" direction="column" justifyContent="flex-start" alignItems="center">
       <Flex
-        h="100vh"
+        h="full"
         w="full"
         direction="column"
-        justifyContent="space-between"
+        justifyContent="flex-start"
         alignItems="center"
         overflowX="hidden"
         overflowY="auto"
+        flexGrow="1"
       >
         <Flex
           id={`chat-${chat?.id}`}
           ref={chatRef}
-          h="full"
+          //! Do not set height, because padding-bottom will not work
+          // h="full"
           w="60%"
           direction="column"
           justifyContent="flex-start"

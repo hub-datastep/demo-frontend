@@ -10,41 +10,35 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css"
 import { getHostPath } from "misc/util"
 
 interface IPDFViewer {
-    fileUrl: string
-    page: number
+  fileUrl: string
+  page: number
 }
 
 const getFullFilePath = (fileUrl: string): string => {
-    const host = getHostPath()
-    return `${host}/${fileUrl}`
+  const host = getHostPath()
+  return `${host}/${fileUrl}`
 }
 
 export const PDFViewer: FC<IPDFViewer> = ({ page, fileUrl }) => {
-    // Create new plugin instance
-    const defaultLayoutPluginInstance = defaultLayoutPlugin()
-    const pageNavigationPluginInstance = pageNavigationPlugin()
-    const { jumpToPage } = pageNavigationPluginInstance
-    const fullFileUrl = getFullFilePath(fileUrl)
+  // Create new plugin instance
+  const defaultLayoutPluginInstance = defaultLayoutPlugin()
+  const pageNavigationPluginInstance = pageNavigationPlugin()
+  const { jumpToPage } = pageNavigationPluginInstance
+  const fullFileUrl = getFullFilePath(fileUrl)
 
-    useEffect(() => {
-        jumpToPage(page)
-    }, [page, jumpToPage])
+  useEffect(() => {
+    jumpToPage(page)
+  }, [page, jumpToPage])
 
-    return (
-        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-            <VStack
-                width="50vw"
-                height="full"
-            >
-                <Viewer
-                    fileUrl={fullFileUrl}
-                    plugins={[
-                        defaultLayoutPluginInstance,
-                        pageNavigationPluginInstance,
-                    ]}
-                    defaultScale={SpecialZoomLevel.PageFit}
-                />
-            </VStack>
-        </Worker>
-    )
+  return (
+    <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+      <VStack width="full" height="full">
+        <Viewer
+          fileUrl={fullFileUrl}
+          plugins={[defaultLayoutPluginInstance, pageNavigationPluginInstance]}
+          defaultScale={SpecialZoomLevel.PageFit}
+        />
+      </VStack>
+    </Worker>
+  )
 }
