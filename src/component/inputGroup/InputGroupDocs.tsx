@@ -75,6 +75,7 @@ const InputGroupDocs: FC<IInputGroupDocs> = (props) => {
               variant="solid"
               resize="none"
               overflowY="hidden"
+              pr={16}
             />
             <IconButton
               aria-label="Send query"

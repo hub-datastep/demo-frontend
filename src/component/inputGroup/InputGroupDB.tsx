@@ -86,6 +86,7 @@ const InputGroupDB: FC<IInputGroupDB> = ({ table, setTable, isLoading, errorMess
               variant="solid"
               resize="none"
               overflowY="hidden"
+              pr={16}
             />
             <IconButton
               aria-label="Send query"
