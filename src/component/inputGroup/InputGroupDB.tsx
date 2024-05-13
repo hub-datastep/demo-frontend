@@ -2,9 +2,9 @@ import { Flex, Grid, GridItem, HStack, IconButton, Text, Textarea, VStack } from
 import { getTenantTables } from "api/promptApi"
 import { ClearChatButton } from "component/chat/ClearChatButton"
 import AskQueryButton from "component/inputGroup/AskQueryButton"
+import { QueryTableSelect } from "component/inputGroup/QueryTableSelect"
 import InputGroupContext from "component/inputGroup/context"
 import { IInputGroupContext, IInputGroupDB } from "component/inputGroup/types"
-import { QueryTableSelect } from "component/inputGroup/QueryTableSelect"
 import { FavoriteMessageContext, IFavoriteMessageContext } from "context/favoriteMessageContext"
 import { ChangeEvent, FC, KeyboardEvent, useContext, useEffect, useState } from "react"
 import { IoMdArrowRoundUp } from "react-icons/io"
@@ -49,7 +49,7 @@ const InputGroupDB: FC<IInputGroupDB> = ({ table, setTable, isLoading, errorMess
   }, [selectedFavoriteQuery])
 
   return (
-    <Flex direction="column" gap="5" justifySelf="flex-end" pb={10}>
+    <Flex backgroundColor="white" w="full" direction="column" justifySelf="flex-end" gap={5} p={5}>
       {similarQueries.length > 0 && (
         <Grid templateRows="repeat(2, 1fr)" templateColumns="repeat(2, 1fr)" gap={2}>
           {similarQueries.map((query: string) => (

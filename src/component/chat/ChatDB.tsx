@@ -1,11 +1,12 @@
 import { Flex } from "@chakra-ui/react"
 import { getOrCreateChat } from "api/chatApi"
 import queryClient from "api/queryClient"
+import { LoadMoreMessagesBtn } from "component/chat/LoadMoreMessagesBtn"
 import InputGroupDB from "component/inputGroup/InputGroupDB"
 import InputGroupContext from "component/inputGroup/context"
-import { LoadMoreMessagesBtn } from "component/chat/LoadMoreMessagesBtn"
+import { DefaultMessage } from "component/message/DefaultMessage"
 import { LoadingMessage } from "component/message/LoadingMessage"
-import { Message, createMessage } from "component/message/Message"
+import { createMessage } from "component/message/Message"
 import { ModeContext, ModeContextI } from "context/modeContext"
 import { UserContext } from "context/userContext"
 import { getLastN } from "misc/util"
@@ -32,6 +33,9 @@ function ChatDB() {
   const { data: chat, status: chatQueryStatus } = useQuery<ChatModel>("chat", () => {
     return getOrCreateChat(user.id, modeId)
   })
+
+  const isMessagesExistsInChat = chat && chat.messages.length !== 0
+  const isMoreMessagesInChat = isMessagesExistsInChat && chat.messages.length > shownMessageCount
 
   const isLoading =
     predictionMutation.isLoading || messageCreateMutation.isLoading || chatQueryStatus === "loading"
@@ -77,53 +81,67 @@ function ChatDB() {
   }
 
   useEffect(() => {
-    window.scroll({
-      top: chatRef.current?.offsetHeight,
-      behavior: "smooth",
-    })
-  }, [chat?.messages.length])
+    const chatDiv = document.getElementById(`chat-${chat?.id}`)
+    if (chatDiv) {
+      chatDiv.scroll({
+        top: messageWindowRef.current?.offsetHeight,
+        behavior: "smooth",
+      })
+    }
+  }, [chat?.messages.length, chat?.id])
 
   return (
-    <Flex direction="row" justifyContent="center" alignItems="flex-start" pt="100" h="full">
-      <Flex ref={chatRef} direction="column" justifyContent="flex-start" h="full" w="2xl" gap={10}>
-        {chat && chat.messages.length > shownMessageCount && (
-          <LoadMoreMessagesBtn isLoading={isLoading} />
-        )}
+    <Flex
+      h="100vh"
+      w="84%"
+      direction="column"
+      justifyContent="flex-start"
+      alignItems="center"
+      // gap={10}
+    >
+      <Flex
+        h="100vh"
+        w="full"
+        direction="column"
+        justifyContent="space-between"
+        alignItems="center"
+        overflowX="hidden"
+        overflowY="auto"
+      >
+        <Flex
+          id={`chat-${chat?.id}`}
+          ref={chatRef}
+          h="full"
+          w="60%"
+          direction="column"
+          justifyContent="flex-start"
+          px={5}
+          pt={2}
+          pb={5}
+          gap={5}
+          flexGrow="1"
+        >
+          {isMoreMessagesInChat && <LoadMoreMessagesBtn isLoading={isLoading} />}
 
-        <Flex ref={messageWindowRef} direction="column" gap="5" flexGrow="1">
-          {/* Messages from history */}
-          {chat &&
-            !!chat.messages.length &&
-            getLastN(
-              shownMessageCount,
-              chat.messages.map((message, i) => createMessage(message, i))
+          <Flex ref={messageWindowRef} direction="column" gap="5">
+            {isMessagesExistsInChat ? (
+              // Show messages from chat history
+              getLastN(
+                shownMessageCount,
+                chat.messages.map((message, i) => createMessage(message, i))
+              )
+            ) : (
+              // Show default bot message
+              <DefaultMessage />
             )}
+          </Flex>
 
           {/* Loading message */}
-          {isLoading && (
-            <Message
-              direction="incoming"
-              messageId={-1}
-              src="/image/avatar/bot.svg"
-              callback={false}
-            >
-              <LoadingMessage />
-            </Message>
-          )}
-
-          {/* Assistant message if not messages */}
-          {chat && chat.messages.length === 0 && (
-            <Message
-              direction="incoming"
-              messageId={-1}
-              src="/image/avatar/bot.svg"
-              callback={false}
-            >
-              Какой у вас запрос?
-            </Message>
-          )}
+          {isLoading && <LoadingMessage />}
         </Flex>
+      </Flex>
 
+      <Flex w="60%">
         <InputGroupContext.Provider value={{ handleSubmit, similarQueries }}>
           <InputGroupDB
             table={table}
