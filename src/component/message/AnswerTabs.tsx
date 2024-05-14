@@ -13,16 +13,16 @@ const AnswerTabs = ({ titles, panels }: IAnswerTabs) => {
   return (
     <Tabs>
       <TabList>
-        {titles.map((title) => (
-          <Tab fontSize="sm" w="full" px={0} mx={0}>
+        {titles.map((title, index) => (
+          <Tab key={index} fontSize="sm" w="full" px={0} mx={0}>
             {title}
           </Tab>
         ))}
       </TabList>
 
       <TabPanels>
-        {panels.map((panelContent) => (
-          <TabPanel>{panelContent}</TabPanel>
+        {panels.map((panelContent, index) => (
+          <TabPanel key={index}>{panelContent}</TabPanel>
         ))}
       </TabPanels>
     </Tabs>
