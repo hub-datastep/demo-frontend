@@ -93,6 +93,7 @@ function ChatDB() {
   return (
     <Flex h="full" w="84%" direction="column" justifyContent="flex-start" alignItems="center">
       <Flex
+        id={`chat-${chat?.id}`}
         h="full"
         w="full"
         direction="column"
@@ -103,7 +104,6 @@ function ChatDB() {
         flexGrow="1"
       >
         <Flex
-          id={`chat-${chat?.id}`}
           ref={chatRef}
           //! Do not set height, because padding-bottom will not work
           // h="full"
