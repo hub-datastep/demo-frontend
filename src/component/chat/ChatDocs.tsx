@@ -109,8 +109,8 @@ export const ChatDocs = () => {
   }, [chat?.messages.length, chat?.id])
 
   return (
-    <Flex h="100vh" w="84%" direction="row" alignItems="flex-start">
-      <Flex h="100vh" w="50%" direction="column" justifyContent="space-between">
+    <Flex h="full" w="84%" direction="row" alignItems="flex-start">
+      <Flex h="full" w="50%" direction="column" justifyContent="space-between">
         <Flex
           id={`chat-${chat?.id}`}
           ref={chatRef}

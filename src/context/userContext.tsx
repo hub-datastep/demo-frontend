@@ -8,38 +8,31 @@ import { useQuery } from "react-query"
 const UserContext = createContext<UserModel>({} as UserModel)
 
 interface UserContextProviderProps {
-    children: ReactNode
+  children: ReactNode
 }
 
 const UserContextProvider: FC<UserContextProviderProps> = ({ children }) => {
-    const { data: user, isSuccess } = useQuery<UserModel>("user", getCurrentUser, {
-        onError: (error) => {
-            clearUserToken()
-            // @ts-ignore
-            if (error.response?.status === 404) {
-                throw Error("User is not found or user is not under any tenant.")
-            }
+  const { data: user, isSuccess } = useQuery<UserModel>("user", getCurrentUser, {
+    onError: (error) => {
+      clearUserToken()
+      // @ts-ignore
+      if (error.response?.status === 404) {
+        throw Error("User is not found or user is not under any tenant.")
+      }
+    },
+    cacheTime: 0,
+    retry: false,
+  })
 
-        },
-        cacheTime: 0,
-        retry: false
-    })
-
-    if (!user || !isSuccess) {
-        return (
-            <Flex h="100vh" w="100vw"  justifyContent="center" alignItems="center">
-                <Spinner color="purple" />
-            </Flex>
-        )
-    }
-
+  if (!user || !isSuccess) {
     return (
-        <UserContext.Provider value={user}>
-            {children}
-        </UserContext.Provider>
+      <Flex h="full" w="full" justifyContent="center" alignItems="center">
+        <Spinner color="purple" />
+      </Flex>
     )
+  }
+
+  return <UserContext.Provider value={user}>{children}</UserContext.Provider>
 }
 
-export {
-    UserContext, UserContextProvider
-}
+export { UserContext, UserContextProvider }
