@@ -5,6 +5,7 @@ import Code from "component/message/Code"
 import Markdown from "component/message/Markdown"
 import { ResultTable } from "component/message/ResultTable"
 import { IMessage } from "component/message/types"
+import { isMarkdownTable } from "misc/markdown-table"
 import { MessageModel } from "model/MessageModel"
 import { FC, ReactNode } from "react"
 
@@ -85,6 +86,8 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
     messageContent = messageModel.answer!
   }
 
+  const messageIsTable = isMarkdownTable(messageContent)
+
   return (
     <Message
       key={key}
@@ -97,7 +100,13 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
       direction={!messageModel.answer ? "outgoing" : "incoming"}
       query={messageModel.query}
     >
-      <Markdown>{messageContent}</Markdown>
+      {messageIsTable ? (
+        <ResultTable markdownTable={messageContent} />
+      ) : (
+        <Markdown>{messageContent}</Markdown>
+      )}
+      {/* <Markdown>{messageContent}</Markdown> */}
+      {/* {messageContent} */}
 
       {messageModel.sql && <AnswerTabs titles={titles} panels={panels} />}
     </Message>

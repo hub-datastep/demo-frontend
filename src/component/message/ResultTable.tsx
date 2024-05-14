@@ -1,5 +1,5 @@
 import { Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
-import { parseMarkdownTable } from "misc/parse-markdown-table"
+import { parseMarkdownTable } from "misc/markdown-table"
 import { FC, useEffect, useState } from "react"
 
 interface ResultTableProps {
