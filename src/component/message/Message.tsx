@@ -3,7 +3,9 @@ import AnswerTabs from "component/message/AnswerTabs"
 import { Avatar } from "component/message/Avatar"
 import Code from "component/message/Code"
 import Markdown from "component/message/Markdown"
+import { ResultTable } from "component/message/ResultTable"
 import { IMessage } from "component/message/types"
+import { isMarkdownTable } from "misc/markdown-table"
 import { MessageModel } from "model/MessageModel"
 import { FC, ReactNode } from "react"
 
@@ -43,11 +45,22 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
   const panels = []
 
   if (messageModel.answer) {
-    titles.push("Как получился результат")
+    titles.push("Результат")
     panels.push(
-      <Text>
-        <Markdown>{messageModel.answer}</Markdown>
-      </Text>
+      <Flex direction="column" gap={5}>
+        <Text>
+          <Markdown>{messageModel.answer}</Markdown>
+        </Text>
+
+        {messageModel.table ? (
+          <Text>
+            <ResultTable markdownTable={messageModel.table} />
+            {/* <Markdown>{messageModel.table}</Markdown> */}
+          </Text>
+        ) : (
+          <Text mt="5">В таблице нет информации для данных фильтров</Text>
+        )}
+      </Flex>
     )
   }
 
@@ -56,16 +69,12 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
     panels.push(<Code>{messageModel.sql}</Code>)
   }
 
-  titles.push("Ответ из таблицы")
-  if (messageModel.table) {
-    panels.push(
-      <Text>
-        <Markdown>{messageModel.table}</Markdown>
-      </Text>
-    )
-  } else {
-    panels.push(<Text mt="5">В таблице нет информации для данных фильтров</Text>)
-  }
+  // titles.push("Ответ из таблицы")
+  // if (messageModel.table) {
+  //   panels.push()
+  // } else {
+  //   panels.push()
+  // }
 
   const isOnlyAnswerFromAssistant =
     messageModel.answer?.trim() !== "" &&
@@ -76,6 +85,8 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
   if (isOnlyAnswerFromAssistant) {
     messageContent = messageModel.answer!
   }
+
+  const messageIsTable = isMarkdownTable(messageContent)
 
   return (
     <Message
@@ -89,7 +100,13 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
       direction={!messageModel.answer ? "outgoing" : "incoming"}
       query={messageModel.query}
     >
-      <Markdown>{messageContent}</Markdown>
+      {messageIsTable ? (
+        <ResultTable markdownTable={messageContent} />
+      ) : (
+        <Markdown>{messageContent}</Markdown>
+      )}
+      {/* <Markdown>{messageContent}</Markdown> */}
+      {/* {messageContent} */}
 
       {messageModel.sql && <AnswerTabs titles={titles} panels={panels} />}
     </Message>
