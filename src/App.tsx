@@ -1,9 +1,10 @@
 import { Box, ChakraProvider } from "@chakra-ui/react"
 import queryClient from "api/queryClient"
 import { AppLayout } from "component/AppLayout"
+import EditPromptForm from "component/EditPromptForm"
+import { ChatClassifier } from "component/chat/ChatClassifier"
 import ChatDB from "component/chat/ChatDB"
 import { ChatDocs } from "component/chat/ChatDocs"
-import EditPromptForm from "component/EditPromptForm"
 import { AuthContextProvider } from "context/authContext"
 import { FavoriteMessageContextProvider } from "context/favoriteMessageContext"
 import { ModeContextProvider } from "context/modeContext"
@@ -35,6 +36,7 @@ export const App = () => {
                       />
                       <Route path="/databases" element={<ChatDB />} />
                       <Route path="/documents" element={<ChatDocs />} />
+                      <Route path="/classifier" element={<ChatClassifier />} />
                     </Route>
                   </Routes>
                   <ToastContainer />

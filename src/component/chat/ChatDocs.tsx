@@ -99,14 +99,16 @@ export const ChatDocs = () => {
   }
 
   useEffect(() => {
-    const chatDiv = document.getElementById(`chat-${chat?.id}`)
-    if (chatDiv) {
-      chatDiv.scroll({
-        top: messageWindowRef.current?.offsetHeight,
-        behavior: "smooth",
-      })
+    if (chat?.id) {
+      const chatDiv = document.getElementById(`chat-${chat?.id}`)
+      if (chatDiv) {
+        chatDiv.scroll({
+          top: messageWindowRef.current?.offsetHeight,
+          behavior: "smooth",
+        })
+      }
     }
-  }, [chat?.messages.length, chat?.id])
+  }, [chat?.id])
 
   return (
     <Flex h="full" w="84%" direction="row" alignItems="flex-start">
