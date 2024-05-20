@@ -19,6 +19,7 @@ const Header = () => {
 
         <AssistantLinkBtn title="Базы Данных" assistant="databases" />
         <AssistantLinkBtn title="Документы" assistant="documents" />
+        <AssistantLinkBtn title="Классификатор" assistant="classifier" />
       </Flex>
 
       <SignOutBtn />
