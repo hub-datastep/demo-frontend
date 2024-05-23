@@ -1,16 +1,18 @@
 interface FileModel {
-    id: number
-    tenant_id: number
-    original_filename: string
-    storage_filename: string
-    file_path: string
+  id: number
+  tenant_id: number
+  original_filename: string
+  storage_filename: string
+  file_path: string
+}
+
+interface DataExtractModel {
+    nomenclature: string,
+    file_metadata?: {[key: string]: string} | null
 }
 
 interface FileUploadModel {
-    file: File
+  file: File
 }
 
-export type {
-    FileModel,
-    FileUploadModel
-}
+export type { FileModel, FileUploadModel, DataExtractModel }
