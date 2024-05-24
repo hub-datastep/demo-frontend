@@ -1,5 +1,5 @@
 import axiosClient from "api/axiosClient"
-import { FileModel, FileUploadModel } from "model/FileModel"
+import { DataExtractModel, FileModel, FileUploadModel } from "model/FileModel"
 
 const getAllFiles = (): Promise<FileModel[]> => {
   return axiosClient.get("/file").then((response) => response.data)
@@ -19,8 +19,14 @@ const uploadFile = (body: FileUploadModel): Promise<FileModel> => {
     .then((response) => response.data)
 }
 
+const extractDataFromInvoice = (body: FileUploadModel): Promise<DataExtractModel[]> => {
+  return axiosClient
+    .postForm("/file/extract_data", { file_object: body.file })
+    .then((response) => response.data)
+}
+
 const removeFile = (file_id: number) => {
   return axiosClient.delete(`/file/${file_id}`)
 }
 
-export { getAllFiles, removeFile, uploadFile }
+export { getAllFiles, removeFile, uploadFile, extractDataFromInvoice }

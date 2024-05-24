@@ -2,14 +2,19 @@ import { Button, Flex, Textarea } from "@chakra-ui/react"
 import { getNomenclaturesMappings } from "api/mappingApi"
 import queryClient from "api/queryClient"
 import { ClassifierAnswer } from "component/ClassifierAnswer"
+import { ClassifierUploadBtn } from "component/ClassifierUploadBtn"
 import { JobStatus } from "constant/jobStatus"
+import { useSearchQuery } from "misc/util"
 import { MappingNomenclatureItem, NomenclaturesMapping } from "model/ClassifierModel"
+import { DataExtractModel } from "model/FileModel"
 import { JobModel } from "model/JobModel"
 import { ChangeEvent, useState } from "react"
 import { useQuery } from "react-query"
 import { useNomenclaturesMapping } from "service/mappingService"
 
 export const ChatClassifier = () => {
+  const urlParams = useSearchQuery()
+  const parserMode = urlParams.get("mode")
   const [queryNomenclaturesList, setQueryNomenclaturesList] = useState<string>("")
   const [currentJob, setCurrentJob] = useState<JobModel>()
 
@@ -69,6 +74,13 @@ export const ChatClassifier = () => {
     setCurrentJob(job)
   }
 
+  const onSuccessDataExtraction = (parsedData: DataExtractModel[]) => {
+    const nomenclaturesList = parsedData.map((nomenclatureObject) =>
+      nomenclatureObject.nomenclature.replace("\n", " ")
+    )
+    setQueryNomenclaturesList(nomenclaturesList.join("\n"))
+  }
+
   return (
     <Flex
       h="full"
@@ -121,7 +133,7 @@ export const ChatClassifier = () => {
             </Button>
           </Flex>
         </Flex>
-
+        {(parserMode === "INVOICE" || parserMode === "KP") && <ClassifierUploadBtn onSuccess={onSuccessDataExtraction} parserMode={parserMode}/>}
         <ClassifierAnswer
           mappingResponseList={mappedNomenclatures}
           isLoading={isTextAreaDisabled}
