@@ -60,12 +60,12 @@ export const ChatClassifier = () => {
       }))
 
     const body = {
-      modelId: "51fddcbb-5c97-4e3e-b442-a297a76b5a1d",
+      modelId: "cd9678bd-1463-46b5-aa51-0e5a0a20632b",
       body: {
         nomenclatures: nomenclatures,
         most_similar_count: 3,
         job_size: 100,
-        chroma_collection_name: "demo_nomenclatures",
+        chroma_collection_name: "unistroy_nomenclatures",
       },
     }
 
