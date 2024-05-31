@@ -5,7 +5,7 @@ import { ClassifierAnswer } from "component/ClassifierAnswer"
 import { ClassifierUploadBtn } from "component/ClassifierUploadBtn"
 import { JobStatus } from "constant/jobStatus"
 import { useSearchQuery } from "misc/util"
-import { MappingNomenclatureItem, NomenclaturesMapping } from "model/ClassifierModel"
+import { MappingNomenclatureBody, MappingNomenclatureItem, NomenclaturesMapping } from "model/ClassifierModel"
 import { DataExtractModel } from "model/FileModel"
 import { JobModel } from "model/JobModel"
 import { ChangeEvent, useState } from "react"
@@ -59,14 +59,14 @@ export const ChatClassifier = () => {
         nomenclature: nomenclature,
       }))
 
-    const body = {
-      modelId: "cd9678bd-1463-46b5-aa51-0e5a0a20632b",
-      body: {
-        nomenclatures: nomenclatures,
-        most_similar_count: 3,
-        job_size: 100,
-        chroma_collection_name: "unistroy_nomenclatures",
-      },
+    const body: MappingNomenclatureBody = {
+      db_con_str: process.env.REACT_APP_DB_CON_STR!,
+      table_name: process.env.REACT_APP_TABLE_NAME!,
+      model_id: process.env.REACT_APP_CLASSIFIER_MODEL_ID!,
+      nomenclatures: nomenclatures,
+      most_similar_count: 1,
+      chunk_size: 100,
+      chroma_collection_name: process.env.REACT_APP_CHROMA_COLLECTION_NAME!,
     }
 
     queryClient.clear()
@@ -133,7 +133,7 @@ export const ChatClassifier = () => {
             </Button>
           </Flex>
         </Flex>
-        {(parserMode === "INVOICE" || parserMode === "KP") && <ClassifierUploadBtn onSuccess={onSuccessDataExtraction} parserMode={parserMode}/>}
+        {(parserMode === "INVOICE" || parserMode === "KP") && <ClassifierUploadBtn onSuccess={onSuccessDataExtraction} parserMode={parserMode} />}
         <ClassifierAnswer
           mappingResponseList={mappedNomenclatures}
           isLoading={isTextAreaDisabled}
