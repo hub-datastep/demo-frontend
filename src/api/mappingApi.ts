@@ -4,7 +4,7 @@ import { JobModel } from "model/JobModel"
 
 export const startNomenclaturesMapping = (body: MappingNomenclatureBody): Promise<JobModel> => {
   return axiosClient
-    .post(`/nomenclature/mapping?model_id=${body.modelId}`, body.body)
+    .post(`/nomenclature/mapping`, body)
     .then((response) => response.data)
 }
 
