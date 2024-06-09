@@ -11,3 +11,4 @@ build/
 # IDEA
 .idea/
 .vscode/
+.DS_Store
