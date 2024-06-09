@@ -1,6 +1,5 @@
 import { Button, Flex, Input, Text } from "@chakra-ui/react"
 import { extractDataFromInvoice } from "api/fileApi"
-import queryClient from "api/queryClient"
 import { AxiosError } from "axios"
 import { DataExtractModel } from "model/FileModel"
 import { ChangeEvent, FC, useRef, useState } from "react"
@@ -15,7 +14,7 @@ export const ClassifierUploadBtn: FC<ClassifierUploadBtnProps> = (props) => {
   const { onSuccess, parserMode } = props
 
   const isInvoiceMode = parserMode === "INVOICE"
-  const isKpMode = parserMode === "KP"
+  const isKPMode = parserMode === "KP"
   const [errorMessage, setErrorMessage] = useState<string>("")
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 

@@ -23,6 +23,7 @@ export const AssistantLinkBtn: FC<AssistantLinkBtnProps> = (props) => {
       display="flex"
       justifyContent="flex-start"
       onClick={handleRedirectClick}
+      whiteSpace="break-spaces"
     >
       {title}
     </Button>

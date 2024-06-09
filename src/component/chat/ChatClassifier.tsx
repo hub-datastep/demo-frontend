@@ -1,11 +1,15 @@
 import { Button, Flex, Textarea } from "@chakra-ui/react"
 import { getNomenclaturesMappings } from "api/mappingApi"
 import queryClient from "api/queryClient"
-import { ClassifierAnswer } from "component/ClassifierAnswer"
-import { ClassifierUploadBtn } from "component/ClassifierUploadBtn"
+import { ClassifierAnswer } from "component/classifier/ClassifierAnswer"
+import { ClassifierUploadBtn } from "component/classifier/ClassifierUploadBtn"
 import { JobStatus } from "constant/jobStatus"
 import { useSearchQuery } from "misc/util"
-import { MappingNomenclatureBody, MappingNomenclatureItem, NomenclaturesMapping } from "model/ClassifierModel"
+import {
+  MappingNomenclatureBody,
+  MappingNomenclatureItem,
+  NomenclaturesMapping,
+} from "model/ClassifierModel"
 import { DataExtractModel } from "model/FileModel"
 import { JobModel } from "model/JobModel"
 import { ChangeEvent, useState } from "react"
@@ -38,7 +42,9 @@ export const ChatClassifier = () => {
     refetchIntervalInBackground: true,
   })
 
-  const mappedNomenclatures = nomenclaturesMappingList?.flatMap((mapping) => mapping.nomenclatures)
+  const mappedNomenclatures = nomenclaturesMappingList?.flatMap(
+    (jobResult) => jobResult.nomenclatures
+  )
 
   const isTextAreaDisabled = !!currentJob || mappingQueryStatus === "loading"
   const isStartMappingBtnDisabled = isTextAreaDisabled || queryNomenclaturesList.trim() === ""
@@ -125,15 +131,21 @@ export const ChatClassifier = () => {
             >
               Сопоставить
             </Button>
+
             <Button variant="outline" colorScheme="green" isDisabled={isExportBtnsDisabled}>
               Экспортировать в Excel
             </Button>
+
             <Button variant="outline" colorScheme="yellow" isDisabled={isExportBtnsDisabled}>
               Отправить в 1С
             </Button>
           </Flex>
         </Flex>
-        {(parserMode === "INVOICE" || parserMode === "KP") && <ClassifierUploadBtn onSuccess={onSuccessDataExtraction} parserMode={parserMode} />}
+
+        {(parserMode === "INVOICE" || parserMode === "KP") && (
+          <ClassifierUploadBtn onSuccess={onSuccessDataExtraction} parserMode={parserMode} />
+        )}
+
         <ClassifierAnswer
           mappingResponseList={mappedNomenclatures}
           isLoading={isTextAreaDisabled}

@@ -1,5 +1,5 @@
 import { Card, Flex, Spinner } from "@chakra-ui/react"
-import { ClassifierTable } from "component/ClassifierTable"
+import { ClassifierMappingsTable } from "component/classifier/ClassifierMappingsTable"
 import { MappingResponse } from "model/ClassifierModel"
 import { FC } from "react"
 
@@ -27,7 +27,7 @@ export const ClassifierAnswer: FC<ClassifierAnswerProps> = (props) => {
 
   return (
     <Card width="full">
-      <ClassifierTable mappingResponseList={mappingResponseList} />
+      <ClassifierMappingsTable mappingResponseList={mappingResponseList} />
     </Card>
   )
 }
