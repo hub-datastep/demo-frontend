@@ -40,5 +40,5 @@ export interface NomenclaturesMapping {
   ready_count: number
   total_count: number
   general_status: string
-  nomenclatures: MappingResponse[]
+  nomenclatures: MappingResponse[] | null
 }

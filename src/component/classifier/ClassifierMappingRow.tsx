@@ -1,4 +1,4 @@
-import { Td, Text, Tr } from "@chakra-ui/react"
+import { Flex, Td, Text, Tr } from "@chakra-ui/react"
 import { ClassifierCheckbox } from "component/classifier/ClassifierCheckbox"
 import { MappingResponse } from "model/ClassifierModel"
 import { FC } from "react"
@@ -26,13 +26,18 @@ export const ClassifierMappingRow: FC<ClassifierTableProps> = (props) => {
 
       {/* Mapped nomenclature */}
       <Td>
-        {/* Show mapped nomenclatures */}
-        {isMappingsExists && !isWrongGroup && <ClassifierCheckbox mappingsList={mappingsList} />}
+        <Flex direction="column">
+          {/* Show mapped nomenclatures */}
+          {isMappingsExists && !isWrongGroup && <ClassifierCheckbox mappingsList={mappingsList} />}
 
-        {/* Show similar nomenclatures */}
-        {!isMappingsExists && !isWrongGroup && isSimilarMappingsExists && (
-          <ClassifierCheckbox mappingsList={similarMappingList} />
-        )}
+          {/* Show similar nomenclatures */}
+          {!isMappingsExists && !isWrongGroup && isSimilarMappingsExists && (
+            <>
+              <Text>Не нашлось номенклатуры с такими параметрами, но возможно Вы имели ввиду:</Text>
+              <ClassifierCheckbox mappingsList={similarMappingList} />
+            </>
+          )}
+        </Flex>
       </Td>
 
       {/* Nomenclature group name */}
