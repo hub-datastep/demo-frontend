@@ -10,4 +10,8 @@ const getChatPdfPrediction = (body: Omit<QueryModel, "chat_id">): Promise<Messag
   return axiosClient.post("/chat_pdf/prediction", body).then((response) => response.data)
 }
 
-export { getChatPdfPrediction, getDatastepPrediction }
+const getChatKnowledgeBasePrediction = (body: Omit<QueryModel, "chat_id">): Promise<MessageInModel> => {
+  return axiosClient.post("/chat_knowledge_base/prediction", body).then((response) => response.data)
+}
+
+export { getChatPdfPrediction, getDatastepPrediction, getChatKnowledgeBasePrediction }
