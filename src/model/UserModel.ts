@@ -4,13 +4,10 @@ import { DatabasePredictionConfigModel } from "model/DatabasePredictionConfigMod
 type ModeT = "wiki" | "databases"
 
 interface UserModel {
-    id: string
-    username: string
-    tenants: TenantModel[]
-    database_prediction_config: DatabasePredictionConfigModel
+  id: string
+  username: string
+  tenants: TenantModel[]
+  database_prediction_config: DatabasePredictionConfigModel
 }
 
-export type {
-    UserModel,
-    ModeT
-}
+export type { UserModel, ModeT }
