@@ -1,21 +1,18 @@
-import { Button, Flex, IconButton, Text, useDisclosure } from "@chakra-ui/react"
+import { Flex, IconButton, Text, useDisclosure } from "@chakra-ui/react"
 import DeleteFileModal from "component/filesHistory/DeleteFileModal"
 import { FileModel } from "model/FileModel"
-import { Dispatch, FC, SetStateAction } from "react"
+import { FC } from "react"
 import { FaTrashAlt } from "react-icons/fa"
 import { useQueryClient } from "react-query"
 import { Bounce, ToastOptions, toast } from "react-toastify"
 import { useDeleteFileMutation } from "service/fileService"
 
-interface RowButtonsProps {
-  fileIndex: number
+interface RowButtonsKnowledgeBaseProps {
   file: FileModel
-  isSelected: boolean
-  setCurrentFileIndex: Dispatch<SetStateAction<number>>
 }
 
-export const RowButtons: FC<RowButtonsProps> = (props) => {
-  const { fileIndex, file, isSelected, setCurrentFileIndex } = props
+export const RowButtonsKnowledgeBase: FC<RowButtonsKnowledgeBaseProps> = (props) => {
+  const { file } = props
 
   const queryClient = useQueryClient()
   const { isOpen: isOpenModal, onOpen: onOpenModal, onClose: onCloseModal } = useDisclosure()
@@ -33,10 +30,6 @@ export const RowButtons: FC<RowButtonsProps> = (props) => {
     closeButton: true,
   }
 
-  const handleSelectButtonClick = () => {
-    setCurrentFileIndex(fileIndex)
-  }
-
   const showSuccefullToast = () => {
     toast.success(<Text fontSize="md">Документ успешно удалён</Text>, clearChatSuccessToastOptions)
   }
@@ -45,21 +38,11 @@ export const RowButtons: FC<RowButtonsProps> = (props) => {
     onCloseModal()
     await deleteFileMutation.mutateAsync(file.id)
     await queryClient.invalidateQueries("filesList")
-    setCurrentFileIndex(-1)
     showSuccefullToast()
   }
 
   return (
     <Flex alignItems="center" gap={2}>
-      <Button
-        colorScheme="purple"
-        variant={isSelected ? "solid" : "outline"}
-        size="sm"
-        onClick={handleSelectButtonClick}
-        isDisabled={isSelected}
-      >
-        {isSelected ? "Выбрано" : "Выбрать"}
-      </Button>
 
       {/* Delete file button */}
       <IconButton

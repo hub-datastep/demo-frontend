@@ -3,7 +3,8 @@ export interface MappingResponse {
   nomenclature: string
   group: string
   group_name: string
-  mappings?: MappingResponseItem[]
+  mappings?: MappingResponseItem[] | null
+  similar_mappings?: MappingResponseItem[] | null
 }
 
 export interface MappingResponseItem {
@@ -39,5 +40,5 @@ export interface NomenclaturesMapping {
   ready_count: number
   total_count: number
   general_status: string
-  nomenclatures: MappingResponse[]
+  nomenclatures: MappingResponse[] | null
 }

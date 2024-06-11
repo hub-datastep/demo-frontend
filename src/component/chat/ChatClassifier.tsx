@@ -1,11 +1,15 @@
-import { Button, Flex, Textarea } from "@chakra-ui/react"
+import { Button, Flex, Text, Textarea } from "@chakra-ui/react"
 import { getNomenclaturesMappings } from "api/mappingApi"
 import queryClient from "api/queryClient"
-import { ClassifierAnswer } from "component/ClassifierAnswer"
-import { ClassifierUploadBtn } from "component/ClassifierUploadBtn"
+import { ClassifierAnswer } from "component/classifier/ClassifierAnswer"
+import { ClassifierUploadBtn } from "component/classifier/ClassifierUploadBtn"
 import { JobStatus } from "constant/jobStatus"
 import { useSearchQuery } from "misc/util"
-import { MappingNomenclatureBody, MappingNomenclatureItem, NomenclaturesMapping } from "model/ClassifierModel"
+import {
+  MappingNomenclatureBody,
+  MappingNomenclatureItem,
+  NomenclaturesMapping,
+} from "model/ClassifierModel"
 import { DataExtractModel } from "model/FileModel"
 import { JobModel } from "model/JobModel"
 import { ChangeEvent, useState } from "react"
@@ -17,6 +21,7 @@ export const ChatClassifier = () => {
   const parserMode = urlParams.get("mode")
   const [queryNomenclaturesList, setQueryNomenclaturesList] = useState<string>("")
   const [currentJob, setCurrentJob] = useState<JobModel>()
+  const [isError, setIsError] = useState<boolean>(false)
 
   const nomenclaturesMappingMutation = useNomenclaturesMapping()
   const { data: nomenclaturesMappingList, status: mappingQueryStatus } = useQuery<
@@ -25,10 +30,21 @@ export const ChatClassifier = () => {
     enabled: !!currentJob?.job_id,
 
     refetchInterval: (data) => {
-      const allMappingJobsFinished = data?.every(
+      // If any of jobs is failed, stop refetching
+      const isAnyJobFailed = data?.some((mapping) => mapping.general_status === JobStatus.FAILED)
+
+      if (isAnyJobFailed) {
+        setCurrentJob(undefined)
+        setIsError(true)
+        return false
+      }
+
+      const isAllMappingJobsFinished = data?.every(
         (mapping) => mapping.general_status === JobStatus.FINISHED
       )
-      if (allMappingJobsFinished) {
+
+      // If all jobs are finished, stop refetching
+      if (isAllMappingJobsFinished) {
         setCurrentJob(undefined)
         return false
       }
@@ -36,9 +52,15 @@ export const ChatClassifier = () => {
       return 5000
     },
     refetchIntervalInBackground: true,
+    onError: () => {
+      setCurrentJob(undefined)
+      setIsError(true)
+    },
   })
 
-  const mappedNomenclatures = nomenclaturesMappingList?.flatMap((mapping) => mapping.nomenclatures)
+  const mappedNomenclatures = nomenclaturesMappingList?.flatMap(
+    (jobResult) => jobResult.nomenclatures || []
+  )
 
   const isTextAreaDisabled = !!currentJob || mappingQueryStatus === "loading"
   const isStartMappingBtnDisabled = isTextAreaDisabled || queryNomenclaturesList.trim() === ""
@@ -115,6 +137,8 @@ export const ChatClassifier = () => {
             pr={16}
           />
 
+          {isError && <Text color="red">Что-то пошло не так. Попробуйте позже</Text>}
+
           {/* TODO: move last 2 btns under table */}
           <Flex direction="row" justifyContent="flex-start" alignItems="flex-start" gap={5}>
             <Button
@@ -122,18 +146,35 @@ export const ChatClassifier = () => {
               colorScheme="purple"
               isDisabled={isStartMappingBtnDisabled}
               onClick={handleStartNomenclaturesMapping}
+              whiteSpace="break-spaces"
             >
               Сопоставить
             </Button>
-            <Button variant="outline" colorScheme="green" isDisabled={isExportBtnsDisabled}>
+
+            <Button
+              variant="outline"
+              colorScheme="green"
+              isDisabled={isExportBtnsDisabled}
+              whiteSpace="break-spaces"
+            >
               Экспортировать в Excel
             </Button>
-            <Button variant="outline" colorScheme="yellow" isDisabled={isExportBtnsDisabled}>
+
+            <Button
+              variant="outline"
+              colorScheme="yellow"
+              isDisabled={isExportBtnsDisabled}
+              whiteSpace="break-spaces"
+            >
               Отправить в 1С
             </Button>
           </Flex>
         </Flex>
-        {(parserMode === "INVOICE" || parserMode === "KP") && <ClassifierUploadBtn onSuccess={onSuccessDataExtraction} parserMode={parserMode} />}
+
+        {(parserMode === "INVOICE" || parserMode === "KP") && (
+          <ClassifierUploadBtn onSuccess={onSuccessDataExtraction} parserMode={parserMode} />
+        )}
+
         <ClassifierAnswer
           mappingResponseList={mappedNomenclatures}
           isLoading={isTextAreaDisabled}
