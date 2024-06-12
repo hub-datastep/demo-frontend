@@ -82,8 +82,6 @@ export const ChatClassifier = () => {
       }))
 
     const body: MappingNomenclatureBody = {
-      db_con_str: process.env.REACT_APP_DB_CON_STR!,
-      table_name: process.env.REACT_APP_TABLE_NAME!,
       model_id: process.env.REACT_APP_CLASSIFIER_MODEL_ID!,
       nomenclatures: nomenclatures,
       most_similar_count: 1,
@@ -133,8 +131,8 @@ export const ChatClassifier = () => {
             isDisabled={isTextAreaDisabled}
             variant="solid"
             resize="none"
-            overflowY="hidden"
-            pr={16}
+            overflowY="scroll"
+            py={2}
           />
 
           {isError && <Text color="red">Что-то пошло не так. Попробуйте позже</Text>}

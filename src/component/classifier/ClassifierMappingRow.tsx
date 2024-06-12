@@ -45,7 +45,7 @@ export const ClassifierMappingRow: FC<ClassifierTableProps> = (props) => {
         {isWrongGroup ? (
           <Text>{mappingsList![0].nomenclature}</Text>
         ) : (
-          <Text>{mappingResponse.group_name}</Text>
+          <Text>{mappingResponse.group}</Text>
         )}
       </Td>
     </Tr>
