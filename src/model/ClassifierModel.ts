@@ -2,7 +2,7 @@ export interface MappingResponse {
   row_number: number
   nomenclature: string
   group: string
-  group_name: string
+  nomenclature_params: object[]
   mappings?: MappingResponseItem[] | null
   similar_mappings?: MappingResponseItem[] | null
 }
@@ -26,8 +26,6 @@ export interface MappingNomenclatureItem {
 }
 
 export interface MappingNomenclatureBody {
-  db_con_str: string
-  table_name: string
   chroma_collection_name: string
   model_id: string
   most_similar_count: number
