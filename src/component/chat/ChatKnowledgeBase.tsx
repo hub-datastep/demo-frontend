@@ -2,6 +2,7 @@ import { Flex } from "@chakra-ui/react"
 import { getOrCreateChat } from "api/chatApi"
 import { getAllFiles } from "api/fileApi"
 import queryClient from "api/queryClient"
+import { PDFViewerKnowledgeBase } from "component/PDFViewerKnowledgeBase"
 import { LoadMoreMessagesBtn } from "component/chat/LoadMoreMessagesBtn"
 import InputGroupKnowledgeBase from "component/inputGroup/InputGroupKnowledgeBase"
 import InputGroupContext from "component/inputGroup/context"
@@ -26,6 +27,8 @@ export const ChatKnowledgeBase = () => {
   const user = useContext<UserModel>(UserContext)
   const modeId = 1
   const [similarQueries, setSimilarQueries] = useState<string[]>([])
+  
+  const [currentFileUrl, setCurrentFileUrl] = useState<string | null>(null)
 
   const { shownMessageCount } = useContext<ModeContextI>(ModeContext)
 
@@ -68,7 +71,7 @@ export const ChatKnowledgeBase = () => {
         limit,
       }
 
-      const { answer } = await predictionMutation.mutateAsync(body)
+      const { answer, filename } = await predictionMutation.mutateAsync(body)
 
       setSimilarQueries(similarQueries)
 
@@ -78,6 +81,9 @@ export const ChatKnowledgeBase = () => {
         connected_message_id: queryMessageId,
       })
       await queryClient.invalidateQueries("chat")
+
+      setCurrentFileUrl(filename ? filename : null)
+      console.log(currentFileUrl)
     }
   }
 
@@ -138,6 +144,10 @@ export const ChatKnowledgeBase = () => {
             chatId={chat?.id}
           />
         </InputGroupContext.Provider>
+
+        {currentFileUrl && (
+          <PDFViewerKnowledgeBase fileUrl={currentFileUrl} page={0} />
+        )}
       </Flex>
     </Flex>
   )
