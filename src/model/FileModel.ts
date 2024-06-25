@@ -12,7 +12,8 @@ interface DataExtractModel {
 }
 
 interface FileUploadModel {
-  file: File
+  file_object: File
+  is_knowledge_base: boolean
 }
 
 export type { FileModel, FileUploadModel, DataExtractModel }
