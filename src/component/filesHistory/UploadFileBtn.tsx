@@ -5,7 +5,12 @@ import { AxiosError } from "axios"
 import { ChangeEvent, FC, useRef, useState } from "react"
 import { useMutation } from "react-query"
 
-export const UploadFileBtn: FC = () => {
+interface UploadFileBtnProps {
+  isKnowledgeBase: boolean
+}
+
+export const UploadFileBtn: FC<UploadFileBtnProps> = (props) => {
+  const { isKnowledgeBase } = props
   const [errorMessage, setErrorMessage] = useState<string>("")
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -19,7 +24,8 @@ export const UploadFileBtn: FC = () => {
   const onUploadFiles = async (files: FileList) => {
     const file = files.item(0)
     await filesMutation.mutateAsync({
-      file: file!,
+      file_object: file!,
+      is_knowledge_base: isKnowledgeBase,
     })
     await queryClient.invalidateQueries("filesList")
   }

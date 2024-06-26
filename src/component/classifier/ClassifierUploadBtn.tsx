@@ -29,7 +29,7 @@ export const ClassifierUploadBtn: FC<ClassifierUploadBtnProps> = (props) => {
   const onUploadFiles = async (files: FileList) => {
     const file = files.item(0)
     await filesMutation.mutateAsync({
-      file: file!,
+      file_object: file!,
     })
   }
 
