@@ -7,22 +7,16 @@ const getAllFiles = (): Promise<FileModel[]> => {
 
 const uploadFile = (body: FileUploadModel): Promise<FileModel> => {
   return axiosClient
-    .postForm(
-      "/file",
-      { file_object: body.file },
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    )
+    .postForm(`/file?is_knowledge_base=${body.is_knowledge_base}`, {
+      file_object: body.file_object,
+    })
     .then((response) => response.data)
 }
 
-const extractDataFromInvoice = (body: FileUploadModel): Promise<DataExtractModel[]> => {
-  return axiosClient
-    .postForm("/file/extract_data", { file_object: body.file })
-    .then((response) => response.data)
+const extractDataFromInvoice = (
+  body: Omit<FileUploadModel, "is_knowledge_base">
+): Promise<DataExtractModel[]> => {
+  return axiosClient.postForm("/file/extract_data", body).then((response) => response.data)
 }
 
 const removeFile = (file_id: number) => {

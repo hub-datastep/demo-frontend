@@ -57,7 +57,7 @@ const FilesHistory: FC<IFilesHistory> = (props) => {
         </DrawerBody>
 
         <DrawerFooter w="full" justifyContent="center">
-          <UploadFileBtn />
+          <UploadFileBtn isKnowledgeBase={false} />
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
