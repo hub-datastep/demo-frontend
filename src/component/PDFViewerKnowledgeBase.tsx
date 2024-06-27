@@ -8,7 +8,7 @@ import { FC, useEffect } from "react"
 import { Flex, Spinner, VStack } from "@chakra-ui/react"
 import "@react-pdf-viewer/core/lib/styles/index.css"
 import "@react-pdf-viewer/default-layout/lib/styles/index.css"
-import "@react-pdf-viewer/search/lib/styles/index.css";
+import "@react-pdf-viewer/search/lib/styles/index.css"
 import { getHostPath } from "misc/util"
 
 interface IPDFViewer {
