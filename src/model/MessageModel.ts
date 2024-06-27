@@ -9,7 +9,7 @@ interface MessageBaseModel {
 }
 
 interface MessageKnowledgeBaseModel extends MessageBaseModel {
-  filename?: string
+  file_path?: string
 }
 
 interface MessageCreateModel extends MessageBaseModel {

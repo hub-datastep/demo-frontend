@@ -71,9 +71,10 @@ export const ChatKnowledgeBase = () => {
         limit,
       }
 
-      const { answer, filename } = await predictionMutation.mutateAsync(body)
+      const { answer, file_path } = await predictionMutation.mutateAsync(body)
 
       setSimilarQueries(similarQueries)
+      setCurrentFileUrl(file_path ? file_path : null)
 
       await messageCreateMutation.mutateAsync({
         chat_id: chat.id,
@@ -81,9 +82,6 @@ export const ChatKnowledgeBase = () => {
         connected_message_id: queryMessageId,
       })
       await queryClient.invalidateQueries("chat")
-
-      setCurrentFileUrl(filename ? filename : null)
-      console.log(currentFileUrl)
     }
   }
 
@@ -144,11 +142,8 @@ export const ChatKnowledgeBase = () => {
             chatId={chat?.id}
           />
         </InputGroupContext.Provider>
-
-        {currentFileUrl && (
-          <PDFViewerKnowledgeBase fileUrl={currentFileUrl} page={0} />
-        )}
       </Flex>
+      {currentFileUrl && <PDFViewerKnowledgeBase fileUrl={currentFileUrl} page={0} />}
     </Flex>
   )
 }
