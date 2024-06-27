@@ -3,15 +3,19 @@ import MarkModel from "model/MarkModel"
 import { ModeT } from "model/UserModel"
 
 interface MessageBaseModel {
-    answer?: string
-    sql?: string
-    table?: string
+  answer?: string
+  sql?: string
+  table?: string
+}
+
+interface MessageKnowledgeBaseModel extends MessageBaseModel {
+  file_path?: string
 }
 
 interface MessageCreateModel extends MessageBaseModel {
-    query?: string
-    connected_message_id?: number
-    chat_id: number
+  query?: string
+  connected_message_id?: number
+  chat_id: number
 }
 
 interface MessageInModel extends MessageBaseModel {
@@ -20,24 +24,25 @@ interface MessageInModel extends MessageBaseModel {
 }
 
 interface MessageModel extends MessageCreateModel {
-    id: number
-    reviews: ReviewModelRead[]
-    mark?: MarkModel[]
-    created_at: string
-    is_deleted: boolean
+  id: number
+  reviews: ReviewModelRead[]
+  mark?: MarkModel[]
+  created_at: string
+  is_deleted: boolean
 }
 
 interface FavoriteMessageModel {
-    id: number
-    user_id: string
-    mode: ModeT
-    query: string
+  id: number
+  user_id: string
+  mode: ModeT
+  query: string
 }
 
 export type {
-    MessageBaseModel,
-    MessageCreateModel,
-    MessageInModel,
-    MessageModel,
-    FavoriteMessageModel
+  MessageBaseModel,
+  MessageCreateModel,
+  MessageInModel,
+  MessageModel,
+  FavoriteMessageModel,
+  MessageKnowledgeBaseModel,
 }
