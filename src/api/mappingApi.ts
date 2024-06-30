@@ -3,9 +3,9 @@ import { MappingNomenclatureBody, NomenclaturesMapping } from "model/ClassifierM
 import { JobModel } from "model/JobModel"
 
 export const startNomenclaturesMapping = (body: MappingNomenclatureBody): Promise<JobModel> => {
-  return axiosClient.post("/nomenclature/mapping", body).then((response) => response.data)
+  return axiosClient.post("/mapping", body).then((response) => response.data)
 }
 
 export const getNomenclaturesMappings = async (jobId: string): Promise<NomenclaturesMapping[]> => {
-  return axiosClient.get(`/nomenclature/mapping/${jobId}`).then((response) => response.data)
+  return axiosClient.get(`/mapping/${jobId}`).then((response) => response.data)
 }
