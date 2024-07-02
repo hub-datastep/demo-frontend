@@ -1,5 +1,5 @@
 import axiosClient from "api/axiosClient"
-import { MessageInModel } from "model/MessageModel"
+import { MessageInModel, MessageKnowledgeBaseModel } from "model/MessageModel"
 import QueryModel from "model/QueryModel"
 
 const getDatastepPrediction = (body: Omit<QueryModel, "chat_id">): Promise<MessageInModel> => {
@@ -10,7 +10,7 @@ const getChatPdfPrediction = (body: Omit<QueryModel, "chat_id">): Promise<Messag
   return axiosClient.post("/chat_pdf/prediction", body).then((response) => response.data)
 }
 
-const getChatKnowledgeBasePrediction = (body: Omit<QueryModel, "chat_id">): Promise<MessageInModel> => {
+const getChatKnowledgeBasePrediction = (body: Omit<QueryModel, "chat_id">): Promise<MessageKnowledgeBaseModel> => {
   return axiosClient.post("/chat_knowledge_base/prediction", body).then((response) => response.data)
 }
 
