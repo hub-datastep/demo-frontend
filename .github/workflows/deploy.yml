@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script_stop: true
           script: |
-            cd ~/datastep-demo/demo-frontend/
+            cd ~/datastep/demo-frontend/
             git checkout main
             git pull
 
