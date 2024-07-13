@@ -82,11 +82,7 @@ export const ChatClassifier = () => {
       }))
 
     const body: MappingNomenclatureBody = {
-      model_id: process.env.REACT_APP_CLASSIFIER_MODEL_ID!,
       nomenclatures: nomenclatures,
-      most_similar_count: 1,
-      chunk_size: 100,
-      chroma_collection_name: process.env.REACT_APP_CHROMA_COLLECTION_NAME!,
     }
 
     queryClient.clear()
