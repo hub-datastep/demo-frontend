@@ -26,11 +26,9 @@ export interface MappingNomenclatureItem {
 }
 
 export interface MappingNomenclatureBody {
-  chroma_collection_name: string
-  model_id: string
-  most_similar_count: number
-  chunk_size: number
   nomenclatures: MappingNomenclatureItem[]
+  most_similar_count?: number
+  chunk_size?: number
 }
 
 export interface NomenclaturesMapping {
