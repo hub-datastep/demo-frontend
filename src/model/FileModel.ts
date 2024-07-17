@@ -7,8 +7,8 @@ interface FileModel {
 }
 
 interface DataExtractModel {
-    nomenclature: string,
-    file_metadata?: {[key: string]: string} | null
+  nomenclature: string | null
+  file_metadata?: { [key: string]: string } | null
 }
 
 interface FileUploadModel {
@@ -16,4 +16,4 @@ interface FileUploadModel {
   is_knowledge_base: boolean
 }
 
-export type { FileModel, FileUploadModel, DataExtractModel }
+export type { DataExtractModel, FileModel, FileUploadModel }
