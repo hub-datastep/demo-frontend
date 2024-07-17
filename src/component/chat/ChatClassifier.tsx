@@ -91,9 +91,7 @@ export const ChatClassifier = () => {
   }
 
   const onSuccessDataExtraction = (parsedData: DataExtractModel[]) => {
-    const nomenclaturesList = parsedData.map((nomenclatureObject) =>
-      nomenclatureObject.nomenclature.replace("\n", " ")
-    )
+    const nomenclaturesList = parsedData.map(({ nomenclature }) => nomenclature?.replace("\n", " "))
     setQueryNomenclaturesList(nomenclaturesList.join("\n"))
   }
 
