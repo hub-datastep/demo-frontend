@@ -4,15 +4,15 @@ import { useNavigate } from "react-router-dom"
 
 interface AssistantLinkBtnProps {
   title: string
-  assistant: "databases" | "documents" | "classifier"
+  url: string
 }
 
 export const AssistantLinkBtn: FC<AssistantLinkBtnProps> = (props) => {
-  const { title, assistant } = props
+  const { title, url } = props
   const navigateTo = useNavigate()
 
   const handleRedirectClick = () => {
-    navigateTo(`/${assistant}`)
+    navigateTo(`/${url}`)
   }
 
   return (
