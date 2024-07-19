@@ -3,9 +3,10 @@ import queryClient from "api/queryClient"
 import { AppLayout } from "component/AppLayout"
 import EditPromptForm from "component/EditPromptForm"
 import { ChatClassifier } from "component/chat/ChatClassifier"
+import { ChatClassifierHistory } from "component/chat/ChatClassifierHistory"
 import ChatDB from "component/chat/ChatDB"
 import { ChatDocs } from "component/chat/ChatDocs"
-import { ChatKnowledgeBase} from "component/chat/ChatKnowledgeBase"
+import { ChatKnowledgeBase } from "component/chat/ChatKnowledgeBase"
 import { AuthContextProvider } from "context/authContext"
 import { FavoriteMessageContextProvider } from "context/favoriteMessageContext"
 import { ModeContextProvider } from "context/modeContext"
@@ -38,7 +39,10 @@ export const App = () => {
                       <Route path="/databases" element={<ChatDB />} />
                       <Route path="/documents" element={<ChatDocs />} />
                       <Route path="/knowledge_base" element={<ChatKnowledgeBase />} />
-                      <Route path="/classifier" element={<ChatClassifier />} />
+                      <Route path="/classifier">
+                        <Route path="" element={<ChatClassifier />} />
+                        <Route path="history" element={<ChatClassifierHistory />} />
+                      </Route>
                     </Route>
                   </Routes>
                   <ToastContainer />

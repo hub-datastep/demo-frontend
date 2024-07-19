@@ -64,7 +64,7 @@ export const ChatClassifier = () => {
 
   const isTextAreaDisabled = !!currentJob || mappingQueryStatus === "loading"
   const isStartMappingBtnDisabled = isTextAreaDisabled || queryNomenclaturesList.trim() === ""
-  const isExportBtnsDisabled = isTextAreaDisabled || !mappedNomenclatures
+  // const isExportBtnsDisabled = isTextAreaDisabled || !mappedNomenclatures
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setQueryNomenclaturesList(event.target.value)
@@ -146,7 +146,7 @@ export const ChatClassifier = () => {
             <Button
               variant="outline"
               colorScheme="green"
-              isDisabled={isExportBtnsDisabled}
+              isDisabled={true}
               whiteSpace="break-spaces"
             >
               Экспортировать в Excel
@@ -155,7 +155,7 @@ export const ChatClassifier = () => {
             <Button
               variant="outline"
               colorScheme="yellow"
-              isDisabled={isExportBtnsDisabled}
+              isDisabled={true}
               whiteSpace="break-spaces"
             >
               Отправить в 1С
