@@ -38,3 +38,11 @@ export interface NomenclaturesMapping {
   general_status: string
   nomenclatures: MappingResponse[] | null
 }
+
+export interface MappingResult {
+  id: number
+  created_at: string
+  user_id: number
+  mapping_nomenclature_corrected: string | null
+  mapping_result: MappingResponse | null
+}
