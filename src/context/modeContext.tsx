@@ -22,8 +22,8 @@ interface ModeContextProviderProps {
 const ModeContextProvider: FC<ModeContextProviderProps> = ({ children }) => {
   const user = useContext(UserContext)
 
-  const is_wiki_mode = user.tenants[0].modes.filter((m) => m.name === "wiki").length > 0
-  const is_databases_mode = user.tenants[0].modes.filter((m) => m.name === "databases").length > 0
+  const is_wiki_mode = user.tenant.modes.filter((m) => m.name === "wiki").length > 0
+  const is_databases_mode = user.tenant.modes.filter((m) => m.name === "databases").length > 0
   const defaultMode = is_databases_mode ? "databases" : "wiki"
 
   const [mode, setMode] = useState<ModeT>(defaultMode)
