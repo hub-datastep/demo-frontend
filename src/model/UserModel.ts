@@ -1,13 +1,13 @@
-import { TenantModel } from "model/TenantModel"
 import { DatabasePredictionConfigModel } from "model/DatabasePredictionConfigModel"
+import { TenantModel } from "model/TenantModel"
 
 type ModeT = "wiki" | "databases"
 
 interface UserModel {
   id: string
   username: string
-  tenants: TenantModel[]
+  tenant: TenantModel
   database_prediction_config: DatabasePredictionConfigModel
 }
 
-export type { UserModel, ModeT }
+export type { ModeT, UserModel }

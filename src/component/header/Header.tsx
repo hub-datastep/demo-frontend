@@ -17,9 +17,10 @@ const Header = () => {
       <Flex direction="column" gap={5}>
         <Logo />
 
-        <AssistantLinkBtn title="Базы Данных" assistant="databases" />
-        <AssistantLinkBtn title="Документы" assistant="documents" />
-        <AssistantLinkBtn title="Классификатор" assistant="classifier" />
+        <AssistantLinkBtn title="Базы Данных" url="databases" />
+        <AssistantLinkBtn title="Документы" url="documents" />
+        <AssistantLinkBtn title="Классификатор" url="classifier" />
+        <AssistantLinkBtn title="История Классификатора" url="classifier/history" />
       </Flex>
 
       <SignOutBtn />
