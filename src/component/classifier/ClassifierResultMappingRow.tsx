@@ -1,7 +1,9 @@
-import { Flex, Td, Text, Tr } from "@chakra-ui/react"
+import { Button, Flex, Td, Text, Tr } from "@chakra-ui/react"
+import SearchComponent from "component/SearchComponent"
 import { ClassifierCheckbox } from "component/classifier/ClassifierCheckbox"
-import { MappingResult } from "model/ClassifierModel"
-import { FC } from "react"
+import { MappingResult, MappingResultUpdate } from "model/ClassifierModel"
+import { FC, useState } from "react"
+import { useCorrectedNomenclature } from "service/mappingService"
 
 interface ClassifierResultTableProps {
   nomenclatureMappingResult: MappingResult
@@ -10,11 +12,28 @@ interface ClassifierResultTableProps {
 export const ClassifierResultMappingRow: FC<ClassifierResultTableProps> = (props) => {
   const { nomenclatureMappingResult } = props
 
+  const [searchVisible, setSearchVisible] = useState(false)
+
+  const correctedNomenclatureMutation = useCorrectedNomenclature()
+
   const mappedNomenclaturesList = nomenclatureMappingResult.mapping_result?.mappings
   const isMappingsExists = mappedNomenclaturesList !== null && mappedNomenclaturesList !== undefined
 
   const similarMappingList = nomenclatureMappingResult.mapping_result?.similar_mappings
   const isSimilarMappingsExists = similarMappingList !== null && similarMappingList !== undefined
+
+  const handleIncorrectMapping = () => {
+    setSearchVisible(true)
+  }
+
+  const handleSelect = async (selectedSimilarNomecnlature: string) => {
+    const updatedNomenclature: MappingResultUpdate = {
+      id: nomenclatureMappingResult.id,
+      mapping_nomenclature_corrected: selectedSimilarNomecnlature,
+    }
+    await correctedNomenclatureMutation.mutateAsync(updatedNomenclature)
+    setSearchVisible(false)
+  }
 
   return (
     <Tr whiteSpace="break-spaces">
@@ -42,12 +61,31 @@ export const ClassifierResultMappingRow: FC<ClassifierResultTableProps> = (props
         <Text>{nomenclatureMappingResult.mapping_result?.group}</Text>
       </Td>
       {/* Corrected nomenclature */}
-      <Td>
-        <Text>{nomenclatureMappingResult.mapping_nomenclature_corrected}</Text>
+      <Td p={0}>
+        {searchVisible ? (
+          <SearchComponent
+            onSelect={handleSelect}
+            isDisabled={correctedNomenclatureMutation.isLoading}
+            setSearchVisible={setSearchVisible}
+          />
+        ) : (
+          <Text>{nomenclatureMappingResult.mapping_nomenclature_corrected}</Text>
+        )}
       </Td>
       {/* Mapping created date */}
       <Td>
         <Text>{nomenclatureMappingResult.created_at}</Text>
+      </Td>
+      <Td>
+        <Button
+          isLoading={correctedNomenclatureMutation.isLoading}
+          colorScheme="red"
+          whiteSpace="break-spaces"
+          onClick={handleIncorrectMapping}
+          isDisabled={correctedNomenclatureMutation.isLoading}
+        >
+          Неправильное сопоставление
+        </Button>
       </Td>
     </Tr>
   )

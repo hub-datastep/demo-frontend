@@ -14,6 +14,7 @@ const COLUMNS_NAME = [
   "Группа",
   "Корректная номенклатура",
   "Дата создания",
+  "",
 ]
 
 export const ClassifierResultMappingsTable: FC<ClassifierResultMappingsTableProps> = (props) => {
@@ -32,8 +33,8 @@ export const ClassifierResultMappingsTable: FC<ClassifierResultMappingsTableProp
   }
 
   return (
-    <TableContainer>
-      <Table variant="striped">
+    <TableContainer whiteSpace="pre-wrap">
+      <Table variant="striped" w="full">
         <Thead>
           <Tr>
             {COLUMNS_NAME.map((column, index) => (
