@@ -33,7 +33,7 @@ export const ClassifierResultMappingsTable: FC<ClassifierResultMappingsTableProp
   }
 
   return (
-    <TableContainer whiteSpace="pre-wrap">
+    <TableContainer whiteSpace="pre-wrap" overflowY="auto">
       <Table variant="striped" w="full">
         <Thead>
           <Tr>

@@ -6,7 +6,10 @@ import { useQuery } from "react-query"
 
 export const ChatClassifierHistory = () => {
   const { data: nomenclatureMappingResults, status: nomenclatureMappingResultsQueryStatus } =
-    useQuery<MappingResult[]>("nomenclatureMappingResults", getNomenclaturesMappingResult)
+    useQuery<MappingResult[]>("nomenclatureMappingResults", async () => {
+      const data = await getNomenclaturesMappingResult()
+      return data.sort((a, b) => b.id - a.id)
+    })
 
   const isClassifierHistoryLoading = nomenclatureMappingResultsQueryStatus === "loading"
   const isMappingResultsExist =
