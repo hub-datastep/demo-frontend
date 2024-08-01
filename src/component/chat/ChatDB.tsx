@@ -67,7 +67,7 @@ function ChatDB() {
         similar_queries: similarQueries,
       } = await predictionMutation.mutateAsync(body)
 
-      setSimilarQueries(similarQueries)
+      setSimilarQueries(similarQueries!)
 
       await messageCreateMutation.mutateAsync({
         chat_id: chat.id,
