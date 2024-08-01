@@ -28,6 +28,7 @@ export const ChatKnowledgeBase = () => {
   const modeId = 1
   const [similarQueries, setSimilarQueries] = useState<string[]>([])
   const [isPdfViewerOpen, setIsPdfViewerOpen] = useState<boolean>(false)
+  const [fileUrl, setFileUrl] = useState<string>("")
 
   const { shownMessageCount } = useContext<ModeContextI>(ModeContext)
 
@@ -79,7 +80,7 @@ export const ChatKnowledgeBase = () => {
         answer: answer,
         connected_message_id: queryMessageId,
         file_path: file_path,
-        filename: filename
+        filename: filename,
       })
       await queryClient.invalidateQueries("chat")
     }
@@ -97,8 +98,9 @@ export const ChatKnowledgeBase = () => {
     }
   }, [chat?.id])
 
-  const togglePdfViewer = () => {
-    setIsPdfViewerOpen((prev) => !prev)
+  const togglePdfViewer = (filePath: string) => {
+    setIsPdfViewerOpen((prevIsOpen) => !prevIsOpen)
+    setFileUrl(filePath)
   }
 
   return (
@@ -126,7 +128,9 @@ export const ChatKnowledgeBase = () => {
               // Show messages from chat history
               getLastN(
                 shownMessageCount,
-                chat.messages.map((message, i) => createMessage(message, i, isPdfViewerOpen, togglePdfViewer))
+                chat.messages.map((message, i) =>
+                  createMessage(message, i, togglePdfViewer)
+                )
               )
             ) : (
               // Show default bot message
@@ -147,6 +151,7 @@ export const ChatKnowledgeBase = () => {
           />
         </InputGroupContext.Provider>
       </Flex>
+      {isPdfViewerOpen && <PDFViewerKnowledgeBase fileUrl={fileUrl} page={0} />}
     </Flex>
   )
 }

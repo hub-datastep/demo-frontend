@@ -30,8 +30,7 @@ export const Message: FC<IMessage> = (props) => {
 export const createMessage = (
   messageModel: MessageModel,
   key: number,
-  isPdfViewerOpen?: boolean,
-  togglePdfViewer?: () => void
+  togglePdfViewer?: (file_path: string) => void
 ): ReactNode => {
   let messageContent = ""
   let src = ""
@@ -93,8 +92,12 @@ export const createMessage = (
   }
 
   const messageIsTable = isMarkdownTable(messageContent)
-  const isKnowledgeBaseMessage = !!messageModel.filename && !!messageModel.file_path
 
+  const messageFilename = messageModel.filename
+  const messageFilePath = messageModel.file_path
+  // if message from Knowledge Base then togglePdfViewer is required
+  const isKnowledgeBaseMessage =
+    messageFilename !== undefined && messageFilePath !== undefined && togglePdfViewer
 
   return (
     <Message
@@ -117,11 +120,17 @@ export const createMessage = (
       {/* {messageContent} */}
 
       {messageModel.sql && <AnswerTabs titles={titles} panels={panels} />}
+      
       {isKnowledgeBaseMessage && (
-        <>
-          <Button onClick={togglePdfViewer}>{messageModel.filename}</Button>
-          {isPdfViewerOpen && <PDFViewerKnowledgeBase fileUrl={messageModel.file_path!} page={0} />}
-        </>
+        <Flex pt={5}>
+          <Button
+            colorScheme="blue"
+            variant="link"
+            onClick={() => togglePdfViewer(messageFilePath)}
+          >
+            {messageFilename}
+          </Button>
+        </Flex>
       )}
     </Message>
   )

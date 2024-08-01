@@ -6,9 +6,6 @@ interface MessageBaseModel {
   answer?: string
   sql?: string
   table?: string
-}
-
-interface MessageKnowledgeBaseModel extends MessageBaseModel {
   file_path?: string
   filename?: string
 }
@@ -17,13 +14,11 @@ interface MessageCreateModel extends MessageBaseModel {
   query?: string
   connected_message_id?: number
   chat_id: number
-  file_path?: string
-  filename?: string
 }
 
 interface MessageInModel extends MessageBaseModel {
-    similar_queries: string[]
-    page: number
+    similar_queries?: string[]
+    page?: number
 }
 
 interface MessageModel extends MessageCreateModel {
@@ -47,5 +42,4 @@ export type {
   MessageInModel,
   MessageModel,
   FavoriteMessageModel,
-  MessageKnowledgeBaseModel,
 }
