@@ -2,6 +2,7 @@ export interface MappingResponse {
   row_number: number
   nomenclature: string
   group: string
+  view: string
   nomenclature_params: object[]
   mappings?: MappingResponseItem[] | null
   similar_mappings?: MappingResponseItem[] | null
