@@ -8,7 +8,7 @@ interface ClassifierMappingsTableProps {
 }
 
 const INITIAL_TABLE_ROWS_COUNT = 3
-const COLUMNS_NAME = ["Номенклатура поставщика", "Номенклатура", "Группа"]
+const COLUMNS_NAME = ["Номенклатура поставщика", "Номенклатура", "Группа", "Вид"]
 
 export const ClassifierMappingsTable: FC<ClassifierMappingsTableProps> = (props) => {
   const { mappingResponseList } = props

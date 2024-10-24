@@ -48,6 +48,11 @@ export const ClassifierMappingRow: FC<ClassifierTableProps> = (props) => {
           <Text>{mappingResponse.group}</Text>
         )}
       </Td>
+
+      {/* Nomenclature view name */}
+      <Td>
+        <Text>{mappingResponse.view}</Text>
+      </Td>
     </Tr>
   )
 }
