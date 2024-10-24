@@ -4,6 +4,8 @@ import { AssistantLinkBtn } from "component/header/AssistantLinkBtn"
 import { SignOutBtn } from "component/header/SignOutBtn"
 
 const Header = () => {
+  // const { colorMode, toggleColorMode } = useColorMode()
+
   return (
     <Flex
       backgroundColor="purple.300"
@@ -22,6 +24,10 @@ const Header = () => {
         <AssistantLinkBtn title="Классификатор" url="classifier" />
         <AssistantLinkBtn title="История Классификатора" url="classifier/history" />
       </Flex>
+
+      {/* <Button onClick={toggleColorMode}>
+        {colorMode === "light" ? "Dark Mode" : "Light Mode"}
+      </Button> */}
 
       <SignOutBtn />
     </Flex>
