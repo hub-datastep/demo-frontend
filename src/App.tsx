@@ -7,6 +7,7 @@ import { ChatClassifierHistory } from "component/chat/ChatClassifierHistory"
 import ChatDB from "component/chat/ChatDB"
 import { ChatDocs } from "component/chat/ChatDocs"
 import { ChatKnowledgeBase } from "component/chat/ChatKnowledgeBase"
+import { DemoSolution } from "component/demo/DemoSolution"
 import { AuthContextProvider } from "context/authContext"
 import { FavoriteMessageContextProvider } from "context/favoriteMessageContext"
 import { ModeContextProvider } from "context/modeContext"
@@ -43,6 +44,7 @@ export const App = () => {
                         <Route path="" element={<ChatClassifier />} />
                         <Route path="history" element={<ChatClassifierHistory />} />
                       </Route>
+                      <Route path="/demo" element={<DemoSolution />} />
                     </Route>
                   </Routes>
                   <ToastContainer />

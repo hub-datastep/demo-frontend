@@ -1,7 +1,7 @@
 import { DatabasePredictionConfigModel } from "model/DatabasePredictionConfigModel"
 import { TenantModel } from "model/TenantModel"
 
-type ModeT = "wiki" | "databases"
+type ModeT = "DOCS" | "DB" | "CLASSIFIER"
 
 interface UserModel {
   id: string

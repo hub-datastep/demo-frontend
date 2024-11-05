@@ -1,4 +1,5 @@
-import { Card, CardBody, Flex, Text } from "@chakra-ui/react"
+import { Button, Card, CardBody, Flex, Text } from "@chakra-ui/react"
+import { PDFViewerKnowledgeBase } from "component/PDFViewerKnowledgeBase"
 import AnswerTabs from "component/message/AnswerTabs"
 import { Avatar } from "component/message/Avatar"
 import Code from "component/message/Code"
@@ -26,7 +27,11 @@ export const Message: FC<IMessage> = (props) => {
   )
 }
 
-export const createMessage = (messageModel: MessageModel, key: number): ReactNode => {
+export const createMessage = (
+  messageModel: MessageModel,
+  key: number,
+  togglePdfViewer?: (file_path: string) => void
+): ReactNode => {
   let messageContent = ""
   let src = ""
 
@@ -88,6 +93,12 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
 
   const messageIsTable = isMarkdownTable(messageContent)
 
+  const messageFilename = messageModel.filename
+  const messageFilePath = messageModel.file_path
+  // if message from Knowledge Base then togglePdfViewer is required
+  const isKnowledgeBaseMessage =
+    messageFilename !== undefined && messageFilePath !== undefined && togglePdfViewer
+
   return (
     <Message
       key={key}
@@ -109,6 +120,18 @@ export const createMessage = (messageModel: MessageModel, key: number): ReactNod
       {/* {messageContent} */}
 
       {messageModel.sql && <AnswerTabs titles={titles} panels={panels} />}
+      
+      {isKnowledgeBaseMessage && (
+        <Flex pt={5}>
+          <Button
+            colorScheme="blue"
+            variant="link"
+            onClick={() => togglePdfViewer(messageFilePath)}
+          >
+            {messageFilename}
+          </Button>
+        </Flex>
+      )}
     </Message>
   )
 }

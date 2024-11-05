@@ -27,8 +27,8 @@ export const ChatKnowledgeBase = () => {
   const user = useContext<UserModel>(UserContext)
   const modeId = 1
   const [similarQueries, setSimilarQueries] = useState<string[]>([])
-  
-  const [currentFileUrl, setCurrentFileUrl] = useState<string | null>(null)
+  const [isPdfViewerOpen, setIsPdfViewerOpen] = useState<boolean>(false)
+  const [fileUrl, setFileUrl] = useState<string>("")
 
   const { shownMessageCount } = useContext<ModeContextI>(ModeContext)
 
@@ -71,15 +71,16 @@ export const ChatKnowledgeBase = () => {
         limit,
       }
 
-      const { answer, file_path } = await predictionMutation.mutateAsync(body)
+      const { answer, file_path, filename } = await predictionMutation.mutateAsync(body)
 
       setSimilarQueries(similarQueries)
-      setCurrentFileUrl(file_path ? file_path : null)
 
       await messageCreateMutation.mutateAsync({
         chat_id: chat.id,
         answer: answer,
         connected_message_id: queryMessageId,
+        file_path: file_path,
+        filename: filename,
       })
       await queryClient.invalidateQueries("chat")
     }
@@ -96,6 +97,11 @@ export const ChatKnowledgeBase = () => {
       }
     }
   }, [chat?.id])
+
+  const togglePdfViewer = (filePath: string) => {
+    setIsPdfViewerOpen((prevIsOpen) => !prevIsOpen)
+    setFileUrl(filePath)
+  }
 
   return (
     <Flex h="full" w="84%" direction="row" alignItems="flex-start">
@@ -122,7 +128,9 @@ export const ChatKnowledgeBase = () => {
               // Show messages from chat history
               getLastN(
                 shownMessageCount,
-                chat.messages.map((message, i) => createMessage(message, i))
+                chat.messages.map((message, i) =>
+                  createMessage(message, i, togglePdfViewer)
+                )
               )
             ) : (
               // Show default bot message
@@ -143,7 +151,7 @@ export const ChatKnowledgeBase = () => {
           />
         </InputGroupContext.Provider>
       </Flex>
-      {currentFileUrl && <PDFViewerKnowledgeBase fileUrl={currentFileUrl} page={0} />}
+      {isPdfViewerOpen && <PDFViewerKnowledgeBase fileUrl={fileUrl} page={0} />}
     </Flex>
   )
 }

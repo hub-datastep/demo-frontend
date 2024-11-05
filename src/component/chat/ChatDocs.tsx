@@ -83,9 +83,9 @@ export const ChatDocs = () => {
         page,
       } = await predictionMutation.mutateAsync(body)
 
-      setCurrentPage(page)
+      setCurrentPage(page!)
 
-      setSimilarQueries(similarQueries)
+      setSimilarQueries(similarQueries!)
 
       await messageCreateMutation.mutateAsync({
         chat_id: chat.id,

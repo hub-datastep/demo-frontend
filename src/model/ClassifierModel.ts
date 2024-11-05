@@ -46,3 +46,13 @@ export interface MappingResult {
   mapping_nomenclature_corrected: string | null
   mapping_result: MappingResponse | null
 }
+
+export interface MappingResultUpdate {
+  id: number
+  mapping_nomenclature_corrected: string
+}
+
+export interface FormattedNomenclature {
+  id: number
+  name: string
+}
