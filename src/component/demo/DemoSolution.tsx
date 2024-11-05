@@ -165,14 +165,30 @@ export const DemoSolution: FC = () => {
           </Thead>
 
           <Tbody>
-            {solutionTable.map((row, index) => (
-              <Tr key={index}>
-                <Td>{row.id}</Td>
-                <Td>{row.input_item}</Td>
-                <Td>{row.output_item}</Td>
-                <Td>{row.additional_info}</Td>
-              </Tr>
-            ))}
+            {solutionTable.map((row, index) => {
+              const input_params = row.input_item.split(";")
+
+              return (
+                <Tr key={index}>
+                  <Td>{row.id}</Td>
+                  <Td>
+                    <Text>
+                      <b>Название CIM модели:</b> {input_params[0]}
+                    </Text>
+                    <Text>
+                      <b>Тип:</b> {input_params[1]}
+                    </Text>
+                    <Text>
+                      <b>Материал:</b> {input_params[2]}
+                    </Text>
+                  </Td>
+                  <Td>
+                    <b>Работа:</b> {row.output_item}
+                  </Td>
+                  <Td>{row.additional_info}</Td>
+                </Tr>
+              )
+            })}
           </Tbody>
         </Table>
       ) : (
