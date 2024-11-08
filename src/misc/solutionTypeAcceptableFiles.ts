@@ -1,6 +1,6 @@
 import { SolutionType } from "constant/solutionTypes"
 
-export const getAcceptableFileTypesBySolutionType = (solutionType: SolutionType) => {
+export const getAcceptableFileTypesBySolutionType = (solutionType?: string) => {
   const acceplableFileTypes = []
 
   // UTDs

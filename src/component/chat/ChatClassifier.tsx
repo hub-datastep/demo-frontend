@@ -14,11 +14,15 @@ import { DataExtractModel } from "model/FileModel"
 import { JobModel } from "model/JobModel"
 import { ChangeEvent, useState } from "react"
 import { useQuery } from "react-query"
+import { useNavigate } from "react-router"
 import { useNomenclaturesMapping } from "service/mappingService"
 
 export const ChatClassifier = () => {
+  const navigateTo = useNavigate()
+
   const urlParams = useSearchQuery()
   const parserMode = urlParams.get("mode")
+
   const [queryNomenclaturesList, setQueryNomenclaturesList] = useState<string>("")
   const [currentJob, setCurrentJob] = useState<JobModel>()
   const [isError, setIsError] = useState<boolean>(false)
@@ -31,7 +35,9 @@ export const ChatClassifier = () => {
 
     refetchInterval: (data) => {
       // If any of jobs is failed, stop refetching
-      const isAnyJobFailed = data?.some((mapping) => mapping.general_status === JobStatus.FAILED)
+      const isAnyJobFailed = data?.some(
+        (mapping) => mapping.general_status === JobStatus.FAILED
+      )
 
       if (isAnyJobFailed) {
         setCurrentJob(undefined)
@@ -63,7 +69,8 @@ export const ChatClassifier = () => {
   )
 
   const isTextAreaDisabled = !!currentJob || mappingQueryStatus === "loading"
-  const isStartMappingBtnDisabled = isTextAreaDisabled || queryNomenclaturesList.trim() === ""
+  const isStartMappingBtnDisabled =
+    isTextAreaDisabled || queryNomenclaturesList.trim() === ""
   // const isExportBtnsDisabled = isTextAreaDisabled || !mappedNomenclatures
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -91,8 +98,14 @@ export const ChatClassifier = () => {
   }
 
   const onSuccessDataExtraction = (parsedData: DataExtractModel[]) => {
-    const nomenclaturesList = parsedData.map(({ nomenclature }) => nomenclature?.replace("\n", " "))
+    const nomenclaturesList = parsedData.map(({ nomenclature }) =>
+      nomenclature?.replace("\n", " ")
+    )
     setQueryNomenclaturesList(nomenclaturesList.join("\n"))
+  }
+
+  const handleHistoryRedirectClick = () => {
+    navigateTo("/classifier/history")
   }
 
   return (
@@ -132,7 +145,12 @@ export const ChatClassifier = () => {
           {isError && <Text color="red">Что-то пошло не так. Попробуйте позже</Text>}
 
           {/* TODO: move last 2 btns under table */}
-          <Flex direction="row" justifyContent="flex-start" alignItems="flex-start" gap={5}>
+          <Flex
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            gap={5}
+          >
             <Button
               variant="outline"
               colorScheme="purple"
@@ -160,11 +178,23 @@ export const ChatClassifier = () => {
             >
               Отправить в 1С
             </Button>
+
+            <Button
+              variant="solid"
+              colorScheme="gray"
+              whiteSpace="break-spaces"
+              onClick={handleHistoryRedirectClick}
+            >
+              История
+            </Button>
           </Flex>
         </Flex>
 
         {(parserMode === "INVOICE" || parserMode === "KP") && (
-          <ClassifierUploadBtn onSuccess={onSuccessDataExtraction} parserMode={parserMode} />
+          <ClassifierUploadBtn
+            onSuccess={onSuccessDataExtraction}
+            parserMode={parserMode}
+          />
         )}
 
         <ClassifierAnswer

@@ -13,3 +13,8 @@ export interface SolutionImitationResponseItem {
 export interface SolutionImitationResponse {
   table: SolutionImitationResponseItem[]
 }
+
+export interface SolutionImitationInputStep {
+  title: string
+  Component: JSX.Element
+}
