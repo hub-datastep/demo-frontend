@@ -20,9 +20,7 @@ export const SidebarItem: FC<SidebarItemProps> = (props) => {
   const isHasSubRoutes = !!route.subRoutes && route.subRoutes.length > 0
 
   if (!isHasSubRoutes) {
-    return (
-      <SidebarItemBtn title={route.title} url={route.url} isDisabled={route.isDisabled} />
-    )
+    return <SidebarItemBtn route={route} />
   }
 
   return (
@@ -44,12 +42,7 @@ export const SidebarItem: FC<SidebarItemProps> = (props) => {
       {/* Sub Routes */}
       <AccordionPanel>
         {route.subRoutes?.map((subRoute, index) => (
-          <SidebarItemBtn
-            key={index}
-            title={subRoute.title}
-            url={subRoute.url}
-            isDisabled={subRoute.isDisabled}
-          />
+          <SidebarItemBtn key={index} route={subRoute} />
         ))}
       </AccordionPanel>
     </AccordionItem>

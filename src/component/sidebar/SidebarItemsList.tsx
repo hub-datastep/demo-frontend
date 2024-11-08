@@ -7,7 +7,7 @@ const routes = configuration.sidebar.routes
 
 export const SidebarItemsList: FC = () => {
   return (
-    <Accordion allowToggle allowMultiple>
+    <Accordion allowMultiple>
       {routes.map((route, index) => (
         <SidebarItem key={index} route={route} />
       ))}
