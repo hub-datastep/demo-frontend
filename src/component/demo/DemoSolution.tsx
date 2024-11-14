@@ -1,73 +1,36 @@
-import {
-  Button,
-  CloseButton,
-  Flex,
-  Heading,
-  Input,
-  Select,
-  Spinner,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react"
-import { SOLUTION_TYPES_LIST } from "constant/solutionTypes"
-import { getShortFileName } from "misc/util"
+import { Button, Flex } from "@chakra-ui/react"
+import { InputsStepper } from "component/demo/InputsStepper"
+import { LoaderWithTexts } from "component/demo/LoaderWithTexts"
+import { ResultsTable } from "component/demo/ResultsTable"
 import { SolutionImitationBody, SolutionImitationResponse } from "model/SolutionImitation"
-import { ChangeEvent, FC, useRef, useState } from "react"
-import { FaUpload } from "react-icons/fa"
+import { FC, useState } from "react"
+import { FaArrowLeft } from "react-icons/fa"
 import { useSolutionImitationMutation } from "service/demoSolutionService"
 
-const COLUMNS_NAME = ["ID", "Входной элемент", "Результат", "Комментарий"]
-
 export const DemoSolution: FC = () => {
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
-
   const [solutionType, setSolutionType] = useState<string>()
   const [uploadedFile, setUploadedFile] = useState<File>()
 
-  const [solutionResponse, setSolutionResponse] = useState<SolutionImitationResponse>()
-
   const isSolutionTypeSelected = !!solutionType
   const isFileUploaded = !!uploadedFile
+
+  const [solutionResponse, setSolutionResponse] = useState<SolutionImitationResponse>()
 
   const solutionTable = solutionResponse?.table
   const isSolutionTableExists = !!solutionTable
 
   const solutionImitationMutation = useSolutionImitationMutation()
 
-  const isError = solutionImitationMutation.isError
   const isLoading = solutionImitationMutation.isLoading
 
-  const isUploadFileBtnDisabled = isLoading || !isSolutionTypeSelected
-
-  const handleTypeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedType = e.target.value
-    setSolutionType(selectedType)
-  }
-
-  const handleUploadFileButtonClick = () => {
-    fileInputRef.current?.click()
-  }
-
-  const handleResetFile = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""
-    }
-    setUploadedFile(undefined)
-  }
-
-  const handleImitateSolution = async (file: File) => {
-    if (!isSolutionTypeSelected) {
+  const handleImitateSolution = async () => {
+    if (!isSolutionTypeSelected || !isFileUploaded) {
       return
     }
 
     const body: SolutionImitationBody = {
       type: solutionType,
-      file_object: file,
+      file_object: uploadedFile,
     }
 
     const responseData = await solutionImitationMutation.mutateAsync(body)
@@ -75,13 +38,8 @@ export const DemoSolution: FC = () => {
     setSolutionResponse(responseData)
   }
 
-  const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.item(0)
-
-    if (file) {
-      setUploadedFile(file)
-      handleImitateSolution(file)
-    }
+  const handleClearResults = () => {
+    setSolutionResponse(undefined)
   }
 
   return (
@@ -90,142 +48,59 @@ export const DemoSolution: FC = () => {
       w="full"
       direction="column"
       px={10}
-      py={16}
+      pt={10}
+      pb={24}
       gap={10}
       overflowX="hidden"
       overflowY="auto"
     >
-      <Flex w="full" direction="column" alignItems="center" gap={3}>
-        {/* Inputs */}
-        <Flex
-          w="full"
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          gap={3}
-        >
-          {/* Solution Type Select */}
-          <Select
-            w="fit-content"
-            variant="filled"
-            placeholder="Select type"
-            value={solutionType}
-            onChange={handleTypeSelect}
-            isInvalid={!isSolutionTypeSelected}
-            isDisabled={isLoading}
-          >
-            {SOLUTION_TYPES_LIST.map((type, index) => (
-              <option key={index} value={type}>
-                {type.toUpperCase()}
-              </option>
-            ))}
-          </Select>
-
-          {/* File Upload Btn */}
+      <Flex
+        h="full"
+        w="full"
+        direction="column"
+        gap={10}
+        //^ Test animation when table with resulst is shown
+        // animation={isSolutionTableExists ? "slideInFromRight 0.5s ease-in-out" : "none"}
+        // css={{
+        //   "@keyframes slideInFromRight": {
+        //     "0%": {
+        //       transform: "translateX(100%)",
+        //       opacity: 0,
+        //     },
+        //     "100%": {
+        //       transform: "translateX(0)",
+        //       opacity: 1,
+        //     },
+        //   },
+        // }}
+      >
+        {isSolutionTableExists ? (
           <>
+            {/* Clear Results Btn */}
             <Button
               w="fit-content"
-              colorScheme="purple"
-              onClick={handleUploadFileButtonClick}
-              leftIcon={<FaUpload />}
-              isDisabled={isUploadFileBtnDisabled}
+              leftIcon={<FaArrowLeft />}
+              onClick={handleClearResults}
             >
-              Загрузить файл
+              Назад
             </Button>
 
-            {/* Reset File */}
-            <CloseButton onClick={handleResetFile} isDisabled={isUploadFileBtnDisabled} />
-
-            <Input
-              hidden
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf,.txt,.ifc"
-              multiple={false}
-              onChange={handleFileInputChange}
-            />
+            {/* Results Table */}
+            <ResultsTable solutionType={solutionType} solutionTable={solutionTable} />
           </>
-        </Flex>
-
-        {/* Uploaded File Data */}
-        {isFileUploaded && (
-          <Text color="gray">{getShortFileName(uploadedFile.name)}</Text>
+        ) : (
+          <InputsStepper
+            solutionType={solutionType}
+            setSolutionType={setSolutionType}
+            uploadedFile={uploadedFile}
+            setUploadedFile={setUploadedFile}
+            onSubmit={handleImitateSolution}
+            isLoading={isLoading}
+          />
         )}
       </Flex>
 
-      {/* Results Table */}
-      {!isLoading && isSolutionTableExists ? (
-        <Table w="full" variant="striped">
-          <Thead>
-            <Tr>
-              {COLUMNS_NAME.map((column, index) => (
-                <Th key={index}>{column}</Th>
-              ))}
-            </Tr>
-          </Thead>
-
-          <Tbody>
-            {solutionTable.map((row, index) => {
-              const input_params = row.input_item.split(";")
-
-              return (
-                <Tr key={index}>
-                  <Td>{row.id}</Td>
-                  <Td>
-                    <Text>
-                      <b>Название CIM модели:</b> {input_params[0]}
-                    </Text>
-                    <Text>
-                      <b>Тип:</b> {input_params[1]}
-                    </Text>
-                    <Text>
-                      <b>Материал:</b> {input_params[2]}
-                    </Text>
-                  </Td>
-                  <Td>
-                    <b>Работа:</b> {row.output_item}
-                  </Td>
-                  <Td>{row.additional_info}</Td>
-                </Tr>
-              )
-            })}
-          </Tbody>
-        </Table>
-      ) : (
-        // Guides Texts
-        <Flex
-          h="full"
-          w="full"
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          gap={2}
-        >
-          {!isSolutionTypeSelected && (
-            <Text fontSize="xl">Выбери тип файла, который нужно обработать</Text>
-          )}
-
-          {!isFileUploaded && <Text fontSize="xl">Загрузи файл</Text>}
-
-          {isLoading && (
-            <Flex alignItems="center" gap={3}>
-              <Spinner size="md" color="purple" />
-
-              <Text fontSize="xl">Обрабатываем файл</Text>
-            </Flex>
-          )}
-
-          {isError && (
-            <Flex direction="column" alignItems="center" gap={2} color="red.400">
-              <Heading fontSize="xl">Что-то пошло не так..</Heading>
-
-              <Text fontSize="lg">
-                Попробуйте ещё раз позже или лучше сообщите нам об ошибке
-              </Text>
-            </Flex>
-          )}
-        </Flex>
-      )}
+      {isLoading && <LoaderWithTexts />}
     </Flex>
   )
 }
