@@ -41,10 +41,11 @@ export interface NomenclaturesMapping {
 
 export interface MappingResult {
   id: number
-  created_at: string
   user_id: number
-  mapping_nomenclature_corrected: string | null
   mapping_result: MappingResponse | null
+  mapping_nomenclature_corrected: string | null
+  iteration_key?: string
+  created_at?: string
 }
 
 export interface MappingResultUpdate {
@@ -55,4 +56,8 @@ export interface MappingResultUpdate {
 export interface FormattedNomenclature {
   id: number
   name: string
+}
+
+export interface MappingResultRequestBody {
+  iteration_key?: string
 }
