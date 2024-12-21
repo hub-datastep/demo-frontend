@@ -50,10 +50,8 @@ export const ChatClassifierHistory = () => {
 
   const handleMappingResultsRefetch = () => {
     // Set 'iteration_key' url param value
-    if (isMappingIterationKeyExists) {
-      urlParams.set("iteration_key", mappingIterationKey)
-      window.history.replaceState({}, "", `?${urlParams.toString()}`)
-    }
+    urlParams.set("iteration_key", mappingIterationKey || "")
+    window.history.replaceState({}, "", `?${urlParams.toString()}`)
 
     // Refetch mapping results
     refetch()
@@ -78,7 +76,6 @@ export const ChatClassifierHistory = () => {
                 variant="ghost"
                 onClick={handleMappingResultsRefetch}
                 isLoading={isLoading}
-                isDisabled={!isMappingIterationKeyExists}
               />
             </InputRightElement>
           </InputGroup>

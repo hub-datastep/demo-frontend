@@ -8,18 +8,24 @@ interface ClassifierResultMappingsTableProps {
 }
 
 const INITIAL_TABLE_ROWS_COUNT = 5
+
 const COLUMNS_NAME = [
   "Номенклатура поставщика",
   "Номенклатура",
   "Группа",
   "Корректная номенклатура",
   "Дата создания",
+  "ID итерации",
   "",
 ]
 
-export const ClassifierResultMappingsTable: FC<ClassifierResultMappingsTableProps> = (props) => {
+export const ClassifierResultMappingsTable: FC<ClassifierResultMappingsTableProps> = (
+  props
+) => {
   const { nomenclatureMappingResults } = props
-  const [visibleRowsNumber, setVisibleRowsNumber] = useState<number>(INITIAL_TABLE_ROWS_COUNT)
+  const [visibleRowsNumber, setVisibleRowsNumber] = useState<number>(
+    INITIAL_TABLE_ROWS_COUNT
+  )
 
   const isTableFullVisible = visibleRowsNumber === nomenclatureMappingResults.length
   const needShowOrHideBtn = nomenclatureMappingResults.length > visibleRowsNumber

@@ -17,10 +17,12 @@ export const ClassifierResultMappingRow: FC<ClassifierResultTableProps> = (props
   const correctedNomenclatureMutation = useCorrectedNomenclature()
 
   const mappedNomenclaturesList = nomenclatureMappingResult.mapping_result?.mappings
-  const isMappingsExists = mappedNomenclaturesList !== null && mappedNomenclaturesList !== undefined
+  const isMappingsExists =
+    mappedNomenclaturesList !== null && mappedNomenclaturesList !== undefined
 
   const similarMappingList = nomenclatureMappingResult.mapping_result?.similar_mappings
-  const isSimilarMappingsExists = similarMappingList !== null && similarMappingList !== undefined
+  const isSimilarMappingsExists =
+    similarMappingList !== null && similarMappingList !== undefined
 
   const handleIncorrectMapping = () => {
     setSearchVisible(true)
@@ -49,7 +51,9 @@ export const ClassifierResultMappingRow: FC<ClassifierResultTableProps> = (props
           {/* Show similar nomenclatures */}
           {!isMappingsExists && isSimilarMappingsExists && (
             <>
-              <Text>Не нашлось номенклатуры с такими параметрами, но возможно Вы имели ввиду:</Text>
+              <Text>
+                Не нашлось номенклатуры с такими параметрами, но возможно Вы имели ввиду:
+              </Text>
               <ClassifierCheckbox mappingsList={similarMappingList} />
             </>
           )}
@@ -60,6 +64,7 @@ export const ClassifierResultMappingRow: FC<ClassifierResultTableProps> = (props
       <Td>
         <Text>{nomenclatureMappingResult.mapping_result?.group}</Text>
       </Td>
+
       {/* Corrected nomenclature */}
       <Td p={0}>
         {searchVisible ? (
@@ -72,10 +77,17 @@ export const ClassifierResultMappingRow: FC<ClassifierResultTableProps> = (props
           <Text>{nomenclatureMappingResult.mapping_nomenclature_corrected}</Text>
         )}
       </Td>
-      {/* Mapping created date */}
+
+      {/* Mapping Сreated Вate */}
       <Td>
         <Text>{nomenclatureMappingResult.created_at}</Text>
       </Td>
+
+      {/* Iteration Key */}
+      <Td>
+        <Text>{nomenclatureMappingResult.iteration_key}</Text>
+      </Td>
+
       <Td>
         <Button
           isLoading={correctedNomenclatureMutation.isLoading}
