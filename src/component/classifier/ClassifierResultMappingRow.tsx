@@ -1,8 +1,9 @@
-import { Button, Flex, Td, Text, Tr } from "@chakra-ui/react"
+import { Flex, IconButton, Td, Text, Tr } from "@chakra-ui/react"
 import SearchComponent from "component/SearchComponent"
 import { ClassifierCheckbox } from "component/classifier/ClassifierCheckbox"
 import { MappingResult, MappingResultUpdate } from "model/ClassifierModel"
 import { FC, useState } from "react"
+import { FaEdit } from "react-icons/fa"
 import { useCorrectedNomenclature } from "service/mappingService"
 
 interface ClassifierResultTableProps {
@@ -12,7 +13,7 @@ interface ClassifierResultTableProps {
 export const ClassifierResultMappingRow: FC<ClassifierResultTableProps> = (props) => {
   const { nomenclatureMappingResult } = props
 
-  const [searchVisible, setSearchVisible] = useState(false)
+  const [isSearchVisible, setIsSearchVisible] = useState(false)
 
   const correctedNomenclatureMutation = useCorrectedNomenclature()
 
@@ -25,7 +26,7 @@ export const ClassifierResultMappingRow: FC<ClassifierResultTableProps> = (props
     similarMappingList !== null && similarMappingList !== undefined
 
   const handleIncorrectMapping = () => {
-    setSearchVisible(true)
+    setIsSearchVisible(true)
   }
 
   const handleSelect = async (selectedSimilarNomecnlature: string) => {
@@ -34,21 +35,21 @@ export const ClassifierResultMappingRow: FC<ClassifierResultTableProps> = (props
       mapping_nomenclature_corrected: selectedSimilarNomecnlature,
     }
     await correctedNomenclatureMutation.mutateAsync(updatedNomenclature)
-    setSearchVisible(false)
+    setIsSearchVisible(false)
   }
 
   return (
     <Tr whiteSpace="break-spaces">
-      {/* Name of initial nomenclature (input from user) */}
+      {/* Initial nomenclature */}
       <Td>{nomenclatureMappingResult.mapping_result?.nomenclature}</Td>
 
-      {/* Mapped nomenclature */}
+      {/* Mapped Nomenclature */}
       <Td>
         <Flex direction="column">
-          {/* Show mapped nomenclatures */}
+          {/* Mapped nomenclatures */}
           {isMappingsExists && <Text>{mappedNomenclaturesList[0].nomenclature}</Text>}
 
-          {/* Show similar nomenclatures */}
+          {/* Similar nomenclatures */}
           {!isMappingsExists && isSimilarMappingsExists && (
             <>
               <Text>
@@ -60,25 +61,33 @@ export const ClassifierResultMappingRow: FC<ClassifierResultTableProps> = (props
         </Flex>
       </Td>
 
-      {/* Nomenclature group name */}
+      {/* Nomenclature Group */}
       <Td>
         <Text>{nomenclatureMappingResult.mapping_result?.group}</Text>
       </Td>
 
-      {/* Corrected nomenclature */}
+      {/* Corrected Nomenclature */}
       <Td p={0}>
-        {searchVisible ? (
+        {isSearchVisible ? (
           <SearchComponent
             onSelect={handleSelect}
             isDisabled={correctedNomenclatureMutation.isLoading}
-            setSearchVisible={setSearchVisible}
+            setIsSearchVisible={setIsSearchVisible}
           />
         ) : (
-          <Text>{nomenclatureMappingResult.mapping_nomenclature_corrected}</Text>
+          <Flex w="full" direction="row" justifyContent="center" gap={2}>
+            <Text>{nomenclatureMappingResult.mapping_nomenclature_corrected}</Text>
+            <IconButton
+              aria-label="edit-corrected-nomenclature"
+              variant="ghost"
+              icon={<FaEdit />}
+              onClick={handleIncorrectMapping}
+            />
+          </Flex>
         )}
       </Td>
 
-      {/* Mapping Сreated Вate */}
+      {/* Сreated At */}
       <Td>
         <Text>{nomenclatureMappingResult.created_at}</Text>
       </Td>
@@ -86,18 +95,6 @@ export const ClassifierResultMappingRow: FC<ClassifierResultTableProps> = (props
       {/* Iteration Key */}
       <Td>
         <Text>{nomenclatureMappingResult.iteration_key}</Text>
-      </Td>
-
-      <Td>
-        <Button
-          isLoading={correctedNomenclatureMutation.isLoading}
-          colorScheme="red"
-          whiteSpace="break-spaces"
-          onClick={handleIncorrectMapping}
-          isDisabled={correctedNomenclatureMutation.isLoading}
-        >
-          Неправильное сопоставление
-        </Button>
       </Td>
     </Tr>
   )

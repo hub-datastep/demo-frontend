@@ -16,7 +16,6 @@ const COLUMNS_NAME = [
   "Корректная номенклатура",
   "Дата создания",
   "ID итерации",
-  "",
 ]
 
 export const ClassifierResultMappingsTable: FC<ClassifierResultMappingsTableProps> = (
