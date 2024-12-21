@@ -46,6 +46,7 @@ export const configuration = {
           },
         ],
       },
+      //* Demo
       {
         title: "Демонстрация",
         url: "demo",
