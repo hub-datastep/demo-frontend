@@ -11,10 +11,14 @@ import { useSimilarNomenclatures } from "service/mappingService"
 interface SearchComponentProps {
   onSelect: (item: string) => void
   isDisabled: boolean
-  setSearchVisible: Dispatch<SetStateAction<boolean>>
+  setIsSearchVisible: Dispatch<SetStateAction<boolean>>
 }
 
-const SearchComponent: FC<SearchComponentProps> = ({ onSelect, isDisabled, setSearchVisible }) => {
+const SearchComponent: FC<SearchComponentProps> = ({
+  onSelect,
+  isDisabled,
+  setIsSearchVisible,
+}) => {
   const [similarNomenclatures, setSimilarNomenclatures] = useState<string[]>([])
   const [query, setQuery] = useState<string>("")
 
@@ -29,7 +33,9 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSelect, isDisabled, setSe
             return
           }
 
-          const similarNomenclatures = await similarNomenclaturesMutation.mutateAsync(query)
+          const similarNomenclatures = await similarNomenclaturesMutation.mutateAsync(
+            query
+          )
           setSimilarNomenclatures(similarNomenclatures)
         }
 
@@ -50,7 +56,7 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSelect, isDisabled, setSe
     <AutoComplete openOnFocus isLoading={similarNomenclaturesMutation.isLoading}>
       <InputGroup>
         <AutoCompleteInput
-          w={320}
+          w="full"
           bgColor="white"
           variant="outline"
           placeholder="Введите корректную номенклатуру"
@@ -59,13 +65,17 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSelect, isDisabled, setSe
           isDisabled={isDisabled}
         />
         <InputRightElement>
-          <CloseButton onClick={() => setSearchVisible(false)} />
+          <CloseButton onClick={() => setIsSearchVisible(false)} />
         </InputRightElement>
       </InputGroup>
 
       <AutoCompleteList>
         {similarNomenclatures.map((nomenclature, index) => (
-          <AutoCompleteItem key={index} value={nomenclature} onClick={() => onSelect(nomenclature)}>
+          <AutoCompleteItem
+            key={index}
+            value={nomenclature}
+            onClick={() => onSelect(nomenclature)}
+          >
             {nomenclature}
           </AutoCompleteItem>
         ))}
