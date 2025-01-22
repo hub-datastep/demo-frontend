@@ -3,8 +3,8 @@ export interface MappingResponse {
   nomenclature: string
   group: string
   nomenclature_params: object[]
-  mappings?: MappingResponseItem[] | null
-  similar_mappings?: MappingResponseItem[] | null
+  mappings?: MappingResponseItem[]
+  similar_mappings?: MappingResponseItem[]
 }
 
 export interface MappingResponseItem {
