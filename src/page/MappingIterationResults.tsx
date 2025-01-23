@@ -1,5 +1,5 @@
 import { Button, Flex } from "@chakra-ui/react"
-import { getMappingIterationById } from "api/mapping/mappingIteration"
+import { getMappingIterationById } from "api/mapping/iteration"
 import { UTDMetadatasParams } from "component/mapping/iteration/UTDMetadatasParams"
 import { MappingResultsTable } from "component/mapping/result/MappingResultsTable"
 import { LoadingPage } from "component/page/LoadingPage"
