@@ -26,14 +26,6 @@ export const getNomenclaturesMappingResult = async (
     .then((response) => response.data)
 }
 
-export const getSimilarNomenclaturesByUserQuery = async (
-  query: string
-): Promise<string[]> => {
-  return axiosClient
-    .post("/mapping/similar_search", { query })
-    .then((response) => response.data)
-}
-
 export const saveCorrectedNomenclature = async (body: MappingResultUpdate) => {
   return axiosClient.post("/mapping/history", body).then((response) => response.data)
 }
