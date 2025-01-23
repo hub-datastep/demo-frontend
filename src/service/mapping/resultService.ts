@@ -1,7 +1,7 @@
 import {
   updateMappingResultsList,
   uploadMappingResultsToKafka,
-} from "api/mapping/mappingResult"
+} from "api/mapping/result"
 import queryClient from "api/queryClient"
 import { AxiosError } from "axios"
 import { notify } from "misc/notifications"

@@ -17,5 +17,5 @@ export const updateMappingResultsList = async (
 }
 
 export const uploadMappingResultsToKafka = async (body: MappingResultsUpload) => {
-  await axiosClient.put("/mapping/result/upload/kafka", body)
+  await axiosClient.post("/mapping/result/upload/kafka", body)
 }
