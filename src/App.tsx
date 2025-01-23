@@ -12,6 +12,7 @@ import { AuthContextProvider } from "context/authContext"
 import { FavoriteMessageContextProvider } from "context/favoriteMessageContext"
 import { ModeContextProvider } from "context/modeContext"
 import { UserContextProvider } from "context/userContext"
+import { MappingIterationResults } from "page/MappingIterationResults"
 import { QueryClientProvider } from "react-query"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
@@ -45,6 +46,10 @@ export const App = () => {
                         <Route path="history" element={<ChatClassifierHistory />} />
                       </Route>
                       <Route path="/demo" element={<DemoSolution />} />
+                      <Route
+                        path="/mapping/result/iteration/:id"
+                        element={<MappingIterationResults />}
+                      />
                     </Route>
                   </Routes>
                   <ToastContainer />
