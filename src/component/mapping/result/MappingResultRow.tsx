@@ -1,4 +1,4 @@
-import { Flex, IconButton, Td, Text, Tr } from "@chakra-ui/react"
+import { Button, Flex, Td, Text, Tr } from "@chakra-ui/react"
 import { NomenclatureSelect } from "component/select/NomenclatureSelect"
 import { FC, useState } from "react"
 import { FaEdit } from "react-icons/fa"
@@ -95,18 +95,25 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
             />
           ) : (
             <Flex w="full" direction="row" alignItems="center" gap={1}>
-              {isCorrectedResultExists ? (
-                <Text>{correctedResult?.nomenclature.name}</Text>
-              ) : (
-                <Text color="gray">Указать номенклатуру</Text>
-              )}
+              <Button
+                variant="ghost"
+                fontWeight="normal"
+                rightIcon={<FaEdit />}
+                onClick={handleSelectVisible}
+              >
+                {isCorrectedResultExists ? (
+                  <Text>{correctedResult?.nomenclature.name}</Text>
+                ) : (
+                  <Text color="gray">Изменить</Text>
+                )}
+              </Button>
 
-              <IconButton
+              {/* <IconButton
                 aria-label="edit-corrected-nomenclature"
                 variant="ghost"
                 icon={<FaEdit />}
                 onClick={handleSelectVisible}
-              />
+              /> */}
             </Flex>
           )}
         </Flex>
