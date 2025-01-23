@@ -8,7 +8,6 @@ import {
   Text,
 } from "@chakra-ui/react"
 import { getNomenclaturesMappingResult } from "api/mappingApi"
-import { ClassifierResultMappingsTable } from "component/classifier/ClassifierResultMappingsTable"
 import { useSearchQuery } from "misc/util"
 import { MappingResult } from "model/ClassifierModel"
 import { ChangeEvent, useState } from "react"
@@ -20,7 +19,7 @@ export const ChatClassifierHistory = () => {
   // Get Iteration Key from url params
   const iterationKeyInParams = urlParams.get("iteration_key") || undefined
   const [mappingIterationKey, setMappingIterationKey] = useState<string | undefined>(
-    iterationKeyInParams
+    iterationKeyInParams,
   )
   const isMappingIterationKeyExists = !!mappingIterationKey
 
@@ -34,7 +33,7 @@ export const ChatClassifierHistory = () => {
     async () =>
       await getNomenclaturesMappingResult({
         iteration_key: mappingIterationKey,
-      })
+      }),
   )
   const isMappingResultsExist =
     nomenclatureMappingResults !== undefined && nomenclatureMappingResults.length !== 0
@@ -98,11 +97,12 @@ export const ChatClassifierHistory = () => {
         </Flex>
       )}
 
-      {!isLoading && isMappingResultsExist && (
+      {/* TODO: show iterations instead mappings */}
+      {/* {!isLoading && isMappingResultsExist && (
         <ClassifierResultMappingsTable
           nomenclatureMappingResults={nomenclatureMappingResults}
         />
-      )}
+      )} */}
     </Flex>
   )
 }
