@@ -1,42 +1,58 @@
-import { Flex, Td, Text, Tr } from "@chakra-ui/react"
-import { FC } from "react"
-import { MappingResult } from "type/mapping/result"
+import { Flex, IconButton, Td, Text, Tr } from "@chakra-ui/react"
+import { NomenclatureSelect } from "component/select/NomenclatureSelect"
+import { FC, useState } from "react"
+import { FaEdit } from "react-icons/fa"
+import { useCorrectedNomenclature } from "service/mappingService"
+import { CorrectedResult, MappingResult } from "type/mapping/result"
+import { SimilarNomenclature } from "type/mapping/similarNomenclature"
+import { WithId } from "type/withId"
 
 interface MappingResultRowProps {
-  mappingResult: MappingResult
+  mappingResult: WithId<MappingResult>
+  correctedResults: CorrectedResult[]
+  onCorrectNomenclatureSelect: (result: CorrectedResult) => void
 }
 
 export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
-  const { mappingResult } = props
+  const { mappingResult, correctedResults, onCorrectNomenclatureSelect } = props
 
-  // const [isSearchVisible, setIsSearchVisible] = useState(false)
+  const resultId = mappingResult.id
+  const result = mappingResult.result
 
-  // const correctedNomenclatureMutation = useCorrectedNomenclature()
+  const correctedResult = correctedResults.find((result) => result.result_id === resultId)
+  const isCorrectedResultExists = !!correctedResult
 
-  const mappingsList = mappingResult.result?.mappings
+  const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false)
+
+  const correctedNomenclatureMutation = useCorrectedNomenclature()
+
+  const isLoading = correctedNomenclatureMutation.isLoading
+
+  const mappingsList = result?.mappings
   const isMappingsExists = !!mappingsList && mappingsList.length > 0
 
-  const similarMappingsList = mappingResult.result?.similar_mappings
+  const similarMappingsList = result?.similar_mappings
   const isSimilarMappingsExists = !!similarMappingsList && similarMappingsList.length > 0
 
-  // const handleIncorrectMapping = () => {
-  //   setIsSearchVisible(true)
-  // }
+  const handleSelectVisible = () => {
+    setIsSearchVisible(true)
+  }
 
-  // const handleSelect = async (selectedSimilarNomecnlature: string) => {
-  //   const updatedNomenclature: MappingResultUpdate = {
-  //     id: nomenclatureMappingResult.id,
-  //     mapping_nomenclature_corrected: selectedSimilarNomecnlature,
-  //   }
-  //   await correctedNomenclatureMutation.mutateAsync(updatedNomenclature)
-  //   setIsSearchVisible(false)
-  // }
+  const handleSelect = (selectedNomenclature: WithId<SimilarNomenclature>) => {
+    const result: CorrectedResult = {
+      result_id: resultId,
+      nomenclature: selectedNomenclature,
+    }
+    onCorrectNomenclatureSelect(result)
+
+    setIsSearchVisible(false)
+  }
 
   return (
     <Tr whiteSpace="break-spaces">
       {/* Initial nomenclature */}
       <Td>
-        <Text>{mappingResult.result?.nomenclature}</Text>
+        <Text>{result?.nomenclature}</Text>
       </Td>
 
       {/* Mapped Nomenclature */}
@@ -47,7 +63,7 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
         {/* Similar Mappings */}
         {!isMappingsExists && isSimilarMappingsExists && (
           <Flex direction="column" gap={2}>
-            <Text>
+            <Text fontWeight="light">
               Не нашлось номенклатуры с такими параметрами, но возможно Вы имели ввиду:
             </Text>
 
@@ -63,30 +79,37 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
 
       {/* Nomenclature Group */}
       <Td>
-        <Text>{mappingResult.result?.group}</Text>
+        <Text>{result?.group}</Text>
       </Td>
 
       {/* Corrected Nomenclature */}
-      <Td p={0}>
-        {/* TODO: set corrected nomenclature */}
+      <Td px={2} py={1}>
+        <Flex w="full">
+          {/* TODO: set corrected nomenclature */}
 
-        {/* {isSearchVisible ? (
-          <SearchComponent
-            onSelect={handleSelect}
-            isDisabled={correctedNomenclatureMutation.isLoading}
-            setIsSearchVisible={setIsSearchVisible}
-          />
-        ) : (
-          <Flex w="full" direction="row" justifyContent="center" gap={2}>
-            <Text>{nomenclatureMappingResult.mapping_nomenclature_corrected}</Text>
-            <IconButton
-              aria-label="edit-corrected-nomenclature"
-              variant="ghost"
-              icon={<FaEdit />}
-              onClick={handleIncorrectMapping}
+          {isSearchVisible ? (
+            <NomenclatureSelect
+              onSelect={handleSelect}
+              isDisabled={isLoading}
+              setIsVisible={setIsSearchVisible}
             />
-          </Flex>
-        )} */}
+          ) : (
+            <Flex w="full" direction="row" alignItems="center" gap={1}>
+              {isCorrectedResultExists ? (
+                <Text>{correctedResult?.nomenclature.name}</Text>
+              ) : (
+                <Text color="gray">Указать номенклатуру</Text>
+              )}
+
+              <IconButton
+                aria-label="edit-corrected-nomenclature"
+                variant="ghost"
+                icon={<FaEdit />}
+                onClick={handleSelectVisible}
+              />
+            </Flex>
+          )}
+        </Flex>
       </Td>
     </Tr>
   )

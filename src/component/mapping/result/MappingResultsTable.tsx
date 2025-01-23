@@ -1,10 +1,13 @@
 import { Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
 import { MappingResultRow } from "component/mapping/result/MappingResultRow"
 import { FC, useState } from "react"
-import { MappingResult } from "type/mapping/result"
+import { CorrectedResult, MappingResult } from "type/mapping/result"
+import { WithId } from "type/withId"
 
 interface MappingResultsTableProps {
-  results: MappingResult[]
+  results: WithId<MappingResult>[]
+  correctedResults: CorrectedResult[]
+  onCorrectNomenclatureSelect: (result: CorrectedResult) => void
 }
 
 const INITIAL_TABLE_ROWS_COUNT = 5
@@ -17,9 +20,10 @@ const COLUMNS_NAME = [
 ]
 
 export const MappingResultsTable: FC<MappingResultsTableProps> = (props) => {
-  const { results } = props
+  const { results, correctedResults, onCorrectNomenclatureSelect } = props
+
   const [visibleRowsNumber, setVisibleRowsNumber] = useState<number>(
-    INITIAL_TABLE_ROWS_COUNT
+    INITIAL_TABLE_ROWS_COUNT,
   )
 
   const isTableFullVisible = visibleRowsNumber === results.length
@@ -39,7 +43,10 @@ export const MappingResultsTable: FC<MappingResultsTableProps> = (props) => {
         <Thead>
           <Tr>
             {COLUMNS_NAME.map((column, index) => (
-              <Th key={index} whiteSpace="break-spaces">
+              <Th
+                key={index}
+                //  whiteSpace="break-spaces"
+              >
                 {column}
               </Th>
             ))}
@@ -47,7 +54,12 @@ export const MappingResultsTable: FC<MappingResultsTableProps> = (props) => {
         </Thead>
         <Tbody>
           {results.slice(0, visibleRowsNumber).map((result, index) => (
-            <MappingResultRow key={index} mappingResult={result} />
+            <MappingResultRow
+              key={index}
+              mappingResult={result}
+              correctedResults={correctedResults}
+              onCorrectNomenclatureSelect={onCorrectNomenclatureSelect}
+            />
           ))}
 
           {needShowOrHideBtn && (
