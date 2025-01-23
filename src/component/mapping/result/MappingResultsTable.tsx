@@ -1,4 +1,4 @@
-import { Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
+import { Button, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
 import { MappingResultRow } from "component/mapping/result/MappingResultRow"
 import { FC, useState } from "react"
 import { CorrectedResult, MappingResult } from "type/mapping/result"
@@ -38,41 +38,34 @@ export const MappingResultsTable: FC<MappingResultsTableProps> = (props) => {
   }
 
   return (
-    <TableContainer>
-      <Table w="full" variant="striped">
-        <Thead>
-          <Tr>
-            {COLUMNS_NAME.map((column, index) => (
-              <Th
-                key={index}
-                //  whiteSpace="break-spaces"
-              >
-                {column}
-              </Th>
-            ))}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {results.slice(0, visibleRowsNumber).map((result, index) => (
-            <MappingResultRow
-              key={index}
-              mappingResult={result}
-              correctedResults={correctedResults}
-              onCorrectNomenclatureSelect={onCorrectNomenclatureSelect}
-            />
+    <Table w="full" variant="striped">
+      <Thead>
+        <Tr>
+          {COLUMNS_NAME.map((column, index) => (
+            <Th key={index}>{column}</Th>
           ))}
+        </Tr>
+      </Thead>
+      <Tbody>
+        {results.slice(0, visibleRowsNumber).map((result, index) => (
+          <MappingResultRow
+            key={index}
+            mappingResult={result}
+            correctedResults={correctedResults}
+            onCorrectNomenclatureSelect={onCorrectNomenclatureSelect}
+          />
+        ))}
 
-          {needShowOrHideBtn && (
-            <Tr>
-              <Td colSpan={COLUMNS_NAME.length} p={0}>
-                <Button w="full" variant="ghost" onClick={showOrHideRows}>
-                  {isTableFullVisible ? "Скрыть" : "Показать больше"}
-                </Button>
-              </Td>
-            </Tr>
-          )}
-        </Tbody>
-      </Table>
-    </TableContainer>
+        {needShowOrHideBtn && (
+          <Tr>
+            <Td colSpan={COLUMNS_NAME.length} p={0}>
+              <Button w="full" variant="ghost" onClick={showOrHideRows}>
+                {isTableFullVisible ? "Скрыть" : "Показать больше"}
+              </Button>
+            </Td>
+          </Tr>
+        )}
+      </Tbody>
+    </Table>
   )
 }
