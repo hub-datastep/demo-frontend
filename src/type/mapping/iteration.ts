@@ -1,4 +1,5 @@
 import { MappingResult } from "type/mapping/result"
+import { WithId } from "type/withId"
 
 export enum IterationType {
   UTD = "UTD",
@@ -10,5 +11,5 @@ export type MappingIteration = {
 }
 
 export type IterationWithResults = MappingIteration & {
-  results: MappingResult[]
+  results: WithId<MappingResult>[]
 }

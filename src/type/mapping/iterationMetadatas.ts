@@ -31,8 +31,11 @@ type UTDCardInputMessage = {
 }
 
 type UTDEntityWithParamsAndNoms = {
+  // Номер УПД
   idn_number?: string
+  // Дата УПД
   idn_date?: string
+  // ИНН поставщика
   supplier_inn?: string
   pages_numbers_list: number[]
   nomenclatures_list?: string[]
