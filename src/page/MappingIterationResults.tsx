@@ -1,9 +1,10 @@
-import { getMappingIterationById } from "api/mapping/result/mappingIteration"
+import { Button, Flex } from "@chakra-ui/react"
+import { getMappingIterationById } from "api/mapping/mappingIteration"
 import { UTDMetadatasParams } from "component/mapping/iteration/UTDMetadatasParams"
 import { MappingResultsTable } from "component/mapping/result/MappingResultsTable"
 import { LoadingPage } from "component/page/LoadingPage"
 import { Page } from "component/page/Page"
-import { FC, useState } from "react"
+import { FC, useEffect, useMemo, useState } from "react"
 import { useQuery } from "react-query"
 import { useParams } from "react-router"
 import { IterationType, IterationWithResults } from "type/mapping/iteration"
@@ -19,8 +20,6 @@ type Params = {
 export const MappingIterationResults: FC = () => {
   const { id: iterationId } = useParams<Params>()
 
-  const [correctedResults, setCorrectedResults] = useState<CorrectedResult[]>([])
-
   const iterationType = useUrlParam("type")
   const isUTDIteration = iterationType?.toLowerCase() === IterationType.UTD.toLowerCase()
 
@@ -35,6 +34,18 @@ export const MappingIterationResults: FC = () => {
   const metadatas = mappingIteration?.metadatas
   const results = mappingIteration?.results
 
+  const prevCorrectedResults: CorrectedResult[] = useMemo(
+    () =>
+      results?.map((result) => ({
+        result_id: result.id,
+        nomenclature: result.corrected_nomenclature,
+      })) || [],
+    [results],
+  )
+
+  const [correctedResults, setCorrectedResults] =
+    useState<CorrectedResult[]>(prevCorrectedResults)
+
   const handleCorrectNomenclatureSelect = async (result: CorrectedResult) => {
     setCorrectedResults((prevResultsList) => {
       const filteredResultsList = prevResultsList.filter(
@@ -44,6 +55,12 @@ export const MappingIterationResults: FC = () => {
       return [...filteredResultsList, result]
     })
   }
+
+  const handleCorrectedResultsUpload = () => {}
+
+  useEffect(() => {
+    setCorrectedResults(prevCorrectedResults)
+  }, [prevCorrectedResults])
 
   return (
     <Page>
@@ -62,6 +79,20 @@ export const MappingIterationResults: FC = () => {
           onCorrectNomenclatureSelect={handleCorrectNomenclatureSelect}
         />
       )}
+
+      {/* Action Btns */}
+      <Flex
+        w="full"
+        direction="row"
+        justifyContent="flex-end"
+        alignItems="center"
+        gap={2}
+      >
+        {/* Send Corrected Results Btn */}
+        <Button colorScheme="purple" onClick={handleCorrectedResultsUpload}>
+          Отправить
+        </Button>
+      </Flex>
     </Page>
   )
 }
