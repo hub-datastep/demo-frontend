@@ -1,5 +1,5 @@
 import { Flex, Text } from "@chakra-ui/react"
-import { getSimilarNomenclatures } from "api/mapping/result/similarNomenclatures"
+import { getSimilarNomenclatures } from "api/mapping/similarNomenclatures"
 import {
   ActionMeta,
   AsyncSelect,

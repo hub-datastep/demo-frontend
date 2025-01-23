@@ -15,7 +15,7 @@ import { JobModel } from "model/JobModel"
 import { ChangeEvent, useState } from "react"
 import { useQuery } from "react-query"
 import { useNavigate } from "react-router"
-import { useNomenclaturesMapping } from "service/mappingService"
+import { useNomenclaturesMapping } from "service/mapping/mappingService"
 
 export const ChatClassifier = () => {
   const navigateTo = useNavigate()

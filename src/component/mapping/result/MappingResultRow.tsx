@@ -2,7 +2,7 @@ import { Button, Flex, Td, Text, Tr } from "@chakra-ui/react"
 import { NomenclatureSelect } from "component/select/NomenclatureSelect"
 import { FC, useState } from "react"
 import { FaEdit } from "react-icons/fa"
-import { useCorrectedNomenclature } from "service/mappingService"
+import { useCorrectedNomenclature } from "service/mapping/mappingService"
 import { CorrectedResult, MappingResult } from "type/mapping/result"
 import { SimilarNomenclature } from "type/mapping/similarNomenclature"
 import { WithId } from "type/withId"
@@ -20,7 +20,7 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
   const result = mappingResult.result
 
   const correctedResult = correctedResults.find((result) => result.result_id === resultId)
-  const isCorrectedResultExists = !!correctedResult
+  const isCorrectedResultExists = !!correctedResult?.nomenclature
 
   const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false)
 
@@ -102,7 +102,7 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
                 onClick={handleSelectVisible}
               >
                 {isCorrectedResultExists ? (
-                  <Text>{correctedResult?.nomenclature.name}</Text>
+                  <Text>{correctedResult?.nomenclature?.name}</Text>
                 ) : (
                   <Text color="gray">Изменить</Text>
                 )}
