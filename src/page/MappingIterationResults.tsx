@@ -7,9 +7,17 @@ import { Page } from "component/page/Page"
 import { FC, useEffect, useMemo, useState } from "react"
 import { useQuery } from "react-query"
 import { useParams } from "react-router"
+import {
+  useMappingResultsUpdateMutation,
+  useMappingResultsUploadToKafkaMutation,
+} from "service/mapping/resultService"
 import { IterationType, IterationWithResults } from "type/mapping/iteration"
 import { UTDMetadatas } from "type/mapping/iterationMetadatas"
-import { CorrectedResult } from "type/mapping/result"
+import {
+  CorrectedResult,
+  MappingResultsUpload,
+  MappingResultUpdate,
+} from "type/mapping/result"
 import { WithStrId } from "type/withId"
 import { useUrlParam } from "util/urlParams"
 
@@ -22,6 +30,11 @@ export const MappingIterationResults: FC = () => {
 
   const iterationType = useUrlParam("type")
   const isUTDIteration = iterationType?.toLowerCase() === IterationType.UTD.toLowerCase()
+
+  const updateMutation = useMappingResultsUpdateMutation()
+  const uploadToKafkaMutation = useMappingResultsUploadToKafkaMutation()
+
+  const isMutationsLoading = updateMutation.isLoading || uploadToKafkaMutation.isLoading
 
   const { data: mappingIteration, isLoading } = useQuery<WithStrId<IterationWithResults>>(
     ["mappingIteration", iterationId],
@@ -46,6 +59,9 @@ export const MappingIterationResults: FC = () => {
   const [correctedResults, setCorrectedResults] =
     useState<CorrectedResult[]>(prevCorrectedResults)
 
+  const isAllResultsCorrected = correctedResults.every((result) => !!result.nomenclature)
+  const isSendBtnDisabled = !isAllResultsCorrected
+
   const handleCorrectNomenclatureSelect = async (result: CorrectedResult) => {
     setCorrectedResults((prevResultsList) => {
       const filteredResultsList = prevResultsList.filter(
@@ -56,7 +72,25 @@ export const MappingIterationResults: FC = () => {
     })
   }
 
-  const handleCorrectedResultsUpload = () => {}
+  const handleResultsUpdate = async () => {
+    const body: MappingResultUpdate = {
+      iteration_id: iterationId!,
+      corrected_results_list: correctedResults,
+    }
+    await updateMutation.mutateAsync(body)
+  }
+
+  const handleResultsUploadToKafka = async () => {
+    const body: MappingResultsUpload = {
+      iteration_id: iterationId!,
+    }
+    await uploadToKafkaMutation.mutateAsync(body)
+  }
+
+  const handleSubmit = async () => {
+    await handleResultsUpdate()
+    await handleResultsUploadToKafka()
+  }
 
   useEffect(() => {
     setCorrectedResults(prevCorrectedResults)
@@ -89,7 +123,12 @@ export const MappingIterationResults: FC = () => {
         gap={2}
       >
         {/* Send Corrected Results Btn */}
-        <Button colorScheme="purple" onClick={handleCorrectedResultsUpload}>
+        <Button
+          colorScheme="purple"
+          onClick={handleSubmit}
+          isDisabled={isSendBtnDisabled}
+          isLoading={isMutationsLoading}
+        >
           Отправить
         </Button>
       </Flex>
