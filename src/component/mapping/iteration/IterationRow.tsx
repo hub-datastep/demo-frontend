@@ -4,6 +4,7 @@ import { FaExternalLinkAlt } from "react-icons/fa"
 import { useNavigate } from "react-router"
 import { MappingIteration } from "type/mapping/iteration"
 import { WithStrId } from "type/withId"
+import { dateAsStringToDate, formatDateTime } from "util/formatting/date"
 
 interface IterationRowProps {
   iteration: WithStrId<MappingIteration>
@@ -16,8 +17,7 @@ export const IterationRow: FC<IterationRowProps> = (props) => {
 
   const iteraionId = iteration.id
   const iterationType = iteration.type
-  // TODO: convert string to Date
-  const createdAt = iteration.created_at
+  const createdAt = dateAsStringToDate(iteration.created_at)
 
   const handleRedirect = () => {
     navigate(`/mapping/result/iteration/${iteraionId}`)
@@ -37,7 +37,7 @@ export const IterationRow: FC<IterationRowProps> = (props) => {
 
       {/* Created At */}
       <Td>
-        <Text>{createdAt}</Text>
+        <Text>{formatDateTime(createdAt)}</Text>
       </Td>
 
       {/* Redirect Btn */}
