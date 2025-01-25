@@ -23,7 +23,7 @@ interface NomenclatureSelectProps {
   setIsVisible: Dispatch<SetStateAction<boolean>>
 }
 
-const styles: ChakraStylesConfig<SelectOption, false, GroupBase<SelectOption>> = {
+const selectStyles: ChakraStylesConfig<SelectOption, false, GroupBase<SelectOption>> = {
   container: (provided) => ({
     ...provided,
     width: "full",
@@ -34,6 +34,12 @@ const styles: ChakraStylesConfig<SelectOption, false, GroupBase<SelectOption>> =
     padding: 0,
     margin: 0,
   }),
+}
+
+const NOMENCLATURE_NOT_FOUND_VARIANT: SelectOption = {
+  id: -1,
+  name: "В НСИ нет подходящего варианта",
+  material_code: "-1",
 }
 
 const getPrevNomenclatures = (prevResult?: MappingResponse): SelectOption[] => {
@@ -84,7 +90,7 @@ export const NomenclatureSelect: FC<NomenclatureSelectProps> = (props) => {
       prevNomenclaturesGroup,
       {
         label: "Номенклатуры из НСИ",
-        options: similarNoms,
+        options: [NOMENCLATURE_NOT_FOUND_VARIANT, ...similarNoms],
       },
     ]
 
@@ -107,7 +113,7 @@ export const NomenclatureSelect: FC<NomenclatureSelectProps> = (props) => {
 
   return (
     <AsyncSelect<SelectOption, false, GroupBase<SelectOption>>
-      chakraStyles={styles}
+      chakraStyles={selectStyles}
       placeholder="Введите номенклатуру"
       defaultOptions={[prevNomenclaturesGroup]}
       loadOptions={handleLoadOptions}
