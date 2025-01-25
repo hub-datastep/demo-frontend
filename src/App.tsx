@@ -3,7 +3,6 @@ import queryClient from "api/queryClient"
 import { AppLayout } from "component/AppLayout"
 import EditPromptForm from "component/EditPromptForm"
 import { ChatClassifier } from "component/chat/ChatClassifier"
-import { ChatClassifierHistory } from "component/chat/ChatClassifierHistory"
 import ChatDB from "component/chat/ChatDB"
 import { ChatDocs } from "component/chat/ChatDocs"
 import { ChatKnowledgeBase } from "component/chat/ChatKnowledgeBase"
@@ -13,6 +12,7 @@ import { FavoriteMessageContextProvider } from "context/favoriteMessageContext"
 import { ModeContextProvider } from "context/modeContext"
 import { UserContextProvider } from "context/userContext"
 import { MappingIterationResults } from "page/MappingIterationResults"
+import { MappingIterations } from "page/MappingIterations"
 import { QueryClientProvider } from "react-query"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
@@ -41,15 +41,15 @@ export const App = () => {
                       <Route path="/databases" element={<ChatDB />} />
                       <Route path="/documents" element={<ChatDocs />} />
                       <Route path="/knowledge_base" element={<ChatKnowledgeBase />} />
-                      <Route path="/classifier">
+                      <Route path="/mapping">
                         <Route path="" element={<ChatClassifier />} />
-                        <Route path="history" element={<ChatClassifierHistory />} />
+                        <Route path="result/iterations" element={<MappingIterations />} />
+                        <Route
+                          path="result/iteration/:id"
+                          element={<MappingIterationResults />}
+                        />
                       </Route>
                       <Route path="/demo" element={<DemoSolution />} />
-                      <Route
-                        path="/mapping/result/iteration/:id"
-                        element={<MappingIterationResults />}
-                      />
                     </Route>
                   </Routes>
                   <ToastContainer />

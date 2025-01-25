@@ -1,6 +1,6 @@
 import { Button, Flex } from "@chakra-ui/react"
 import { getMappingIterationById } from "api/mapping/iteration"
-import { UTDMetadatasParams } from "component/mapping/iteration/UTDMetadatasParams"
+import { UTDMetadatasParams } from "component/mapping/iteration/metadatas/UTDMetadatasParams"
 import { MappingResultsTable } from "component/mapping/result/MappingResultsTable"
 import { LoadingPage } from "component/page/LoadingPage"
 import { Page } from "component/page/Page"
@@ -19,7 +19,6 @@ import {
   MappingResultUpdate,
 } from "type/mapping/result"
 import { WithStrId } from "type/withId"
-import { useUrlParam } from "util/urlParams"
 
 type Params = {
   id: string
@@ -27,9 +26,6 @@ type Params = {
 
 export const MappingIterationResults: FC = () => {
   const { id: iterationId } = useParams<Params>()
-
-  const iterationType = useUrlParam("type")
-  const isUTDIteration = iterationType?.toLowerCase() === IterationType.UTD.toLowerCase()
 
   const updateMutation = useMappingResultsUpdateMutation()
   const uploadToKafkaMutation = useMappingResultsUploadToKafkaMutation()
@@ -45,6 +41,8 @@ export const MappingIterationResults: FC = () => {
   )
   const isIterationExists = !!mappingIteration
   const metadatas = mappingIteration?.metadatas
+  const isUTDIteration =
+    mappingIteration?.type?.toLowerCase() === IterationType.UTD.toLowerCase()
   const results = mappingIteration?.results
 
   const prevCorrectedResults: CorrectedResult[] = useMemo(

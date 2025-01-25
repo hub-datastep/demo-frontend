@@ -7,7 +7,8 @@ export enum IterationType {
 
 export type MappingIteration = {
   metadatas?: Record<string, any>
-  created_at?: Date
+  type?: string
+  created_at?: string
 }
 
 export type IterationWithResults = MappingIteration & {

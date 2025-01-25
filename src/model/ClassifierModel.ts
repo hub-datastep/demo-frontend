@@ -57,7 +57,3 @@ export interface FormattedNomenclature {
   id: number
   name: string
 }
-
-export interface MappingResultRequestBody {
-  iteration_key?: string
-}
