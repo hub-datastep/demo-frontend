@@ -6,7 +6,7 @@ import {
   InputRightElement,
   Text,
 } from "@chakra-ui/react"
-import { getNomenclaturesMappingResult } from "api/mappingApi"
+import { getMappingIterations } from "api/mapping/iteration"
 import { IterationsTable } from "component/mapping/iteration/IterationsTable"
 import { LoadingPage } from "component/page/LoadingPage"
 import { Page } from "component/page/Page"
@@ -19,7 +19,6 @@ import { WithStrId } from "type/withId"
 
 export const MappingIterations = () => {
   const [iterationKey, setIterationKey] = useState<string>()
-  const isIterationKeyExists = !!iterationKey
 
   const {
     data: mappingIterationsList,
@@ -27,7 +26,7 @@ export const MappingIterations = () => {
     isRefetching: isMappingIterationsListRefetching,
     refetch,
   } = useQuery<WithStrId<MappingIteration>[]>("mappingIterationsList", () =>
-    getNomenclaturesMappingResult(iterationKey),
+    getMappingIterations(iterationKey),
   )
   const isMappingIterationsListExist =
     !!mappingIterationsList && mappingIterationsList.length > 0
