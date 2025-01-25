@@ -25,7 +25,9 @@ export const MappingResultsTable: FC<MappingResultsTableProps> = (props) => {
       <Thead>
         <Tr>
           {COLUMNS_NAME.map((column, index) => (
-            <Th key={index}>{column}</Th>
+            <Th key={index} whiteSpace="nowrap">
+              {column}
+            </Th>
           ))}
         </Tr>
       </Thead>

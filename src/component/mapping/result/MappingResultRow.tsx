@@ -20,7 +20,8 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
   const result = mappingResult.result
 
   const correctedResult = correctedResults.find((result) => result.result_id === resultId)
-  const isCorrectedResultExists = !!correctedResult?.nomenclature
+  const selectedNomenclature = correctedResult?.nomenclature
+  const isCorrectedResultExists = !!selectedNomenclature
 
   const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false)
 
@@ -89,6 +90,8 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
 
           {isSearchVisible ? (
             <NomenclatureSelect
+              prevResult={result}
+              selectedNomenclature={selectedNomenclature}
               onSelect={handleSelect}
               isDisabled={isLoading}
               setIsVisible={setIsSearchVisible}
@@ -107,13 +110,6 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
                   <Text color="gray">Изменить</Text>
                 )}
               </Button>
-
-              {/* <IconButton
-                aria-label="edit-corrected-nomenclature"
-                variant="ghost"
-                icon={<FaEdit />}
-                onClick={handleSelectVisible}
-              /> */}
             </Flex>
           )}
         </Flex>

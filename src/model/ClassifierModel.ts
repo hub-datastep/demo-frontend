@@ -11,6 +11,7 @@ export interface MappingResponseItem {
   nomenclature_guid: string
   nomenclature: string
   similarity_score: number
+  materail_code: string
 }
 
 export interface MappingModel {
