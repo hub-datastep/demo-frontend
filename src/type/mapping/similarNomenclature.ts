@@ -4,4 +4,5 @@ export type SimilarNomenclatureSearch = {
 
 export type SimilarNomenclature = {
   name: string
+  material_code: string
 }
