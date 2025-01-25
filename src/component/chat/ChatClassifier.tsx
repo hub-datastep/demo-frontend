@@ -36,7 +36,7 @@ export const ChatClassifier = () => {
     refetchInterval: (data) => {
       // If any of jobs is failed, stop refetching
       const isAnyJobFailed = data?.some(
-        (mapping) => mapping.general_status === JobStatus.FAILED
+        (mapping) => mapping.general_status === JobStatus.FAILED,
       )
 
       if (isAnyJobFailed) {
@@ -46,7 +46,7 @@ export const ChatClassifier = () => {
       }
 
       const isAllMappingJobsFinished = data?.every(
-        (mapping) => mapping.general_status === JobStatus.FINISHED
+        (mapping) => mapping.general_status === JobStatus.FINISHED,
       )
 
       // If all jobs are finished, stop refetching
@@ -65,7 +65,7 @@ export const ChatClassifier = () => {
   })
 
   const mappedNomenclatures = nomenclaturesMappingList?.flatMap(
-    (jobResult) => jobResult.nomenclatures || []
+    (jobResult) => jobResult.nomenclatures || [],
   )
 
   const isTextAreaDisabled = !!currentJob || mappingQueryStatus === "loading"
@@ -99,13 +99,13 @@ export const ChatClassifier = () => {
 
   const onSuccessDataExtraction = (parsedData: DataExtractModel[]) => {
     const nomenclaturesList = parsedData.map(({ nomenclature }) =>
-      nomenclature?.replace("\n", " ")
+      nomenclature?.replace("\n", " "),
     )
     setQueryNomenclaturesList(nomenclaturesList.join("\n"))
   }
 
   const handleHistoryRedirectClick = () => {
-    navigateTo("/classifier/history")
+    navigateTo("/mapping/result/iterations")
   }
 
   return (
