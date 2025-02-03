@@ -13,7 +13,11 @@ const toastOptions: ToastOptions = {
 }
 
 export const notify = (text: string, type: TypeOptions) => {
-  const content = <Text fontSize="md">{text}</Text>
+  const content = (
+    <Text fontSize="md" fontWeight="medium">
+      {text}
+    </Text>
+  )
 
   // Error
   if (type === "error") {
