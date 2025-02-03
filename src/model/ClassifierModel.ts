@@ -3,14 +3,15 @@ export interface MappingResponse {
   nomenclature: string
   group: string
   nomenclature_params: object[]
-  mappings?: MappingResponseItem[] | null
-  similar_mappings?: MappingResponseItem[] | null
+  mappings?: MappingResponseItem[]
+  similar_mappings?: MappingResponseItem[]
 }
 
 export interface MappingResponseItem {
   nomenclature_guid: string
   nomenclature: string
   similarity_score: number
+  materail_code: string
 }
 
 export interface MappingModel {
@@ -56,8 +57,4 @@ export interface MappingResultUpdate {
 export interface FormattedNomenclature {
   id: number
   name: string
-}
-
-export interface MappingResultRequestBody {
-  iteration_key?: string
 }
