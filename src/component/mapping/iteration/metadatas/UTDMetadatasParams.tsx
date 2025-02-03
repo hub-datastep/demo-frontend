@@ -27,12 +27,32 @@ export const UTDMetadatasParams: FC<UTDMetadatasParamsProps> = (props) => {
       <Grid
         w="fit-content"
         templateColumns="repeat(2, auto)"
-        rowGap={2}
+        rowGap={3}
         columnGap={5}
         px={2}
       >
+        <MetadatasParamsRow name="ИНН организации" value={utdEntity?.organization_inn} />
         <MetadatasParamsRow name="ИНН поставщика" value={utdEntity?.supplier_inn} />
-        {/* Place new params here */}
+        <MetadatasParamsRow
+          name="Номер исправления УПД"
+          value={utdEntity?.correction_idn_number}
+        />
+        <MetadatasParamsRow
+          name="Дата исправления УПД"
+          value={utdEntity?.correction_idn_date}
+        />
+        <MetadatasParamsRow
+          name="Наименование договора поставки"
+          value={utdEntity?.contract_name}
+        />
+        <MetadatasParamsRow
+          name="Номер договора поставки"
+          value={utdEntity?.contract_number}
+        />
+        <MetadatasParamsRow
+          name="Дата договора поставки"
+          value={utdEntity?.contract_date}
+        />
       </Grid>
     </Flex>
   )

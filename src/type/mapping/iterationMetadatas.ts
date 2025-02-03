@@ -30,25 +30,30 @@ type UTDCardInputMessage = {
   documents: UTDDocument[]
 }
 
-type UTDEntityWithParamsAndNoms = {
+type UTDEntityParams = {
   // Номер УПД
   idn_number?: string
   // Дата УПД
   idn_date?: string
+  // ИНН организации (покупатель со стороны Унистрой)
+  organization_inn?: string
   // ИНН поставщика
   supplier_inn?: string
-  pages_numbers_list: number[]
-  nomenclatures_list?: string[]
+  // Номер исправления УПД (Integrated Delivery Note)
+  correction_idn_number?: string
+  // Дата исправления УПД
+  correction_idn_date?: string
+  // Наименование договора поставки
+  contract_name?: string
+  // Номер договора поставки
+  contract_number?: string
+  // Дата договора поставки
+  contract_date?: string
 }
 
-type SimilarMapping = {
-  // guid материала НСИ
-  nomenclature_guid: string
-  // Наименование материала НСИ
-  nomenclature: string
-  // Степень семантической схожести названия материала УПД с материалов НСИ
-  // От 0 до 1
-  similarity_score: number
+type UTDEntityWithParamsAndNoms = UTDEntityParams & {
+  pages_numbers_list: number[]
+  nomenclatures_list?: string[]
 }
 
 type MappedMaterial = {
@@ -58,10 +63,6 @@ type MappedMaterial = {
   idn_material_name: string
   // guid материала (из справочника НСИ)
   material_guid?: string
-  // Материалы НСИ, похожие на материал УПД
-  // Если material_guid=null, тогда не передается
-  // Если material_guid is not null, тогда передаем
-  similar_mappings?: SimilarMapping[]
   // Количество полученного материала
   quantity?: number
   // Цена материала за единицу
