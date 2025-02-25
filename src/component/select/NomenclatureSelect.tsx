@@ -48,7 +48,7 @@ const getPrevNomenclatures = (prevResult?: MappingResponse): SelectOption[] => {
     const nomenclaturesList = prevResult.mappings.map((mapping) => ({
       id: Number(mapping.nomenclature_guid),
       name: mapping.nomenclature,
-      material_code: mapping.materail_code,
+      material_code: mapping.material_code,
     }))
     return nomenclaturesList
   }
@@ -58,7 +58,7 @@ const getPrevNomenclatures = (prevResult?: MappingResponse): SelectOption[] => {
     const nomenclaturesList = prevResult.similar_mappings.map((mapping) => ({
       id: Number(mapping.nomenclature_guid),
       name: mapping.nomenclature,
-      material_code: mapping.materail_code,
+      material_code: mapping.material_code,
     }))
     return nomenclaturesList
   }
