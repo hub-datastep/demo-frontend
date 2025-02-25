@@ -40,9 +40,13 @@ export const MappingIterationResults: FC = () => {
     },
   )
   const isIterationExists = !!mappingIteration
+
   const metadatas = mappingIteration?.metadatas
-  const isUTDIteration =
-    mappingIteration?.type?.toLowerCase() === IterationType.UTD.toLowerCase()
+
+  const isUTDIteration = mappingIteration?.type
+    ?.toLowerCase()
+    .includes(IterationType.UTD.toLowerCase())
+
   const results = mappingIteration?.results
 
   const prevCorrectedResults: CorrectedResult[] = useMemo(

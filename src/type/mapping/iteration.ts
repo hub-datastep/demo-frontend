@@ -3,6 +3,7 @@ import { WithId } from "type/withId"
 
 export enum IterationType {
   UTD = "UTD",
+  UTD_LLM = "UTD-LLM",
 }
 
 export type MappingIteration = {
