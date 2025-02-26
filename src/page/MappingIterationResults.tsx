@@ -51,10 +51,14 @@ export const MappingIterationResults: FC = () => {
 
   const prevCorrectedResults: CorrectedResult[] = useMemo(
     () =>
-      results?.map((result) => ({
-        result_id: result.id,
-        nomenclature: result.corrected_nomenclature,
-      })) || [],
+      results?.map(
+        (result) =>
+          ({
+            result_id: result.corrected_nomenclature?.result_id || result.id,
+            nomenclature: result.corrected_nomenclature?.nomenclature,
+            feedback: result.corrected_nomenclature?.feedback,
+          } as CorrectedResult),
+      ) || [],
     [results],
   )
 

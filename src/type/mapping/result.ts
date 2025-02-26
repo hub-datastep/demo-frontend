@@ -6,12 +6,13 @@ export type MappingResult = {
   iteration_id: string
   user_id?: number
   result?: MappingResponse
-  corrected_nomenclature?: WithId<SimilarNomenclature>
+  corrected_nomenclature?: CorrectedResult
 }
 
 export type CorrectedResult = {
   result_id: number
   nomenclature?: WithId<SimilarNomenclature>
+  feedback?: string
 }
 
 export type MappingResultUpdate = {

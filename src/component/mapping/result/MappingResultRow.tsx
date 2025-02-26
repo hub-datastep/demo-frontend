@@ -1,6 +1,6 @@
-import { Button, Flex, Td, Text, Tr } from "@chakra-ui/react"
+import { Button, Flex, Td, Text, Textarea, Tr } from "@chakra-ui/react"
 import { NomenclatureSelect } from "component/select/NomenclatureSelect"
-import { FC, useState } from "react"
+import { ChangeEvent, FC, useState } from "react"
 import { FaEdit } from "react-icons/fa"
 import { useCorrectedNomenclature } from "service/mapping/mappingService"
 import { CorrectedResult, MappingResult } from "type/mapping/result"
@@ -47,6 +47,18 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
     onCorrectNomenclatureSelect(result)
 
     setIsSearchVisible(false)
+  }
+
+  const handleFeedbackChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    e.preventDefault()
+
+    const feedback = e.target.value
+    const result: CorrectedResult = {
+      ...(correctedResult || ({} as CorrectedResult)),
+      feedback: feedback,
+    }
+
+    onCorrectNomenclatureSelect(result)
   }
 
   return (
@@ -105,7 +117,9 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
                 onClick={handleSelectVisible}
               >
                 {isCorrectedResultExists ? (
-                  <Text>{correctedResult?.nomenclature?.name}</Text>
+                  <Text textAlign="left" whiteSpace="normal">
+                    {correctedResult?.nomenclature?.name}
+                  </Text>
                 ) : (
                   <Text color="gray">Изменить</Text>
                 )}
@@ -113,6 +127,15 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
             </Flex>
           )}
         </Flex>
+      </Td>
+
+      {/* Feedback */}
+      <Td p={0}>
+        <Textarea
+          value={correctedResult?.feedback}
+          onChange={handleFeedbackChange}
+          placeholder="Подскажите, а почему мы неправильно сопоставили?"
+        />
       </Td>
     </Tr>
   )
