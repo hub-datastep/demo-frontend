@@ -41,7 +41,7 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
 
   const handleSelect = (selectedNomenclature: WithId<SimilarNomenclature>) => {
     const result: CorrectedResult = {
-      result_id: resultId,
+      ...(correctedResult || ({} as CorrectedResult)),
       nomenclature: selectedNomenclature,
     }
     onCorrectNomenclatureSelect(result)
