@@ -34,6 +34,10 @@ const selectStyles: ChakraStylesConfig<SelectOption, false, GroupBase<SelectOpti
     padding: 0,
     margin: 0,
   }),
+  singleValue: (provided) => ({
+    ...provided,
+    whiteSpace: "normal",
+  }),
 }
 
 const NOMENCLATURE_NOT_FOUND_VARIANT: SelectOption = {
@@ -95,8 +99,6 @@ export const NomenclatureSelect: FC<NomenclatureSelectProps> = (props) => {
     ]
 
     return groupedOptions
-
-    // return [...prevNomenclatures, ...similarNoms]
   }
 
   const handleSelect = (

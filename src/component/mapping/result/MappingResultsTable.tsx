@@ -15,6 +15,7 @@ const COLUMNS_NAME = [
   "Сопоставленная Номенклатура из НСИ",
   "Сопоставленная Группа из НСИ",
   "Корректная Номенклатура",
+  "Объяснение почему неверно сопоставили",
 ]
 
 export const MappingResultsTable: FC<MappingResultsTableProps> = (props) => {
@@ -25,9 +26,7 @@ export const MappingResultsTable: FC<MappingResultsTableProps> = (props) => {
       <Thead>
         <Tr>
           {COLUMNS_NAME.map((column, index) => (
-            <Th key={index} whiteSpace="nowrap">
-              {column}
-            </Th>
+            <Th key={index}>{column}</Th>
           ))}
         </Tr>
       </Thead>
