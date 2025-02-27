@@ -13,7 +13,7 @@ type CreditSlipData = {
   material_category_guid: string
 }
 
-type UTDDocument = {
+export type UTDDocument = {
   // guid файла УПД
   idn_file_guid: string
   // Ссылка на скачивание файла УПД
@@ -94,8 +94,8 @@ type UTDCardCheckResultsOutputMessage = {
 }
 
 export type UTDMetadatas = {
-  input_message: UTDCardInputMessage
   entity: UTDEntityWithParamsAndNoms
+  input_message: UTDCardInputMessage
   mapped_materials?: MappedMaterial[]
   check_results_output_message: UTDCardCheckResultsOutputMessage
 }
