@@ -111,7 +111,9 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
           ) : (
             <Flex w="full" direction="row" alignItems="center" gap={1}>
               <Button
+                h="fit-content"
                 variant="ghost"
+                py={1}
                 fontWeight="normal"
                 rightIcon={<FaEdit />}
                 onClick={handleSelectVisible}
@@ -121,7 +123,7 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
                     {correctedResult?.nomenclature?.name}
                   </Text>
                 ) : (
-                  <Text color="gray">Изменить</Text>
+                  <Text>Изменить</Text>
                 )}
               </Button>
             </Flex>
