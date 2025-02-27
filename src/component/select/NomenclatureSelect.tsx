@@ -46,6 +46,11 @@ const NOMENCLATURE_NOT_FOUND_VARIANT: SelectOption = {
   material_code: "-1",
 }
 
+const filterEmptyNomenclatures = (nomenclaturesList: SelectOption[]): SelectOption[] => {
+  const filteredNomenclaturesList = nomenclaturesList.filter((nom) => !!nom.name)
+  return filteredNomenclaturesList
+}
+
 const getPrevNomenclatures = (prevResult?: MappingResponse): SelectOption[] => {
   // If mappings exists
   if (!!prevResult?.mappings) {
@@ -54,7 +59,7 @@ const getPrevNomenclatures = (prevResult?: MappingResponse): SelectOption[] => {
       name: mapping.nomenclature,
       material_code: mapping.material_code,
     }))
-    return nomenclaturesList
+    return filterEmptyNomenclatures(nomenclaturesList)
   }
 
   // If similar mappings exists
@@ -64,7 +69,7 @@ const getPrevNomenclatures = (prevResult?: MappingResponse): SelectOption[] => {
       name: mapping.nomenclature,
       material_code: mapping.material_code,
     }))
-    return nomenclaturesList
+    return filterEmptyNomenclatures(nomenclaturesList)
   }
 
   return []
