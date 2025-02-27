@@ -4,6 +4,7 @@ import { PageHeading } from "component/page/PageHeading"
 import { PossiblyEmptyParam } from "component/PossiblyEmptyParam"
 import { FC } from "react"
 import { UTDMetadatas } from "type/mapping/iterationMetadatas"
+import { dateAsStringToDate, formatDate } from "util/formatting/date"
 
 interface UTDMetadatasParamsProps {
   metadatas?: UTDMetadatas
@@ -13,13 +14,16 @@ export const UTDMetadatasParams: FC<UTDMetadatasParamsProps> = (props) => {
   const { metadatas } = props
 
   const utdEntity = metadatas?.entity
+  const idnDate = dateAsStringToDate(utdEntity?.idn_date)
+  const correctionDate = dateAsStringToDate(utdEntity?.correction_idn_date)
+  const contractDate = dateAsStringToDate(utdEntity?.contract_date)
 
   return (
     <Flex w="full" direction="column" gap={5}>
       <PageHeading>
         <Flex w="full" direction="row" gap={3}>
           УПД №<PossiblyEmptyParam value={utdEntity?.idn_number} />
-          от <PossiblyEmptyParam value={utdEntity?.idn_date} />
+          от <PossiblyEmptyParam value={formatDate(idnDate, true)} />
         </Flex>
       </PageHeading>
 
@@ -39,7 +43,7 @@ export const UTDMetadatasParams: FC<UTDMetadatasParamsProps> = (props) => {
         />
         <MetadatasParamsRow
           name="Дата исправления УПД"
-          value={utdEntity?.correction_idn_date}
+          value={formatDate(correctionDate, true)}
         />
         <MetadatasParamsRow
           name="Наименование договора поставки"
@@ -51,7 +55,7 @@ export const UTDMetadatasParams: FC<UTDMetadatasParamsProps> = (props) => {
         />
         <MetadatasParamsRow
           name="Дата договора поставки"
-          value={utdEntity?.contract_date}
+          value={formatDate(contractDate, true)}
         />
       </Grid>
     </Flex>
