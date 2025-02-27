@@ -132,9 +132,11 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
       {/* Feedback */}
       <Td p={0}>
         <Textarea
+          h="full"
+          w="full"
+          placeholder="Подскажите, а почему мы неправильно сопоставили?"
           value={correctedResult?.feedback}
           onChange={handleFeedbackChange}
-          placeholder="Подскажите, а почему мы неправильно сопоставили?"
         />
       </Td>
     </Tr>
