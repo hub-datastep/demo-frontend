@@ -4,6 +4,8 @@ import { UTDMetadatasParams } from "component/mapping/iteration/metadatas/UTDMet
 import { MappingResultsTable } from "component/mapping/result/MappingResultsTable"
 import { LoadingPage } from "component/page/LoadingPage"
 import { Page } from "component/page/Page"
+import { IterationStatus } from "constant/iterationStatus"
+import { IterationType } from "constant/iterationType"
 import { FC, useEffect, useMemo, useState } from "react"
 import { useQuery } from "react-query"
 import { useParams } from "react-router"
@@ -11,7 +13,7 @@ import {
   useMappingResultsUpdateMutation,
   useMappingResultsUploadToKafkaMutation,
 } from "service/mapping/resultService"
-import { IterationType, IterationWithResults } from "type/mapping/iteration"
+import { IterationWithResults } from "type/mapping/iteration"
 import { UTDMetadatas } from "type/mapping/iterationMetadatas"
 import {
   CorrectedResult,
@@ -46,6 +48,9 @@ export const MappingIterationResults: FC = () => {
   const isUTDIteration = mappingIteration?.type
     ?.toLowerCase()
     .includes(IterationType.UTD.toLowerCase())
+
+  const status = mappingIteration?.status
+  const isIterationApproved = status === IterationStatus.APPROVED
 
   const results = mappingIteration?.results
 
@@ -102,17 +107,23 @@ export const MappingIterationResults: FC = () => {
     setCorrectedResults(prevCorrectedResults)
   }, [prevCorrectedResults])
 
+  // TODO: add btns/checkboxes to select row as correct
+  // TODO: add btns/checkboxes to select all rows as correct
+
   return (
     <Page>
       {isLoading && <LoadingPage />}
 
       {/* Iteration Metadatas */}
-      {isIterationExists && isUTDIteration && (
-        <UTDMetadatasParams metadatas={metadatas as UTDMetadatas | undefined} />
+      {!isLoading && isIterationExists && isUTDIteration && (
+        <UTDMetadatasParams
+          status={status}
+          metadatas={metadatas as UTDMetadatas | undefined}
+        />
       )}
 
       {/* Mapping Results */}
-      {isIterationExists && (
+      {!isLoading && isIterationExists && (
         <MappingResultsTable
           results={results!}
           correctedResults={correctedResults}
@@ -121,23 +132,27 @@ export const MappingIterationResults: FC = () => {
       )}
 
       {/* Action Btns */}
-      <Flex
-        w="full"
-        direction="row"
-        justifyContent="flex-end"
-        alignItems="center"
-        gap={2}
-      >
-        {/* Send Corrected Results Btn */}
-        <Button
-          colorScheme="purple"
-          onClick={handleSubmit}
-          isDisabled={isSendBtnDisabled}
-          isLoading={isMutationsLoading}
+      {!isLoading && isIterationExists && (
+        <Flex
+          w="full"
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          gap={2}
         >
-          Отправить
-        </Button>
-      </Flex>
+          {/* Send Corrected Results Btn */}
+          {!isIterationApproved && (
+            <Button
+              colorScheme="purple"
+              onClick={handleSubmit}
+              isDisabled={isSendBtnDisabled}
+              isLoading={isMutationsLoading}
+            >
+              Отправить
+            </Button>
+          )}
+        </Flex>
+      )}
     </Page>
   )
 }

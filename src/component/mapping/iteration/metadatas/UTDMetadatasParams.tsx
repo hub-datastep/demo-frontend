@@ -1,6 +1,7 @@
 import { Flex, Grid } from "@chakra-ui/react"
+import { IterationStatusBadge } from "component/mapping/iteration/IterationStatusBadge"
 import { MetadatasParamsRow } from "component/mapping/iteration/metadatas/MetadatasParamsRow"
-import { UTDDocumentLink } from "component/mapping/iteration/metadatas/UTDDocumentLink"
+import { UTDDocumentLink } from "component/mapping/iteration/UTDDocumentLink"
 import { PageHeading } from "component/page/PageHeading"
 import { PossiblyEmptyParam } from "component/PossiblyEmptyParam"
 import { FC } from "react"
@@ -8,11 +9,12 @@ import { UTDMetadatas } from "type/mapping/iterationMetadatas"
 import { dateAsStringToDate, formatDate } from "util/formatting/date"
 
 interface UTDMetadatasParamsProps {
+  status?: string
   metadatas?: UTDMetadatas
 }
 
 export const UTDMetadatasParams: FC<UTDMetadatasParamsProps> = (props) => {
-  const { metadatas } = props
+  const { status, metadatas } = props
 
   const utdEntity = metadatas?.entity
   const idnDate = dateAsStringToDate(utdEntity?.idn_date)
@@ -24,11 +26,16 @@ export const UTDMetadatasParams: FC<UTDMetadatasParamsProps> = (props) => {
 
   return (
     <Flex w="full" direction="column" gap={5}>
-      {/* Number & Date */}
       <PageHeading>
-        <Flex w="full" direction="row" gap={3}>
-          УПД №<PossiblyEmptyParam value={utdEntity?.idn_number} />
-          от <PossiblyEmptyParam value={formatDate(idnDate, true)} />
+        <Flex w="full" direction="row" alignItems="center" gap={5}>
+          {/* Number & Date */}
+          <Flex w="full" direction="row" alignItems="center" gap={3}>
+            УПД №<PossiblyEmptyParam value={utdEntity?.idn_number} />
+            от <PossiblyEmptyParam value={formatDate(idnDate, true)} />
+          </Flex>
+
+          {/* UTD Status */}
+          <IterationStatusBadge size="xl" status={status} />
         </Flex>
       </PageHeading>
 
