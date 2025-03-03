@@ -5,7 +5,11 @@ import { FaEdit } from "react-icons/fa"
 import { useCorrectedNomenclature } from "service/mapping/mappingService"
 import { CorrectedResult, MappingResult } from "type/mapping/result"
 import { SimilarNomenclature } from "type/mapping/similarNomenclature"
-import { WithId } from "type/withId"
+import { WithId, WithStrId } from "type/withId"
+import {
+  getMappedNomenclature,
+  isMappedNomenclatureValid,
+} from "util/validation/mappedNomenclature"
 
 interface MappingResultRowProps {
   mappingResult: WithId<MappingResult>
@@ -29,8 +33,13 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
 
   const isLoading = correctedNomenclatureMutation.isLoading
 
-  const mappingsList = result?.mappings
-  const isMappingsExists = !!mappingsList && mappingsList.length > 0
+  const mappedNomenclature = getMappedNomenclature(mappingResult)
+  const isMappedNomenclatureExists = isMappedNomenclatureValid(mappingResult)
+
+  const isAlreadyMarkedAsCorrect =
+    correctedResult?.nomenclature?.name === mappedNomenclature?.nomenclature
+  const isMarkAsCorrectBtnDisabled =
+    !isMappedNomenclatureExists || isAlreadyMarkedAsCorrect
 
   const similarMappingsList = result?.similar_mappings
   const isSimilarMappingsExists = !!similarMappingsList && similarMappingsList.length > 0
@@ -39,7 +48,7 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
     setIsSearchVisible(true)
   }
 
-  const handleSelect = (selectedNomenclature: WithId<SimilarNomenclature>) => {
+  const handleSelect = (selectedNomenclature: WithStrId<SimilarNomenclature>) => {
     const result: CorrectedResult = {
       ...(correctedResult || ({} as CorrectedResult)),
       nomenclature: selectedNomenclature,
@@ -61,6 +70,18 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
     onCorrectNomenclatureSelect(result)
   }
 
+  const handleMarkAsCorrect = () => {
+    if (!isMappedNomenclatureExists || !mappedNomenclature) {
+      return
+    }
+
+    handleSelect({
+      id: mappedNomenclature.nomenclature_guid,
+      name: mappedNomenclature.nomenclature,
+      material_code: mappedNomenclature.material_code,
+    })
+  }
+
   return (
     <Tr whiteSpace="break-spaces">
       {/* Initial nomenclature */}
@@ -71,10 +92,27 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
       {/* Mapped Nomenclature */}
       <Td>
         {/* Mappings */}
-        {isMappingsExists && <Text>{mappingsList[0].nomenclature}</Text>}
+        {isMappedNomenclatureExists && mappedNomenclature && (
+          <Flex w="full" direction="column" gap={2}>
+            <Text>{mappedNomenclature.nomenclature}</Text>
+
+            {/* Mark As Correct Btn */}
+            <Flex w="full">
+              <Button
+                size="xs"
+                variant="outline"
+                colorScheme="teal"
+                onClick={handleMarkAsCorrect}
+                isDisabled={isMarkAsCorrectBtnDisabled}
+              >
+                Правильно
+              </Button>
+            </Flex>
+          </Flex>
+        )}
 
         {/* Similar Mappings */}
-        {!isMappingsExists && isSimilarMappingsExists && (
+        {!isMappedNomenclatureExists && isSimilarMappingsExists && (
           <Flex direction="column" gap={2}>
             <Text fontWeight="light">
               Не нашлось номенклатуры с такими параметрами, но возможно Вы имели ввиду:
@@ -98,8 +136,6 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
       {/* Corrected Nomenclature */}
       <Td px={2} py={1}>
         <Flex w="full">
-          {/* TODO: set corrected nomenclature */}
-
           {isSearchVisible ? (
             <NomenclatureSelect
               prevResult={result}
