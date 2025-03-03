@@ -36,8 +36,9 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
   const mappedNomenclature = getMappedNomenclature(mappingResult)
   const isMappedNomenclatureExists = isMappedNomenclatureValid(mappingResult)
 
+  const correctedNomenclatureName = correctedResult?.nomenclature?.name
   const isAlreadyMarkedAsCorrect =
-    correctedResult?.nomenclature?.name === mappedNomenclature?.nomenclature
+    correctedNomenclatureName === mappedNomenclature?.nomenclature
   const isMarkAsCorrectBtnDisabled =
     !isMappedNomenclatureExists || isAlreadyMarkedAsCorrect
 
@@ -135,7 +136,7 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
 
       {/* Corrected Nomenclature */}
       <Td px={2} py={1}>
-        <Flex w="full">
+        <Flex w="full" direction="column" justifyContent="center">
           {isSearchVisible ? (
             <NomenclatureSelect
               prevResult={result}
@@ -145,23 +146,39 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
               setIsVisible={setIsSearchVisible}
             />
           ) : (
-            <Flex w="full" direction="row" alignItems="center" gap={1}>
-              <Button
-                h="fit-content"
-                variant="ghost"
-                py={1}
-                fontWeight="normal"
-                rightIcon={<FaEdit />}
-                onClick={handleSelectVisible}
-              >
-                {isCorrectedResultExists ? (
-                  <Text textAlign="left" whiteSpace="normal">
-                    {correctedResult?.nomenclature?.name}
+            <Flex w="full" direction="column" justifyContent="center" gap={1}>
+              {isCorrectedResultExists ? (
+                <Button
+                  h="fit-content"
+                  w="fit-content"
+                  variant="ghost"
+                  colorScheme="gray"
+                  py={1}
+                  fontWeight="normal"
+                  textAlign="left"
+                  rightIcon={<FaEdit />}
+                  onClick={handleSelectVisible}
+                >
+                  <Text w="fit-content" whiteSpace="normal">
+                    {correctedNomenclatureName}
                   </Text>
-                ) : (
+                </Button>
+              ) : (
+                <Button
+                  h="fit-content"
+                  w="fit-content"
+                  variant="outline"
+                  colorScheme="blue"
+                  size="sm"
+                  py={1}
+                  fontWeight="medium"
+                  textAlign="left"
+                  rightIcon={<FaEdit />}
+                  onClick={handleSelectVisible}
+                >
                   <Text>Изменить</Text>
-                )}
-              </Button>
+                </Button>
+              )}
             </Flex>
           )}
         </Flex>
