@@ -1,6 +1,6 @@
 import { MappingResponse } from "model/ClassifierModel"
 import { SimilarNomenclature } from "type/mapping/similarNomenclature"
-import { WithId } from "type/withId"
+import { WithStrId } from "type/withId"
 
 export type MappingResult = {
   iteration_id: string
@@ -11,7 +11,7 @@ export type MappingResult = {
 
 export type CorrectedResult = {
   result_id: number
-  nomenclature?: WithId<SimilarNomenclature>
+  nomenclature?: WithStrId<SimilarNomenclature>
   feedback?: string
 }
 

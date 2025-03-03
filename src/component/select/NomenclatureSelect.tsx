@@ -11,9 +11,9 @@ import {
 import { MappingResponse } from "model/ClassifierModel"
 import { Dispatch, FC, SetStateAction } from "react"
 import { SimilarNomenclature } from "type/mapping/similarNomenclature"
-import { WithId } from "type/withId"
+import { WithStrId } from "type/withId"
 
-type SelectOption = WithId<SimilarNomenclature>
+type SelectOption = WithStrId<SimilarNomenclature>
 
 interface NomenclatureSelectProps {
   prevResult?: MappingResponse
@@ -41,7 +41,7 @@ const selectStyles: ChakraStylesConfig<SelectOption, false, GroupBase<SelectOpti
 }
 
 const NOMENCLATURE_NOT_FOUND_VARIANT: SelectOption = {
-  id: -1,
+  id: "-1",
   name: "В НСИ нет подходящего варианта",
   material_code: "-1",
 }
@@ -55,7 +55,7 @@ const getPrevNomenclatures = (prevResult?: MappingResponse): SelectOption[] => {
   // If mappings exists
   if (!!prevResult?.mappings) {
     const nomenclaturesList = prevResult.mappings.map((mapping) => ({
-      id: Number(mapping.nomenclature_guid),
+      id: mapping.nomenclature_guid,
       name: mapping.nomenclature,
       material_code: mapping.material_code,
     }))
@@ -65,7 +65,7 @@ const getPrevNomenclatures = (prevResult?: MappingResponse): SelectOption[] => {
   // If similar mappings exists
   if (!!prevResult?.similar_mappings) {
     const nomenclaturesList = prevResult.similar_mappings.map((mapping) => ({
-      id: Number(mapping.nomenclature_guid),
+      id: mapping.nomenclature_guid,
       name: mapping.nomenclature,
       material_code: mapping.material_code,
     }))
