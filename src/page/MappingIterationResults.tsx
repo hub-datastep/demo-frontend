@@ -17,10 +17,15 @@ import { IterationWithResults } from "type/mapping/iteration"
 import { UTDMetadatas } from "type/mapping/iterationMetadatas"
 import {
   CorrectedResult,
+  MappingResult,
   MappingResultsUpload,
   MappingResultUpdate,
 } from "type/mapping/result"
-import { WithStrId } from "type/withId"
+import { WithId, WithStrId } from "type/withId"
+import {
+  getMappedNomenclature,
+  isMappedNomenclatureValid,
+} from "util/validation/mappedNomenclature"
 
 type Params = {
   id: string
@@ -52,7 +57,9 @@ export const MappingIterationResults: FC = () => {
   const status = mappingIteration?.status
   const isIterationApproved = status === IterationStatus.APPROVED
 
-  const results = mappingIteration?.results
+  const results = mappingIteration?.results as WithId<MappingResult>[] | undefined
+  const isResultsExist = !!results
+  const isAllResultsExist = results?.every(isMappedNomenclatureValid)
 
   const prevCorrectedResults: CorrectedResult[] = useMemo(
     () =>
@@ -75,11 +82,45 @@ export const MappingIterationResults: FC = () => {
 
   const handleCorrectNomenclatureSelect = async (result: CorrectedResult) => {
     setCorrectedResults((prevResultsList) => {
+      const prevResult = prevResultsList.find(
+        (prevResult) => prevResult.result_id === result.result_id,
+      )
+
+      // Save any feedback
+      if (!!prevResult) {
+        result.feedback = result.feedback || prevResult.feedback
+      }
+
       const filteredResultsList = prevResultsList.filter(
         (prevResult) => prevResult.result_id !== result.result_id,
       )
 
       return [...filteredResultsList, result]
+    })
+  }
+
+  const handleMarkAllAsCorrect = () => {
+    if (!isResultsExist) {
+      return
+    }
+
+    results.forEach((mappingResult) => {
+      const resultId = mappingResult.id
+
+      if (!isMappedNomenclatureValid(mappingResult)) {
+        return
+      }
+
+      const mappedNomenclature = getMappedNomenclature(mappingResult)!
+
+      handleCorrectNomenclatureSelect({
+        result_id: resultId,
+        nomenclature: {
+          id: mappedNomenclature.nomenclature_guid,
+          name: mappedNomenclature.nomenclature,
+          material_code: mappedNomenclature.material_code,
+        },
+      })
     })
   }
 
@@ -107,9 +148,6 @@ export const MappingIterationResults: FC = () => {
     setCorrectedResults(prevCorrectedResults)
   }, [prevCorrectedResults])
 
-  // TODO: add btns/checkboxes to select row as correct
-  // TODO: add btns/checkboxes to select all rows as correct
-
   return (
     <Page>
       {isLoading && <LoadingPage />}
@@ -122,35 +160,44 @@ export const MappingIterationResults: FC = () => {
         />
       )}
 
-      {/* Mapping Results */}
-      {!isLoading && isIterationExists && (
+      {/* Mapping Results Table */}
+      {!isLoading && isIterationExists && isResultsExist && (
         <MappingResultsTable
-          results={results!}
+          results={results}
           correctedResults={correctedResults}
           onCorrectNomenclatureSelect={handleCorrectNomenclatureSelect}
         />
       )}
 
       {/* Action Btns */}
-      {!isLoading && isIterationExists && (
+      {!isLoading && isIterationExists && isResultsExist && !isIterationApproved && (
         <Flex
           w="full"
           direction="row"
           justifyContent="flex-end"
           alignItems="center"
-          gap={2}
+          gap={3}
         >
+          {/* All Results Correct */}
+          <Button
+            colorScheme="teal"
+            variant="outline"
+            onClick={handleMarkAllAsCorrect}
+            isLoading={isMutationsLoading}
+            isDisabled={!isAllResultsExist || isAllResultsCorrected}
+          >
+            Все позиции правильные
+          </Button>
+
           {/* Send Corrected Results Btn */}
-          {!isIterationApproved && (
-            <Button
-              colorScheme="purple"
-              onClick={handleSubmit}
-              isDisabled={isSendBtnDisabled}
-              isLoading={isMutationsLoading}
-            >
-              Отправить
-            </Button>
-          )}
+          <Button
+            colorScheme="purple"
+            onClick={handleSubmit}
+            isLoading={isMutationsLoading}
+            isDisabled={isSendBtnDisabled}
+          >
+            Отправить
+          </Button>
         </Flex>
       )}
     </Page>
