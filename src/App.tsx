@@ -10,6 +10,7 @@ import { DemoSolution } from "component/demo/DemoSolution"
 import { AuthContextProvider } from "context/authContext"
 import { FavoriteMessageContextProvider } from "context/favoriteMessageContext"
 import { ModeContextProvider } from "context/modeContext"
+import { SidebarContextProvider } from "context/sidebarContext"
 import { UserContextProvider } from "context/userContext"
 import { MappingIterationResults } from "page/MappingIterationResults"
 import { MappingIterations } from "page/MappingIterations"
@@ -28,30 +29,35 @@ export const App = () => {
             <UserContextProvider>
               <ModeContextProvider>
                 <FavoriteMessageContextProvider>
-                  <Routes>
-                    <Route element={<AppLayout />}>
-                      <Route
-                        path="/admin"
-                        element={
-                          <Box mt={40}>
-                            <EditPromptForm />
-                          </Box>
-                        }
-                      />
-                      <Route path="/databases" element={<ChatDB />} />
-                      <Route path="/documents" element={<ChatDocs />} />
-                      <Route path="/knowledge_base" element={<ChatKnowledgeBase />} />
-                      <Route path="/mapping">
-                        <Route path="" element={<ChatClassifier />} />
-                        <Route path="result/iterations" element={<MappingIterations />} />
+                  <SidebarContextProvider>
+                    <Routes>
+                      <Route element={<AppLayout />}>
                         <Route
-                          path="result/iteration/:id"
-                          element={<MappingIterationResults />}
+                          path="/admin"
+                          element={
+                            <Box mt={40}>
+                              <EditPromptForm />
+                            </Box>
+                          }
                         />
+                        <Route path="/databases" element={<ChatDB />} />
+                        <Route path="/documents" element={<ChatDocs />} />
+                        <Route path="/knowledge_base" element={<ChatKnowledgeBase />} />
+                        <Route path="/mapping">
+                          <Route path="" element={<ChatClassifier />} />
+                          <Route
+                            path="result/iterations"
+                            element={<MappingIterations />}
+                          />
+                          <Route
+                            path="result/iteration/:id"
+                            element={<MappingIterationResults />}
+                          />
+                        </Route>
+                        <Route path="/demo" element={<DemoSolution />} />
                       </Route>
-                      <Route path="/demo" element={<DemoSolution />} />
-                    </Route>
-                  </Routes>
+                    </Routes>
+                  </SidebarContextProvider>
                   <ToastContainer />
                 </FavoriteMessageContextProvider>
               </ModeContextProvider>

@@ -80,14 +80,14 @@ export const NomenclatureSelect: FC<NomenclatureSelectProps> = (props) => {
 
   const prevNomenclatures = getPrevNomenclatures(prevResult)
 
-  const prevNomenclaturesGroup = {
+  const predictedNomenclaturesOptionsGroup = {
     label: "Предложенные ИИ",
     options: prevNomenclatures,
   }
 
   const isSelectedValueInvalid = !selectedNomenclature
 
-  const handleLoadOptions = async (
+  const handleOptionsLoad = async (
     inputValue: string,
     _: (options: OptionsOrGroups<SelectOption, GroupBase<SelectOption>>) => void,
   ) => {
@@ -96,7 +96,7 @@ export const NomenclatureSelect: FC<NomenclatureSelectProps> = (props) => {
     })
 
     const groupedOptions = [
-      prevNomenclaturesGroup,
+      predictedNomenclaturesOptionsGroup,
       {
         label: "Номенклатуры из НСИ",
         options: [NOMENCLATURE_NOT_FOUND_VARIANT, ...similarNoms],
@@ -122,8 +122,8 @@ export const NomenclatureSelect: FC<NomenclatureSelectProps> = (props) => {
     <AsyncSelect<SelectOption, false, GroupBase<SelectOption>>
       chakraStyles={selectStyles}
       placeholder="Введите номенклатуру"
-      defaultOptions={[prevNomenclaturesGroup]}
-      loadOptions={handleLoadOptions}
+      defaultOptions={[predictedNomenclaturesOptionsGroup]}
+      loadOptions={handleOptionsLoad}
       getOptionLabel={(option) => option.name}
       value={selectedNomenclature || null}
       onChange={handleSelect}

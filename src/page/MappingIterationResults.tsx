@@ -7,6 +7,7 @@ import { Page } from "component/page/Page"
 import { IterationStatus } from "constant/iterationStatus"
 import { IterationType } from "constant/iterationType"
 import { FC, useEffect, useMemo, useState } from "react"
+import { FaCheckSquare } from "react-icons/fa"
 import { useQuery } from "react-query"
 import { useParams } from "react-router"
 import {
@@ -144,6 +145,7 @@ export const MappingIterationResults: FC = () => {
     await handleResultsUploadToKafka()
   }
 
+  // Update corrected results
   useEffect(() => {
     setCorrectedResults(prevCorrectedResults)
   }, [prevCorrectedResults])
@@ -166,6 +168,8 @@ export const MappingIterationResults: FC = () => {
           results={results}
           correctedResults={correctedResults}
           onCorrectNomenclatureSelect={handleCorrectNomenclatureSelect}
+          isIterationApproved={isIterationApproved}
+          isLoading={isMutationsLoading}
         />
       )}
 
@@ -180,13 +184,13 @@ export const MappingIterationResults: FC = () => {
         >
           {/* All Results Correct */}
           <Button
-            colorScheme="teal"
-            variant="outline"
+            colorScheme="gray"
             onClick={handleMarkAllAsCorrect}
-            isLoading={isMutationsLoading}
-            isDisabled={!isAllResultsExist || isAllResultsCorrected}
+            rightIcon={<FaCheckSquare color="green" />}
+            isLoading={isLoading}
+            isDisabled={!isAllResultsExist || isAllResultsCorrected || isMutationsLoading}
           >
-            Все позиции правильные
+            Отменить все позиции правильными
           </Button>
 
           {/* Send Corrected Results Btn */}
