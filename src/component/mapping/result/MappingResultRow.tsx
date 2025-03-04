@@ -1,9 +1,7 @@
-import { Button, Flex, Td, Text, Textarea, Tr } from "@chakra-ui/react"
+import { Button, Checkbox, Flex, Td, Text, Textarea, Tr } from "@chakra-ui/react"
 import { NSIViewer, useNSIViewerDisclosure } from "component/mapping/result/NSIViewer"
-import { NomenclatureSelect } from "component/select/NomenclatureSelect"
-import { ChangeEvent, FC, useState } from "react"
+import { ChangeEvent, FC } from "react"
 import { FaEdit } from "react-icons/fa"
-import { useCorrectedNomenclature } from "service/mapping/mappingService"
 import { CorrectedResult, MappingResult } from "type/mapping/result"
 import { SimilarNomenclature } from "type/mapping/similarNomenclature"
 import { WithId, WithStrId } from "type/withId"
@@ -16,10 +14,18 @@ interface MappingResultRowProps {
   mappingResult: WithId<MappingResult>
   correctedResults: CorrectedResult[]
   onCorrectNomenclatureSelect: (result: CorrectedResult) => void
+  isIterationApproved?: boolean
+  isLoading?: boolean
 }
 
 export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
-  const { mappingResult, correctedResults, onCorrectNomenclatureSelect } = props
+  const {
+    mappingResult,
+    correctedResults,
+    onCorrectNomenclatureSelect,
+    isIterationApproved,
+    isLoading,
+  } = props
 
   const resultId = mappingResult.id
   const result = mappingResult.result
@@ -28,21 +34,14 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
   const selectedNomenclature = correctedResult?.nomenclature
   const isCorrectedResultExists = !!selectedNomenclature
 
-  const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false)
-
-  const correctedNomenclatureMutation = useCorrectedNomenclature()
-
-  const isLoading = correctedNomenclatureMutation.isLoading
-
   const mappedNomenclature = getMappedNomenclature(mappingResult)
   const isMappedNomenclatureExists =
     mappedNomenclature && isMappedNomenclatureValid(mappingResult)
 
   const correctedNomenclatureName = correctedResult?.nomenclature?.name
-  const isAlreadyMarkedAsCorrect =
-    correctedNomenclatureName === mappedNomenclature?.nomenclature
+  const isMarkedAsCorrect = correctedNomenclatureName === mappedNomenclature?.nomenclature
   const isMarkAsCorrectBtnDisabled =
-    !isMappedNomenclatureExists || isAlreadyMarkedAsCorrect
+    !isMappedNomenclatureExists || isIterationApproved || isLoading
 
   const similarMappingsList = result?.similar_mappings
   const isSimilarMappingsExists = !!similarMappingsList && similarMappingsList.length > 0
@@ -56,18 +55,12 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
         }
       : undefined
 
-  const handleSelectVisible = () => {
-    setIsSearchVisible(true)
-  }
-
-  const handleSelect = (selectedNomenclature: WithStrId<SimilarNomenclature>) => {
+  const handleSelect = (selectedNomenclature?: WithStrId<SimilarNomenclature>) => {
     const result: CorrectedResult = {
       ...(correctedResult || ({} as CorrectedResult)),
       nomenclature: selectedNomenclature,
     }
     onCorrectNomenclatureSelect(result)
-
-    setIsSearchVisible(false)
   }
 
   const handleFeedbackChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -82,16 +75,21 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
     onCorrectNomenclatureSelect(result)
   }
 
-  const handleMarkAsCorrect = () => {
+  const handleMarkAsCorrect = (e: ChangeEvent<HTMLInputElement>) => {
     if (!isMappedNomenclatureExists) {
       return
     }
 
-    handleSelect({
-      id: mappedNomenclature.nomenclature_guid,
-      name: mappedNomenclature.nomenclature,
-      material_code: mappedNomenclature.material_code,
-    })
+    const isChecked = e.target.checked
+    if (isChecked) {
+      handleSelect({
+        id: mappedNomenclature.nomenclature_guid,
+        name: mappedNomenclature.nomenclature,
+        material_code: mappedNomenclature.material_code,
+      })
+    } else {
+      handleSelect(undefined)
+    }
   }
 
   const { isNSIViewerOpen, onNSIViewerOpen, onNSIViewerClose } = useNSIViewerDisclosure()
@@ -110,19 +108,6 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
           {isMappedNomenclatureExists && (
             <Flex w="full" direction="column" gap={2}>
               <Text>{mappedNomenclature.nomenclature}</Text>
-
-              {/* Mark As Correct Btn */}
-              <Flex w="full">
-                <Button
-                  size="xs"
-                  variant="outline"
-                  colorScheme="teal"
-                  onClick={handleMarkAsCorrect}
-                  isDisabled={isMarkAsCorrectBtnDisabled}
-                >
-                  Правильно
-                </Button>
-              </Flex>
             </Flex>
           )}
 
@@ -148,53 +133,63 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
           <Text>{result?.group}</Text>
         </Td>
 
+        {/* Is Correct Checkbox */}
+        <Td>
+          <Flex w="full" direction="column" justifyContent="center" alignItems="center">
+            <Checkbox
+              colorScheme="blue"
+              isChecked={isMarkedAsCorrect}
+              onChange={handleMarkAsCorrect}
+              isDisabled={isMarkAsCorrectBtnDisabled}
+            />
+          </Flex>
+        </Td>
+
         {/* Corrected Nomenclature */}
-        <Td px={2} py={1}>
-          <Flex w="full" direction="column" justifyContent="center">
-            {isSearchVisible ? (
-              <NomenclatureSelect
-                prevResult={result}
-                selectedNomenclature={selectedNomenclature}
-                onSelect={handleSelect}
-                isDisabled={isLoading}
-                setIsVisible={setIsSearchVisible}
-              />
-            ) : (
-              <Flex w="full" direction="column" justifyContent="center" gap={1}>
-                {isCorrectedResultExists ? (
-                  <Button
-                    h="fit-content"
-                    w="fit-content"
-                    variant="ghost"
-                    colorScheme="gray"
-                    py={1}
-                    fontWeight="normal"
-                    textAlign="left"
-                    rightIcon={<FaEdit />}
-                    onClick={handleSelectVisible}
-                  >
-                    <Text w="fit-content" whiteSpace="normal">
-                      {correctedNomenclatureName}
-                    </Text>
-                  </Button>
-                ) : (
-                  <Button
-                    h="fit-content"
-                    w="fit-content"
-                    variant="outline"
-                    colorScheme="blue"
-                    size="sm"
-                    py={1}
-                    fontWeight="medium"
-                    textAlign="left"
-                    rightIcon={<FaEdit />}
-                    onClick={onNSIViewerOpen}
-                  >
-                    <Text>Выбрать из НСИ</Text>
-                  </Button>
-                )}
+        <Td>
+          <Flex w="full" direction="column" gap={2}>
+            {isCorrectedResultExists && (
+              <Flex w="full" direction="column" gap={2}>
+                <Text w="fit-content" whiteSpace="normal">
+                  {correctedNomenclatureName}
+                </Text>
               </Flex>
             )}
+
+            <Flex w="full" direction="column" gap={2}>
+              {/* <Button
+              h="fit-content"
+              w="fit-content"
+              // variant="outline"
+              colorScheme="teal"
+              size="sm"
+              py={1}
+              onClick={handleMarkAsCorrect}
+              rightIcon={<FaCheckCircle />}
+              isDisabled={isMarkAsCorrectBtnDisabled}
+            >
+              Отметить корректной
+            </Button> */}
+
+              {/* NSI Viewer Btn */}
+              {!isIterationApproved && (
+                <Button
+                  h="fit-content"
+                  w="fit-content"
+                  // variant="outline"
+                  colorScheme="blue"
+                  size="sm"
+                  py={1}
+                  fontWeight="medium"
+                  textAlign="left"
+                  rightIcon={<FaEdit />}
+                  onClick={onNSIViewerOpen}
+                  isDisabled={isLoading}
+                >
+                  <Text>Выбрать из НСИ</Text>
+                </Button>
+              )}
+            </Flex>
           </Flex>
         </Td>
 
