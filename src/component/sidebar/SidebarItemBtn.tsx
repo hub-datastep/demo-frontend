@@ -35,7 +35,7 @@ export const SidebarItemBtn: FC<SidebarItemBtnProps> = (props) => {
   return (
     <Button
       w="full"
-      bgColor="whiteAlpha.300"
+      bgColor="purple.300"
       variant="solid"
       colorScheme="purple"
       display="flex"

@@ -1,20 +1,27 @@
 import { Image } from "@chakra-ui/react"
 import { FC } from "react"
 
+import logoDark from "assets/logo/datastep-logo-dark.svg"
+import logoIcon from "assets/logo/datastep-logo-icon.svg"
+import logoLight from "assets/logo/datastep-logo-light.svg"
+
 interface LogoProps {
-    isDark?: boolean
+  imageSize?: string
+  isDark?: boolean
+  isIconOnly?: boolean
 }
 
-const Logo: FC<LogoProps> = ({ isDark }) => {
-    if (isDark) {
-        return (
-            <Image src="/image/logo/datastep-logo-dark.svg" alt="logo" />
-        )
-    }
+export const Logo: FC<LogoProps> = (props) => {
+  const { imageSize, isDark, isIconOnly } = props
 
-    return (
-        <Image src="/image/logo/datastep-logo-light.svg" alt="logo" />
-    )
+  let logoPath
+  if (isIconOnly) {
+    logoPath = logoIcon
+  } else if (isDark) {
+    logoPath = logoDark
+  } else {
+    logoPath = logoLight
+  }
+
+  return <Image w={imageSize} src={logoPath} alt="Datastep Logo" />
 }
-
-export default Logo

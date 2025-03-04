@@ -145,6 +145,7 @@ export const MappingIterationResults: FC = () => {
     await handleResultsUploadToKafka()
   }
 
+  // Update corrected results
   useEffect(() => {
     setCorrectedResults(prevCorrectedResults)
   }, [prevCorrectedResults])

@@ -9,7 +9,7 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react"
-import Logo from "component/Logo"
+import { Logo } from "component/Logo"
 import { ChangeEvent, FC, FormEvent, useState } from "react"
 
 interface IAuth {
