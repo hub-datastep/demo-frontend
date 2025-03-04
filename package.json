@@ -50,10 +50,6 @@
       "react-app"
     ],
     "rules": {
-      "indent": [
-        "warn",
-        2
-      ],
       "no-console": "warn",
       "semi": [
         "warn",

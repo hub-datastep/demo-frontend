@@ -3,28 +3,25 @@ FROM node:18-alpine as build
 
 WORKDIR /app
 
-COPY package.json yarn.lock /app/
+# 1. Копируем только файлы зависимостей
+COPY package.json yarn.lock ./
 
-# For running on Mac M1
-RUN apk --update --no-cache --virtual build-dependencies add \
-        python3 \
-        make \
-        g++
+# 2. Устанавливаем зависимости и build-пакеты в одном слое
+RUN apk add --no-cache --virtual .build-deps python3 make g++ \
+        && yarn install --frozen-lockfile \
+        && apk del .build-deps
 
-RUN yarn install
+# 3. Копируем остальные файлы проекта
+COPY . .
 
-RUN apk del build-dependencies
-
-COPY . /app/
-
+# 4. Сборка проекта
 RUN yarn run build
-
 
 # Stage 2: Запуск Nginx
 FROM nginx:stable-alpine
 
-COPY ngnix.conf /etc/nginx/conf.d/default.conf
-
+# Исправлено имя конфига (было ngnix.conf)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/build /usr/share/nginx/html
 
 EXPOSE 3003

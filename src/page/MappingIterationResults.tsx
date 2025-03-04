@@ -4,21 +4,29 @@ import { UTDMetadatasParams } from "component/mapping/iteration/metadatas/UTDMet
 import { MappingResultsTable } from "component/mapping/result/MappingResultsTable"
 import { LoadingPage } from "component/page/LoadingPage"
 import { Page } from "component/page/Page"
+import { IterationStatus } from "constant/iterationStatus"
+import { IterationType } from "constant/iterationType"
 import { FC, useEffect, useMemo, useState } from "react"
+import { FaCheckSquare } from "react-icons/fa"
 import { useQuery } from "react-query"
 import { useParams } from "react-router"
 import {
   useMappingResultsUpdateMutation,
   useMappingResultsUploadToKafkaMutation,
 } from "service/mapping/resultService"
-import { IterationType, IterationWithResults } from "type/mapping/iteration"
+import { IterationWithResults } from "type/mapping/iteration"
 import { UTDMetadatas } from "type/mapping/iterationMetadatas"
 import {
   CorrectedResult,
+  MappingResult,
   MappingResultsUpload,
   MappingResultUpdate,
 } from "type/mapping/result"
-import { WithStrId } from "type/withId"
+import { WithId, WithStrId } from "type/withId"
+import {
+  getMappedNomenclature,
+  isMappedNomenclatureValid,
+} from "util/validation/mappedNomenclature"
 
 type Params = {
   id: string
@@ -47,7 +55,12 @@ export const MappingIterationResults: FC = () => {
     ?.toLowerCase()
     .includes(IterationType.UTD.toLowerCase())
 
-  const results = mappingIteration?.results
+  const status = mappingIteration?.status
+  const isIterationApproved = status === IterationStatus.APPROVED
+
+  const results = mappingIteration?.results as WithId<MappingResult>[] | undefined
+  const isResultsExist = !!results
+  const isAllResultsExist = results?.every(isMappedNomenclatureValid)
 
   const prevCorrectedResults: CorrectedResult[] = useMemo(
     () =>
@@ -70,11 +83,45 @@ export const MappingIterationResults: FC = () => {
 
   const handleCorrectNomenclatureSelect = async (result: CorrectedResult) => {
     setCorrectedResults((prevResultsList) => {
+      const prevResult = prevResultsList.find(
+        (prevResult) => prevResult.result_id === result.result_id,
+      )
+
+      // Save any feedback
+      if (!!prevResult) {
+        result.feedback = result.feedback || prevResult.feedback
+      }
+
       const filteredResultsList = prevResultsList.filter(
         (prevResult) => prevResult.result_id !== result.result_id,
       )
 
       return [...filteredResultsList, result]
+    })
+  }
+
+  const handleMarkAllAsCorrect = () => {
+    if (!isResultsExist) {
+      return
+    }
+
+    results.forEach((mappingResult) => {
+      const resultId = mappingResult.id
+
+      if (!isMappedNomenclatureValid(mappingResult)) {
+        return
+      }
+
+      const mappedNomenclature = getMappedNomenclature(mappingResult)!
+
+      handleCorrectNomenclatureSelect({
+        result_id: resultId,
+        nomenclature: {
+          id: mappedNomenclature.nomenclature_guid,
+          name: mappedNomenclature.nomenclature,
+          material_code: mappedNomenclature.material_code,
+        },
+      })
     })
   }
 
@@ -98,6 +145,7 @@ export const MappingIterationResults: FC = () => {
     await handleResultsUploadToKafka()
   }
 
+  // Update corrected results
   useEffect(() => {
     setCorrectedResults(prevCorrectedResults)
   }, [prevCorrectedResults])
@@ -107,37 +155,55 @@ export const MappingIterationResults: FC = () => {
       {isLoading && <LoadingPage />}
 
       {/* Iteration Metadatas */}
-      {isIterationExists && isUTDIteration && (
-        <UTDMetadatasParams metadatas={metadatas as UTDMetadatas | undefined} />
+      {!isLoading && isIterationExists && isUTDIteration && (
+        <UTDMetadatasParams
+          status={status}
+          metadatas={metadatas as UTDMetadatas | undefined}
+        />
       )}
 
-      {/* Mapping Results */}
-      {isIterationExists && (
+      {/* Mapping Results Table */}
+      {!isLoading && isIterationExists && isResultsExist && (
         <MappingResultsTable
-          results={results!}
+          results={results}
           correctedResults={correctedResults}
           onCorrectNomenclatureSelect={handleCorrectNomenclatureSelect}
+          isIterationApproved={isIterationApproved}
+          isLoading={isMutationsLoading}
         />
       )}
 
       {/* Action Btns */}
-      <Flex
-        w="full"
-        direction="row"
-        justifyContent="flex-end"
-        alignItems="center"
-        gap={2}
-      >
-        {/* Send Corrected Results Btn */}
-        <Button
-          colorScheme="purple"
-          onClick={handleSubmit}
-          isDisabled={isSendBtnDisabled}
-          isLoading={isMutationsLoading}
+      {!isLoading && isIterationExists && isResultsExist && !isIterationApproved && (
+        <Flex
+          w="full"
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          gap={3}
         >
-          Отправить
-        </Button>
-      </Flex>
+          {/* All Results Correct */}
+          <Button
+            colorScheme="gray"
+            onClick={handleMarkAllAsCorrect}
+            rightIcon={<FaCheckSquare color="green" />}
+            isLoading={isLoading}
+            isDisabled={!isAllResultsExist || isAllResultsCorrected || isMutationsLoading}
+          >
+            Отменить все позиции правильными
+          </Button>
+
+          {/* Send Corrected Results Btn */}
+          <Button
+            colorScheme="purple"
+            onClick={handleSubmit}
+            isLoading={isMutationsLoading}
+            isDisabled={isSendBtnDisabled}
+          >
+            Отправить
+          </Button>
+        </Flex>
+      )}
     </Page>
   )
 }

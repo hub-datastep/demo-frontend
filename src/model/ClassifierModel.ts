@@ -2,6 +2,7 @@ export interface MappingResponse {
   row_number: number
   nomenclature: string
   group: string
+  group_code: string
   nomenclature_params: object[]
   mappings?: MappingResponseItem[]
   similar_mappings?: MappingResponseItem[]
@@ -12,6 +13,8 @@ export interface MappingResponseItem {
   nomenclature: string
   similarity_score: number
   material_code: string
+  group: string
+  group_code: string
 }
 
 export interface MappingModel {

@@ -11,9 +11,9 @@ import {
 import { MappingResponse } from "model/ClassifierModel"
 import { Dispatch, FC, SetStateAction } from "react"
 import { SimilarNomenclature } from "type/mapping/similarNomenclature"
-import { WithId } from "type/withId"
+import { WithStrId } from "type/withId"
 
-type SelectOption = WithId<SimilarNomenclature>
+type SelectOption = WithStrId<SimilarNomenclature>
 
 interface NomenclatureSelectProps {
   prevResult?: MappingResponse
@@ -41,30 +41,35 @@ const selectStyles: ChakraStylesConfig<SelectOption, false, GroupBase<SelectOpti
 }
 
 const NOMENCLATURE_NOT_FOUND_VARIANT: SelectOption = {
-  id: -1,
+  id: "-1",
   name: "В НСИ нет подходящего варианта",
   material_code: "-1",
+}
+
+const filterEmptyNomenclatures = (nomenclaturesList: SelectOption[]): SelectOption[] => {
+  const filteredNomenclaturesList = nomenclaturesList.filter((nom) => !!nom.name)
+  return filteredNomenclaturesList
 }
 
 const getPrevNomenclatures = (prevResult?: MappingResponse): SelectOption[] => {
   // If mappings exists
   if (!!prevResult?.mappings) {
     const nomenclaturesList = prevResult.mappings.map((mapping) => ({
-      id: Number(mapping.nomenclature_guid),
+      id: mapping.nomenclature_guid,
       name: mapping.nomenclature,
       material_code: mapping.material_code,
     }))
-    return nomenclaturesList
+    return filterEmptyNomenclatures(nomenclaturesList)
   }
 
   // If similar mappings exists
   if (!!prevResult?.similar_mappings) {
     const nomenclaturesList = prevResult.similar_mappings.map((mapping) => ({
-      id: Number(mapping.nomenclature_guid),
+      id: mapping.nomenclature_guid,
       name: mapping.nomenclature,
       material_code: mapping.material_code,
     }))
-    return nomenclaturesList
+    return filterEmptyNomenclatures(nomenclaturesList)
   }
 
   return []
@@ -75,14 +80,14 @@ export const NomenclatureSelect: FC<NomenclatureSelectProps> = (props) => {
 
   const prevNomenclatures = getPrevNomenclatures(prevResult)
 
-  const prevNomenclaturesGroup = {
+  const predictedNomenclaturesOptionsGroup = {
     label: "Предложенные ИИ",
     options: prevNomenclatures,
   }
 
   const isSelectedValueInvalid = !selectedNomenclature
 
-  const handleLoadOptions = async (
+  const handleOptionsLoad = async (
     inputValue: string,
     _: (options: OptionsOrGroups<SelectOption, GroupBase<SelectOption>>) => void,
   ) => {
@@ -91,7 +96,7 @@ export const NomenclatureSelect: FC<NomenclatureSelectProps> = (props) => {
     })
 
     const groupedOptions = [
-      prevNomenclaturesGroup,
+      predictedNomenclaturesOptionsGroup,
       {
         label: "Номенклатуры из НСИ",
         options: [NOMENCLATURE_NOT_FOUND_VARIANT, ...similarNoms],
@@ -117,8 +122,8 @@ export const NomenclatureSelect: FC<NomenclatureSelectProps> = (props) => {
     <AsyncSelect<SelectOption, false, GroupBase<SelectOption>>
       chakraStyles={selectStyles}
       placeholder="Введите номенклатуру"
-      defaultOptions={[prevNomenclaturesGroup]}
-      loadOptions={handleLoadOptions}
+      defaultOptions={[predictedNomenclaturesOptionsGroup]}
+      loadOptions={handleOptionsLoad}
       getOptionLabel={(option) => option.name}
       value={selectedNomenclature || null}
       onChange={handleSelect}

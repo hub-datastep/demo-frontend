@@ -3,11 +3,11 @@ import {
   SimilarNomenclature,
   SimilarNomenclatureSearch,
 } from "type/mapping/similarNomenclature"
-import { WithId } from "type/withId"
+import { WithStrId } from "type/withId"
 
 export const getSimilarNomenclatures = async (
   body: SimilarNomenclatureSearch,
-): Promise<WithId<SimilarNomenclature>[]> => {
+): Promise<WithStrId<SimilarNomenclature>[]> => {
   const { data: similarNomenclatures } = await axiosClient.post(
     "/mapping/result/similar_nomenclatures",
     body,

@@ -8,7 +8,7 @@ interface IterationsTableProps {
   iterations: WithStrId<MappingIteration>[]
 }
 
-const COLUMNS_NAME = ["ID Итерации", "Тип Итерации", "Дата Создания", ""]
+const COLUMNS_NAME = ["ID Итерации", "Тип Итерации", "Статус", "Дата Создания", ""]
 
 export const IterationsTable: FC<IterationsTableProps> = (props) => {
   const { iterations } = props

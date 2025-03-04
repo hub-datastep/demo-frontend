@@ -33,7 +33,7 @@ export const configuration = {
         subRoutes: [
           {
             title: "Материалы",
-            url: "classifier",
+            url: "mapping",
             mode: "CLASSIFIER",
           },
           {

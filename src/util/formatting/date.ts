@@ -7,39 +7,39 @@ export const dateAsStringToDate = (dateAsString?: string) => {
   return date
 }
 
-export const formatDate = (date?: Date) => {
+export const formatDate = (
+  date?: Date,
+  isShortDate: boolean = false,
+  withTime: boolean = false,
+  locale?: string,
+) => {
   if (!date) {
     return
   }
 
+  // Format date
   const formatedDate = date
-    .toLocaleString(undefined, {
-      weekday: "short",
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
+    .toLocaleString(locale || navigator.language, {
+      // Date
+      dateStyle: isShortDate ? "short" : undefined,
+      weekday: isShortDate ? undefined : "short",
+      day: isShortDate ? undefined : "2-digit",
+      month: isShortDate ? undefined : "short",
+      year: isShortDate ? undefined : "numeric",
+      // Time
+      hour: withTime ? "2-digit" : undefined,
+      minute: withTime ? "2-digit" : undefined,
+      second: withTime ? "2-digit" : undefined,
     })
     // Remove ","
     .replaceAll(",", "")
   return formatedDate
 }
 
-export const formatDateTime = (date?: Date) => {
-  if (!date) {
-    return
-  }
-
-  const formattedDateTime = date
-    .toLocaleString(undefined, {
-      weekday: "short",
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    })
-    // Remove ","
-    .replaceAll(",", "")
-  return formattedDateTime
+export const formatDateTime = (
+  date?: Date,
+  isShortDate: boolean = false,
+  locale?: string,
+) => {
+  return formatDate(date, isShortDate, true, locale)
 }
