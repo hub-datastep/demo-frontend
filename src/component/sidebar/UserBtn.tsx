@@ -20,7 +20,7 @@ export const UserBtn: FC<UserBtnProps> = (props) => {
       w="full"
       direction="row"
       alignItems="center"
-      px={2}
+      px={3}
       py={4}
       color="white"
       fontSize="lg"
