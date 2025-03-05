@@ -43,7 +43,7 @@ const selectStyles: ChakraStylesConfig<SelectOption, false, GroupBase<SelectOpti
 const NOMENCLATURE_NOT_FOUND_VARIANT: SelectOption = {
   id: "-1",
   name: "В НСИ нет подходящего варианта",
-  material_code: "-1",
+  material_code: null,
 }
 
 const filterEmptyNomenclatures = (nomenclaturesList: SelectOption[]): SelectOption[] => {
