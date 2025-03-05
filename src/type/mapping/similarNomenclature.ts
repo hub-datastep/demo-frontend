@@ -9,5 +9,5 @@ export type SimilarNomenclatureSearch = {
 export type SimilarNomenclature = {
   name: string
   group?: string
-  material_code: string
+  material_code?: string | null
 }

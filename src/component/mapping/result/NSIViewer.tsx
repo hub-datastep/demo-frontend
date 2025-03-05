@@ -30,7 +30,7 @@ const NOMS_PER_PAGE_LIMIT = 20
 const NOMENCLATURE_NOT_FOUND_VARIANT: WithStrId<SimilarNomenclature> = {
   id: "-1",
   name: "В НСИ нет подходящего варианта",
-  material_code: "-1",
+  material_code: null,
 }
 
 export const NSIViewer: FC<NSIViewerProps> = (props) => {
