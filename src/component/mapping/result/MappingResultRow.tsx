@@ -66,10 +66,10 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
   const handleFeedbackChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     e.preventDefault()
 
-    const feedback = e.target.value.trim()
+    const feedback = e.target.value
     const result: CorrectedResult = {
       ...(correctedResult || ({} as CorrectedResult)),
-      feedback: !!feedback ? feedback : undefined,
+      feedback: !!feedback.trim() ? feedback : undefined,
     }
 
     onCorrectNomenclatureSelect(result)
