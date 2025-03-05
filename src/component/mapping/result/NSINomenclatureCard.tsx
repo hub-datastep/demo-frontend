@@ -1,4 +1,5 @@
 import { Button, Flex, Text } from "@chakra-ui/react"
+import { PossiblyEmptyParam } from "component/PossiblyEmptyParam"
 import { FC } from "react"
 import { SimilarNomenclature } from "type/mapping/similarNomenclature"
 import { WithStrId } from "type/withId"
@@ -12,6 +13,9 @@ interface NSINomenclatureCardProps {
 
 export const NSINomenclatureCard: FC<NSINomenclatureCardProps> = (props) => {
   const { nomenclature, onClick, onClose, isLoading } = props
+
+  const name = nomenclature.name
+  const group = nomenclature.group
 
   const handleClick = () => {
     onClick(nomenclature)
@@ -27,14 +31,17 @@ export const NSINomenclatureCard: FC<NSINomenclatureCardProps> = (props) => {
       px={4}
       py={2}
       borderRadius={10}
-      gap={2}
+      gap={5}
     >
       {/* Nomenclature Data */}
       <Flex w="full" direction="column" gap={1}>
         {/* Name */}
-        <Text fontWeight="medium">{nomenclature.name}</Text>
+        <Text fontWeight="medium">
+          <PossiblyEmptyParam value={name} />
+        </Text>
+
         {/* Group */}
-        <Text color="gray.400">{nomenclature.group}</Text>
+        {!!group && <Text color="gray.400">{group}</Text>}
       </Flex>
 
       {/* Select Btn */}
