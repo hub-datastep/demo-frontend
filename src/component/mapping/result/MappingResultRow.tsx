@@ -66,10 +66,10 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
   const handleFeedbackChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     e.preventDefault()
 
-    const feedback = e.target.value
+    const feedback = e.target.value.trim()
     const result: CorrectedResult = {
       ...(correctedResult || ({} as CorrectedResult)),
-      feedback: feedback,
+      feedback: !!feedback ? feedback : undefined,
     }
 
     onCorrectNomenclatureSelect(result)
@@ -137,6 +137,7 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
         <Td>
           <Flex w="full" direction="column" justifyContent="center" alignItems="center">
             <Checkbox
+              borderColor="gray"
               colorScheme="blue"
               isChecked={isMarkedAsCorrect}
               onChange={handleMarkAsCorrect}
@@ -199,7 +200,7 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
             h="full"
             w="full"
             placeholder="Подскажите, а почему мы неправильно сопоставили?"
-            value={correctedResult?.feedback}
+            value={correctedResult?.feedback || undefined}
             onChange={handleFeedbackChange}
           />
         </Td>

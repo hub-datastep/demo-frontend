@@ -27,6 +27,12 @@ interface NSIViewerProps extends ModalProps {
 
 const NOMS_PER_PAGE_LIMIT = 20
 
+const NOMENCLATURE_NOT_FOUND_VARIANT: WithStrId<SimilarNomenclature> = {
+  id: "-1",
+  name: "В НСИ нет подходящего варианта",
+  material_code: "-1",
+}
+
 export const NSIViewer: FC<NSIViewerProps> = (props) => {
   const { isOpen, onClose, prevGroup, onNomenclatureSelect } = props
 
@@ -34,6 +40,8 @@ export const NSIViewer: FC<NSIViewerProps> = (props) => {
 
   const [nomenclatures, setNomenclatures] = useState<WithStrId<SimilarNomenclature>[]>([])
   const [nsiGroup, setNSIGroup] = useState<WithStrId<SimilarNomenclature>>()
+
+  const isNomsInNSIFound = !!nomenclatures && nomenclatures.length > 0
 
   const [page, setPage] = useState<number>(1)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -58,7 +66,7 @@ export const NSIViewer: FC<NSIViewerProps> = (props) => {
       limit: NOMS_PER_PAGE_LIMIT,
       offset: (page - 1) * NOMS_PER_PAGE_LIMIT,
     })
-    setNomenclatures((prev) => [...prev, ...(similarNomsList || [])])
+    setNomenclatures((prevNoms) => [...prevNoms, ...(similarNomsList || [])])
 
     setHasMore(similarNomsList.length > 0)
     setIsLoading(false)
@@ -133,6 +141,14 @@ export const NSIViewer: FC<NSIViewerProps> = (props) => {
               overflowY="auto"
               gap={3}
             >
+              {/* Not Found in NSI */}
+              <NSINomenclatureCard
+                nomenclature={NOMENCLATURE_NOT_FOUND_VARIANT}
+                onClick={onNomenclatureSelect}
+                onClose={onClose}
+              />
+
+              {/* Found NSI Nomenclatures */}
               {nomenclatures.map((nomenclature, index) => (
                 <NSINomenclatureCard
                   key={index}
@@ -142,7 +158,7 @@ export const NSIViewer: FC<NSIViewerProps> = (props) => {
                 />
               ))}
 
-              {!isLoading && !nomenclatures.length && (
+              {!isLoading && !isNomsInNSIFound && (
                 <Flex
                   h="full"
                   w="full"

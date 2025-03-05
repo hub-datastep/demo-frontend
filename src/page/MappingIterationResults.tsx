@@ -88,8 +88,8 @@ export const MappingIterationResults: FC = () => {
       )
 
       // Save any feedback
-      if (!!prevResult) {
-        result.feedback = result.feedback || prevResult.feedback
+      if (result.feedback === null && !!prevResult?.feedback) {
+        result.feedback = prevResult.feedback || undefined
       }
 
       const filteredResultsList = prevResultsList.filter(
@@ -121,6 +121,8 @@ export const MappingIterationResults: FC = () => {
           name: mappedNomenclature.nomenclature,
           material_code: mappedNomenclature.material_code,
         },
+        // Set to null to then replace it with prev feedback or undefined
+        feedback: null,
       })
     })
   }
@@ -185,12 +187,12 @@ export const MappingIterationResults: FC = () => {
           {/* All Results Correct */}
           <Button
             colorScheme="gray"
-            onClick={handleMarkAllAsCorrect}
             rightIcon={<FaCheckSquare color="green" />}
+            onClick={handleMarkAllAsCorrect}
             isLoading={isLoading}
             isDisabled={!isAllResultsExist || isAllResultsCorrected || isMutationsLoading}
           >
-            Отменить все позиции правильными
+            Отметить все позиции правильными
           </Button>
 
           {/* Send Corrected Results Btn */}

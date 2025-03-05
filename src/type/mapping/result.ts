@@ -12,7 +12,7 @@ export type MappingResult = {
 export type CorrectedResult = {
   result_id: number
   nomenclature?: WithStrId<SimilarNomenclature>
-  feedback?: string
+  feedback?: string | null
 }
 
 export type MappingResultUpdate = {
