@@ -107,12 +107,15 @@ export const MappingIterationResults: FC = () => {
 
     results.forEach((mappingResult) => {
       const resultId = mappingResult.id
+      const mappedNomenclature = getMappedNomenclature(mappingResult)
 
-      if (!isMappedNomenclatureValid(mappingResult)) {
+      if (
+        !isMappedNomenclatureValid(mappingResult) ||
+        !mappedNomenclature?.nomenclature.trim()
+      ) {
+        // TODO: select "not found in NSI variant"
         return
       }
-
-      const mappedNomenclature = getMappedNomenclature(mappingResult)!
 
       handleCorrectNomenclatureSelect({
         result_id: resultId,

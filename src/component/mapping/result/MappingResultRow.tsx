@@ -41,7 +41,10 @@ export const MappingResultRow: FC<MappingResultRowProps> = (props) => {
   const correctedNomenclatureName = correctedResult?.nomenclature?.name
   const isMarkedAsCorrect = correctedNomenclatureName === mappedNomenclature?.nomenclature
   const isMarkAsCorrectBtnDisabled =
-    !isMappedNomenclatureExists || isIterationApproved || isLoading
+    !isMappedNomenclatureExists ||
+    isIterationApproved ||
+    isLoading ||
+    !mappedNomenclature.nomenclature.trim()
 
   const similarMappingsList = result?.similar_mappings
   const isSimilarMappingsExists = !!similarMappingsList && similarMappingsList.length > 0

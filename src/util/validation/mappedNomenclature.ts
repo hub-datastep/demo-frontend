@@ -17,8 +17,7 @@ export const getMappedNomenclature = (
 
 export const isMappedNomenclatureValid = (mapping: WithId<MappingResult>): boolean => {
   const mappedNomenclature = getMappedNomenclature(mapping)
-  const isMappedNomenclatureExists =
-    !!mappedNomenclature && !!mappedNomenclature.nomenclature.trim()
+  const isMappedNomenclatureExists = !!mappedNomenclature
 
   return isMappedNomenclatureExists
 }
