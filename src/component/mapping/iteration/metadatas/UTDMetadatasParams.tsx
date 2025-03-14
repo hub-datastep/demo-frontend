@@ -22,6 +22,7 @@ export const UTDMetadatasParams: FC<UTDMetadatasParamsProps> = (props) => {
   const contractDate = dateAsStringToDate(utdEntity?.contract_date)
 
   const inputMessage = metadatas?.input_message
+  const creditSlipData = inputMessage?.credit_slip_data
   const documents = inputMessage?.documents
 
   return (
@@ -47,6 +48,9 @@ export const UTDMetadatasParams: FC<UTDMetadatasParamsProps> = (props) => {
         columnGap={5}
         px={2}
       >
+        {/* Building Name */}
+        <MetadatasParamsRow name="Объект" value={creditSlipData?.building_name} />
+
         {/* Organization INN */}
         <MetadatasParamsRow name="ИНН организации" value={utdEntity?.organization_inn} />
 
