@@ -28,15 +28,23 @@ export const UTDMetadatasParams: FC<UTDMetadatasParamsProps> = (props) => {
   return (
     <Flex w="full" direction="column" gap={5}>
       <PageHeading>
-        <Flex w="full" direction="row" alignItems="center" gap={5}>
-          {/* Number & Date */}
-          <Flex w="full" direction="row" alignItems="center" gap={3}>
-            УПД №<PossiblyEmptyParam value={utdEntity?.idn_number} />
-            от <PossiblyEmptyParam value={formatDate(idnDate, true)} />
+        <Flex w="full" direction="column" gap={2}>
+          {/* Building Name */}
+          <Flex w="full" direction="row" alignItems="center" gap={5}>
+            {creditSlipData?.building_name}
           </Flex>
 
-          {/* UTD Status */}
-          <IterationStatusBadge size="xl" status={status} />
+          {/* UTD Number, Date, Status */}
+          <Flex w="full" direction="row" alignItems="center" gap={3}>
+            {/* Number & Date */}
+            <Flex w="full" direction="row" alignItems="center" gap={3}>
+              УПД №<PossiblyEmptyParam value={utdEntity?.idn_number} />
+              от <PossiblyEmptyParam value={formatDate(idnDate, true)} />
+            </Flex>
+
+            {/* UTD Status */}
+            <IterationStatusBadge size="xl" status={status} />
+          </Flex>
         </Flex>
       </PageHeading>
 
@@ -48,9 +56,6 @@ export const UTDMetadatasParams: FC<UTDMetadatasParamsProps> = (props) => {
         columnGap={5}
         px={2}
       >
-        {/* Building Name */}
-        <MetadatasParamsRow name="Объект" value={creditSlipData?.building_name} />
-
         {/* Organization INN */}
         <MetadatasParamsRow name="ИНН организации" value={utdEntity?.organization_inn} />
 
