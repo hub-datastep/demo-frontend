@@ -7,6 +7,8 @@ type CreditSlipData = {
   operation_kind: string
   // guid объекта строительства
   building_guid: string
+  // Название объекта строительства
+  building_name: string
   // guid Генерального Подрядчика(сейчас это константа)
   gen_contractor_guid: string
   // guid категории материалов
