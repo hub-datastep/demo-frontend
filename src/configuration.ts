@@ -46,6 +46,16 @@ export const configuration = {
           },
         ],
       },
+      //* QA бот для жителей
+      {
+        title: "QA бот для жителей",
+        url: "orders_qa",
+      },
+      //* База знаний QA заявок
+      {
+        title: "База знаний QA заявок",
+        url: "qa-orders-knowledge-base",
+      },
       //* Demo
       {
         title: "Демонстрация",
